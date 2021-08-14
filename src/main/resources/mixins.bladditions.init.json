@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "package": "com.seriouscreeper.bladditions.mixins",
+  "compatibilityLevel": "JAVA_8",
+  "target": "@env(INIT)",
+  "minVersion": "0.6",
+  "refmap": "refmap.bladditions.json",
+  "mixins": [
+    "init.MixinLoader"
+  ],
+  "client": [],
+  "injectors": {
+    "maxShiftBy": 10
+  }
+}

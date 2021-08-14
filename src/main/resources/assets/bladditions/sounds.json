@@ -1,0 +1,12 @@
+{
+  "insectswarm": {
+    "category": "blocks",
+    "sounds": [
+      {
+        "name": "bladditions:blocks/insectswarm",
+        "stream": true
+      }
+    ],
+    "subtitle": "subtitle.bladditions.insectswarm"
+  }
+}

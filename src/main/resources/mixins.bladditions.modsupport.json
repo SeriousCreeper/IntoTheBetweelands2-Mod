@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "package": "com.seriouscreeper.bladditions.mixins.modsupport",
+  "compatibilityLevel": "JAVA_8",
+  "target": "@env(DEFAULT)",
+  "minVersion": "0.6.0",
+  "refmap": "refmap.bladditions.json",
+  "mixins": [
+    "MixinMystgears",
+    "MixinItemRegistry"
+  ],
+  "client": [],
+  "injectors": {
+    "maxShiftBy": 10
+  }
+}

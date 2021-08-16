@@ -68,7 +68,7 @@ dependencies {
 }
 
 mixin {
-    add sourceSets.main, "refmap.bladditions.json"
+   // add sourceSets.main, "refmap.bladditions.json"
 }
 
 processResources {

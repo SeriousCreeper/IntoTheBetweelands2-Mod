@@ -40,7 +40,7 @@ import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.tile.TileEntityDugSoil;
 
-@Mod(modid = BLAdditions.MODID, name = BLAdditions.NAME, version = BLAdditions.VERSION, dependencies = "required-after:crafttweaker;required-after:mystgears;required-after:deliverymerchants;required-after:thebetweenlands;required-after:roots;required-after:thaumcraft;required-after:thaumicperiphery;required-after:embers")
+@Mod(modid = BLAdditions.MODID, name = BLAdditions.NAME, version = BLAdditions.VERSION, dependencies = "required-after:pizzacraft;required-after:growthcraft;required-after:crafttweaker;required-after:mystgears;required-after:deliverymerchants;required-after:thebetweenlands;required-after:roots;required-after:thaumcraft;required-after:thaumicperiphery;required-after:embers")
 public class BLAdditions
 {
     public static final String MODID = "bladditions";

@@ -1,7 +1,9 @@
 package com.seriouscreeper.bladditions.items;
 
+import com.mrbysco.anotherliquidmilkmod.init.MilkRegistry;
 import com.seriouscreeper.bladditions.BLAdditions;
 import com.seriouscreeper.bladditions.proxy.CommonProxy;
+import growthcraft.bees.shared.init.GrowthcraftBeesFluids;
 import growthcraft.milk.shared.init.GrowthcraftMilkFluids;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -49,6 +51,8 @@ public class PatchedItemDentrothystFluidVial extends UniversalBucket implements 
         allowedFluids.add(GrowthcraftMilkFluids.curds.getFluid());
         allowedFluids.add(GrowthcraftMilkFluids.rennet.getFluid());
         allowedFluids.add(GrowthcraftMilkFluids.whey.getFluid());
+        allowedFluids.add(GrowthcraftBeesFluids.honey.getFluid());
+        allowedFluids.add(MilkRegistry.liquid_milk);
     }
 
     @Override

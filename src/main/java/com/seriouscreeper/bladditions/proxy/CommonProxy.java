@@ -1,5 +1,6 @@
 package com.seriouscreeper.bladditions.proxy;
 
+import com.mrbysco.anotherliquidmilkmod.init.MilkRegistry;
 import com.rcx.mystgears.MysticalGears;
 import com.rcx.mystgears.block.BlockTurret;
 import com.rcx.mystgears.item.ItemGear;
@@ -13,6 +14,7 @@ import com.seriouscreeper.bladditions.items.PatchedItemDentrothystVial;
 import com.seriouscreeper.bladditions.items.PatchedVerdantCharm;
 import com.seriouscreeper.bladditions.items.tools.*;
 import com.seriouscreeper.bladditions.libs.BLAdditionsUtils;
+import com.seriouscreeper.bladditions.mixins.modsupport.MixinBLFluidRegistry;
 import com.seriouscreeper.bladditions.rituals.PatchedEntityRitualHeavyStorms;
 import com.seriouscreeper.bladditions.rituals.PatchedRitualHeavyStorms;
 import com.seriouscreeper.bladditions.tiles.PatchedTilePotionSprayer;
@@ -20,11 +22,25 @@ import com.seriouscreeper.bladditions.tiles.PatchedTileSpa;
 import com.seriouscreeper.bladditions.tiles.TileCrucibleSwamp;
 import com.seriouscreeper.bladditions.tiles.TileWaterJugSwamp;
 import com.seriouscreeper.bladditions.world.BLBeeHiveWorldGen;
+import com.tiviacz.pizzacraft.crafting.bakeware.BaseShapelessOreRecipe;
+import com.tiviacz.pizzacraft.crafting.bakeware.IBakewareRecipe;
+import com.tiviacz.pizzacraft.crafting.bakeware.PizzaCraftingManager;
+import com.tiviacz.pizzacraft.init.ModBlocks;
+import com.tiviacz.pizzacraft.init.ModItems;
 import epicsquid.mysticallib.LibRegistry;
 import epicsquid.mysticallib.entity.RenderNull;
 import epicsquid.roots.config.RitualConfig;
 import epicsquid.roots.integration.jei.soil.SoilRecipe;
 import epicsquid.roots.ritual.RitualRegistry;
+import growthcraft.core.shared.CoreRegistry;
+import growthcraft.core.shared.config.GrowthcraftCoreConfig;
+import growthcraft.core.shared.fluids.FluidDictionary;
+import growthcraft.core.shared.fluids.FluidTag;
+import growthcraft.core.shared.legacy.FluidContainerRegistry;
+import growthcraft.core.shared.utils.TickUtils;
+import growthcraft.milk.common.Init;
+import growthcraft.milk.shared.fluids.MilkFluidTags;
+import growthcraft.milk.shared.init.GrowthcraftMilkFluids;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPistonBase;
 import net.minecraft.init.Blocks;
@@ -129,6 +145,7 @@ public class CommonProxy {
 
         SoilRecipe.recipes = Arrays.asList(SoilRecipe.EARTH, SoilRecipe.AIR, SoilRecipe.WATER);
 
+
         registerEntities();
     }
 
@@ -202,6 +219,36 @@ public class CommonProxy {
 
         ScanningManager.addScannableThing(new ScanItem("ORE", new ItemStack(ItemsTC.crystalEssence, 1, OreDictionary.WILDCARD_VALUE)));
         ScanningManager.addScannableThing(new ScanItem("!ORECRYSTAL", new ItemStack(ItemsTC.crystalEssence, 1, OreDictionary.WILDCARD_VALUE)));
+
+        CoreRegistry.instance().fluidDictionary().addFluidTags(MilkRegistry.liquid_milk, MilkFluidTags.MILK);
+        growthcraft.milk.shared.MilkRegistry.instance().pancheon().addRecipe(
+                new FluidStack(MilkRegistry.liquid_milk, 1000),
+                GrowthcraftMilkFluids.cream.asFluidStack(2 * GrowthcraftCoreConfig.BOTTLE_CAPACITY), GrowthcraftMilkFluids.skimMilk.asFluidStack(Init.roundToBottles(FluidContainerRegistry.BUCKET_VOLUME - 2 * GrowthcraftCoreConfig.BOTTLE_CAPACITY)),
+                TickUtils.minutes(1));
+
+    }
+
+
+    private void setupPizzaRecipes() {
+        PizzaCraftingManager manager = PizzaCraftingManager.getPizzaCraftingInstance();
+        List<IBakewareRecipe> recipes = manager.getRecipeList();
+
+        for(int i = recipes.size() - 1; i >= 0; i--) {
+            System.out.println("----------------- REMOVING RECIPE: " + recipes.get(i).toString());
+            manager.removeRecipe(recipes.get(i));
+        }
+
+        manager.addRecipe(new BaseShapelessOreRecipe(new ItemStack(ModBlocks.RAW_PIZZA_0, 1), "foodPizzaDough", "foodCheese"));
+        manager.addRecipe(new BaseShapelessOreRecipe(new ItemStack(ModBlocks.RAW_PIZZA_1, 1), "foodPizzaDough", "foodCheese", "foodMushroom"));
+        manager.addRecipe(new BaseShapelessOreRecipe(new ItemStack(ModBlocks.RAW_PIZZA_2, 1), "foodPizzaDough", new ItemStack(ItemRegistry.ANGLER_MEAT_RAW), new ItemStack(ItemRegistry.SWAMP_KELP_ITEM)));
+        manager.addRecipe(new BaseShapelessOreRecipe(new ItemStack(ModBlocks.RAW_PIZZA_3, 1), "foodPizzaDough", "foodCheese", new ItemStack(ItemRegistry.SNAIL_FLESH_RAW), new ItemStack(ItemRegistry.MIRE_SNAIL_EGG_COOKED)));
+        manager.addRecipe(new BaseShapelessOreRecipe(new ItemStack(ModBlocks.RAW_PIZZA_4, 1), "foodPizzaDough", "foodCheese", "foodMushroom", new ItemStack(ItemRegistry.FROG_LEGS_RAW), new ItemStack(BlockRegistry.NETTLE)));
+        manager.addRecipe(new BaseShapelessOreRecipe(new ItemStack(ModBlocks.RAW_PIZZA_5, 1), "foodPizzaDough", "foodCheese", "foodMushroom", new ItemStack(ItemRegistry.SAP_BALL), new ItemStack(ItemRegistry.SAP_SPIT), new ItemStack(ItemRegistry.SLUDGE_BALL)));
+        manager.addRecipe(new BaseShapelessOreRecipe(new ItemStack(ModBlocks.RAW_PIZZA_6, 1), "foodPizzaDough", "foodCheese", "foodMushroom", new ItemStack(ItemRegistry.SWAMP_KELP_ITEM), new ItemStack(ItemRegistry.MIDDLE_FRUIT)));
+        manager.addRecipe(new BaseShapelessOreRecipe(new ItemStack(ModBlocks.RAW_PIZZA_7, 1), "foodPizzaDough", "foodCheese", "foodMushroom", new ItemStack(ItemRegistry.SWAMP_KELP_ITEM), new ItemStack(ItemRegistry.SNAIL_FLESH_RAW), new ItemStack(ItemRegistry.FROG_LEGS_RAW), new ItemStack(BlockRegistry.MUD)));
+        manager.addRecipe(new BaseShapelessOreRecipe(new ItemStack(ModBlocks.RAW_PIZZA_8, 1), "foodPizzaDough", "foodCheese", "foodMushroom", new ItemStack(ItemRegistry.SWAMP_KELP_ITEM), new ItemStack(ItemRegistry.ITEMS_CRUSHED, 1, 34)));
+        manager.addRecipe(new BaseShapelessOreRecipe(new ItemStack(ModBlocks.RAW_PIZZA_9, 1), "foodPizzaDough", "foodCheese", new ItemStack(ItemRegistry.FORBIDDEN_FIG), new ItemStack(ItemRegistry.WIGHT_HEART), new ItemStack(ItemRegistry.SPIRIT_FRUIT), new ItemStack(ItemRegistry.WEEPING_BLUE_PETAL)));
+        //manager.addRecipe(new BaseShapelessOreRecipe(new ItemStack(ModBlocks.RAW_PIZZA_10, 1), "foodPizzaDough", "foodCheese"));
     }
 
 
@@ -210,6 +257,7 @@ public class CommonProxy {
         registerInfusionRecipes();
         registerSmeltingRecipes();
         registerAdditionalBLFurnaceIngots();
+        setupPizzaRecipes();
     }
 
 

@@ -1,9 +1,13 @@
 package com.seriouscreeper.bladditions.events;
 
+import com.mrbysco.anotherliquidmilkmod.init.MilkRegistry;
 import com.seriouscreeper.bladditions.proxy.CommonProxy;
 import growthcraft.cellar.common.tileentity.TileEntityBrewKettle;
 import growthcraft.core.shared.tileentity.GrowthcraftTileDeviceBase;
+import growthcraft.core.shared.tileentity.feature.IFluidTankOperable;
+import growthcraft.milk.shared.init.GrowthcraftMilkFluids;
 import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -23,10 +27,7 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.BonemealEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidActionResult;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.*;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fml.common.Mod;
@@ -37,11 +38,13 @@ import thaumcraft.api.capabilities.IPlayerKnowledge;
 import thaumcraft.api.capabilities.ThaumcraftCapabilities;
 import thaumcraft.api.research.ResearchCategories;
 import thaumcraft.api.research.ResearchCategory;
+import thebetweenlands.common.entity.mobs.EntityLurker;
 import thebetweenlands.common.entity.projectiles.EntityBetweenstonePebble;
 import thebetweenlands.common.entity.projectiles.EntityPyradFlame;
 import thebetweenlands.common.entity.projectiles.EntitySapSpit;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.tile.TileEntityBarrel;
 
 import java.util.Map;
 
@@ -138,8 +141,7 @@ public class BLAdditionsEventHandler {
 
         TileEntity te = world.getTileEntity(event.getPos());
 
-        if(stack != ItemStack.EMPTY && te instanceof GrowthcraftTileDeviceBase) {
-            GrowthcraftTileDeviceBase kettle = (GrowthcraftTileDeviceBase)te;
+        if(stack != ItemStack.EMPTY && (te instanceof GrowthcraftTileDeviceBase || te instanceof TileEntityBarrel)) {
             int itemDamage = stack.getItemDamage();
             IFluidHandler fluidHandler = FluidUtil.getFluidHandler(world, event.getPos(), null);
             ItemStack singleStack = stack.copy();
@@ -148,7 +150,7 @@ public class BLAdditionsEventHandler {
 
             // this is only for draining
             if(stack.getItem() == ItemRegistry.DENTROTHYST_VIAL && (itemDamage == 0 || itemDamage == 2)) {
-                ItemStack newBottle = new ItemStack(CommonProxy.DENTROTHYST_FLUID_VIAL);
+                ItemStack newBottle = itemDamage == 0 ? new ItemStack(CommonProxy.DENTROTHYST_FLUID_VIAL) : new ItemStack(CommonProxy.DENTROTHYST_FLUID_VIAL, 1, 1);
 
                 // has no content, check output side of TE
                 FluidStack fluidStack = fluidHandler.drain(250, false);
@@ -166,11 +168,9 @@ public class BLAdditionsEventHandler {
                         ((EntityPlayerMP) player).sendContainerToPlayer(player.inventoryContainer);
                     }
 
-                    //world.playSound(player, event.getPos().getX(), event.getPos().getY(), event.getPos().getZ(), SoundEvents.ITEM_BUCKET_EMPTY, SoundCategory.PLAYERS, 1.0F, 1.0F);
-
                     event.setCanceled(true);
                 }
-            } else if(stack.getItem() == CommonProxy.DENTROTHYST_FLUID_VIAL && (stack.getItemDamage() == 0 || stack.getItemDamage() == 2)) {
+            } else if(stack.getItem() == CommonProxy.DENTROTHYST_FLUID_VIAL && (stack.getItemDamage() == 0 || stack.getItemDamage() == 1)) {
                 // for filling the kettle
                 FluidStack fluidStack = fluidItem.drain(250, false);
                 FluidActionResult result = fluidStack != null ? FluidUtil.tryEmptyContainer(singleStack, fluidHandler, 250, player, false) : FluidActionResult.FAILURE;
@@ -178,10 +178,15 @@ public class BLAdditionsEventHandler {
                 if(result.isSuccess()) {
                     FluidUtil.tryEmptyContainer(singleStack, fluidHandler, 250, player, true);
 
-                    stack.shrink(1);
+                    ItemStack newBottle;
 
-                    ItemStack newBottle = new ItemStack(ItemRegistry.DENTROTHYST_VIAL);
-                    newBottle.setItemDamage(itemDamage);
+                    if(stack.getItemDamage() == 0) {
+                        newBottle = new ItemStack(ItemRegistry.DENTROTHYST_VIAL, 1, 1);
+                    } else {
+                        newBottle = new ItemStack(ItemRegistry.DENTROTHYST_VIAL, 1, 2);
+                    }
+
+                    stack.shrink(1);
 
                     if (!player.inventory.addItemStackToInventory(newBottle)) {
                         world.spawnEntity(new EntityItem(world, (double) event.getPos().getX() + 0.5D, (double) event.getPos().getY() + 1.5D, (double) event.getPos().getZ() + 0.5D, newBottle));
@@ -191,6 +196,31 @@ public class BLAdditionsEventHandler {
 
                     event.setCanceled(true);
                 }
+            }
+        }
+    }
+
+
+    @SubscribeEvent
+    public void onEntityInteract(PlayerInteractEvent.EntityInteract e) {
+        World world = e.getWorld();
+
+        ItemStack itemstack = e.getItemStack();
+
+        System.out.println("-------------------- FOO 1 ---------------");
+
+        if (itemstack != ItemStack.EMPTY && itemstack.getItem() == ItemRegistry.BL_BUCKET) {
+            Entity target = e.getTarget();
+
+            System.out.println("-------------------- FOO 2 ---------------");
+
+            if (target instanceof EntityLurker) {
+                System.out.println("-------------------- FOO 3 ---------------");
+                EntityPlayer player = e.getEntityPlayer();
+
+                IFluidHandlerItem bucket = FluidUtil.getFluidHandler(itemstack);
+                FluidStack milkStack = new FluidStack(MilkRegistry.liquid_milk, 1000);
+                int filled = bucket.fill(milkStack, true);
             }
         }
     }

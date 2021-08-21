@@ -6,6 +6,7 @@
   "minVersion": "0.6.0",
   "refmap": "refmap.bladditions.json",
   "mixins": [
+    "MixinBiomeDetectorBase",
     "MixinBLFluidRegistry",
     "MixinBlockChoppingBoard",
     "MixinBlockPizza",

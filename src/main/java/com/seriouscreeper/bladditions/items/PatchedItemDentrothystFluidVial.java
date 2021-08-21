@@ -31,8 +31,18 @@ import javax.annotation.Nullable;
 import java.util.*;
 
 public class PatchedItemDentrothystFluidVial extends UniversalBucket implements ItemRegistry.IMultipleItemModelDefinition {
-    public static final List<Fluid> allowedFluids = new ArrayList<Fluid>() {
-    };
+    public static final List<Fluid> allowedFluids = new ArrayList<Fluid>() {{
+        add(GrowthcraftMilkFluids.butterMilk.getFluid());
+        add(GrowthcraftMilkFluids.milk.getFluid());
+        add(GrowthcraftMilkFluids.condensedMilk.getFluid());
+        add(GrowthcraftMilkFluids.skimMilk.getFluid());
+        add(GrowthcraftMilkFluids.cream.getFluid());
+        add(GrowthcraftMilkFluids.curds.getFluid());
+        add(GrowthcraftMilkFluids.rennet.getFluid());
+        add(GrowthcraftMilkFluids.whey.getFluid());
+        add(GrowthcraftBeesFluids.honey.getFluid());
+        add(MilkRegistry.liquid_milk);
+    }};
 
 
     public PatchedItemDentrothystFluidVial() {
@@ -42,29 +52,8 @@ public class PatchedItemDentrothystFluidVial extends UniversalBucket implements 
         this.setMaxDamage(0);
         this.setCreativeTab(BLCreativeTabs.HERBLORE);
         setRegistryName(BLAdditions.MODID, "dentrothyst_fluid_vial");
-
-        allowedFluids.add(GrowthcraftMilkFluids.butterMilk.getFluid());
-        allowedFluids.add(GrowthcraftMilkFluids.milk.getFluid());
-        allowedFluids.add(GrowthcraftMilkFluids.condensedMilk.getFluid());
-        allowedFluids.add(GrowthcraftMilkFluids.skimMilk.getFluid());
-        allowedFluids.add(GrowthcraftMilkFluids.cream.getFluid());
-        allowedFluids.add(GrowthcraftMilkFluids.curds.getFluid());
-        allowedFluids.add(GrowthcraftMilkFluids.rennet.getFluid());
-        allowedFluids.add(GrowthcraftMilkFluids.whey.getFluid());
-        allowedFluids.add(GrowthcraftBeesFluids.honey.getFluid());
-        allowedFluids.add(MilkRegistry.liquid_milk);
     }
 
-    @Override
-    public void onCreated(ItemStack stack, World worldIn, EntityPlayer playerIn) {
-        NBTTagCompound nbt = stack.getTagCompound();
-        if (nbt == null) {
-            nbt = new NBTTagCompound();
-        }
-
-        nbt.setTag("Fluid", new NBTTagCompound());
-        stack.setTagCompound(nbt);
-    }
 
     @Override
     public Map<Integer, ResourceLocation> getModels() {
@@ -76,8 +65,7 @@ public class PatchedItemDentrothystFluidVial extends UniversalBucket implements 
 
     @Override
     public int getItemStackLimit(ItemStack stack) {
-        FluidStack fluidStack = this.getFluid(stack);
-        return fluidStack != null ? 1 : super.getItemStackLimit(stack);
+        return super.getItemStackLimit(stack);
     }
 
     @Override

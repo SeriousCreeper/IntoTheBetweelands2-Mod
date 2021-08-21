@@ -1,75 +1,34 @@
-package com.seriouscreeper.bladditions.items.tools;
+package com.seriouscreeper.bladditions.items.tools.roots;
 
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Multimap;
+import epicsquid.roots.item.runed.ItemRunedShovel;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.ItemMeshDefinition;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thaumcraft.api.items.ItemsTC;
-import thaumcraft.common.config.ConfigItems;
-import thaumcraft.common.items.IThaumcraftItems;
 import thebetweenlands.api.item.CorrosionHelper;
 import thebetweenlands.api.item.ICorrodible;
 import thebetweenlands.common.registries.BlockRegistry;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Set;
 
-public class PatchedItemThaumiumShovel extends ItemSpade implements IThaumcraftItems, ICorrodible {
-    public PatchedItemThaumiumShovel(ToolMaterial enumtoolmaterial) {
-        super(enumtoolmaterial);
-        this.setCreativeTab(ConfigItems.TABTC);
-        this.setRegistryName("thaumcraft:thaumium_shovel");
-        this.setTranslationKey("thaumium_shovel");
-        ConfigItems.ITEM_VARIANT_HOLDERS.add(this);
-
+public class PatchedItemRunedShovel extends ItemRunedShovel implements ICorrodible {
+    public PatchedItemRunedShovel(ToolMaterial material, String name) {
+        super(material, name);
         CorrosionHelper.addCorrosionPropertyOverrides(this);
     }
 
-    public Item getItem() {
-        return this;
-    }
-
-    public String[] getVariantNames() {
-        return new String[]{"normal"};
-    }
-
-    public int[] getVariantMeta() {
-        return new int[]{0};
-    }
-
-    public ItemMeshDefinition getCustomMesh() {
-        return null;
-    }
-
-    public ModelResourceLocation getCustomModelResourceLocation(String variant) {
-        return new ModelResourceLocation("thaumcraft:" + variant);
-    }
-
-    public Set<String> getToolClasses(ItemStack stack) {
-        return ImmutableSet.of("shovel");
-    }
-
-    public boolean getIsRepairable(ItemStack stack1, ItemStack stack2) {
-        return stack2.isItemEqual(new ItemStack(ItemsTC.ingots, 1, 0)) ? true : super.getIsRepairable(stack1, stack2);
-    }
 
     @Override
     public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
@@ -77,8 +36,9 @@ public class PatchedItemThaumiumShovel extends ItemSpade implements IThaumcraftI
         super.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected);
     }
 
-
     public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        super.onItemUse(player, world, pos, hand, facing, hitX, hitY, hitZ);
+
         if (facing == EnumFacing.UP) {
             boolean dug = false;
             IBlockState blockState = world.getBlockState(pos);
@@ -123,14 +83,12 @@ public class PatchedItemThaumiumShovel extends ItemSpade implements IThaumcraftI
         return EnumActionResult.PASS;
     }
 
-
     @SideOnly(Side.CLIENT)
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         super.addInformation(stack, worldIn, tooltip, flagIn);
         CorrosionHelper.addCorrosionTooltips(stack, tooltip, flagIn.isAdvanced());
     }
-
 
     @Override
     public float getDestroySpeed(ItemStack stack, IBlockState state) {

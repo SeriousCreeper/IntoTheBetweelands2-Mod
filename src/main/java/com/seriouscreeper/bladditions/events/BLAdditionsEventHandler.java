@@ -18,7 +18,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityDispenser;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
@@ -30,9 +32,11 @@ import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fluids.*;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
+import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStackSimple;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
+import net.minecraftforge.items.ItemHandlerHelper;
 import thaumcraft.api.aura.AuraHelper;
 import thaumcraft.api.capabilities.IPlayerKnowledge;
 import thaumcraft.api.capabilities.ThaumcraftCapabilities;
@@ -42,8 +46,10 @@ import thebetweenlands.common.entity.mobs.EntityLurker;
 import thebetweenlands.common.entity.projectiles.EntityBetweenstonePebble;
 import thebetweenlands.common.entity.projectiles.EntityPyradFlame;
 import thebetweenlands.common.entity.projectiles.EntitySapSpit;
+import thebetweenlands.common.item.tools.ItemBLBucket;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.tile.TileEntityBarrel;
 
 import java.util.Map;
@@ -200,28 +206,41 @@ public class BLAdditionsEventHandler {
         }
     }
 
-
     @SubscribeEvent
     public void onEntityInteract(PlayerInteractEvent.EntityInteract e) {
         World world = e.getWorld();
 
+        if(world.isRemote)
+            return;
+
         ItemStack itemstack = e.getItemStack();
 
-        System.out.println("-------------------- FOO 1 ---------------");
+        if (itemstack != ItemStack.EMPTY && itemstack.getItem() == ItemRegistry.BL_BUCKET && e.getHand() == EnumHand.MAIN_HAND) {
+            ItemStack copy = ItemHandlerHelper.copyStackWithSize(itemstack, 1);
+            IFluidHandlerItem fluidItem = FluidUtil.getFluidHandler(copy);
 
-        if (itemstack != ItemStack.EMPTY && itemstack.getItem() == ItemRegistry.BL_BUCKET) {
-            Entity target = e.getTarget();
+            if (fluidItem != null) {
+                int fill = fluidItem.fill(new FluidStack(MilkRegistry.liquid_milk, Fluid.BUCKET_VOLUME), true);
 
-            System.out.println("-------------------- FOO 2 ---------------");
+                if (fill == Fluid.BUCKET_VOLUME) {
+                    EntityPlayer player = e.getEntityPlayer();
+                    player.playSound(SoundEvents.ENTITY_COW_MILK, 1.0F, 1.0F);
+                    world.playSound(null, player.posX, player.posY + 0.5D, player.posZ, SoundEvents.ENTITY_COW_MILK, SoundCategory.BLOCKS, 1.0F, 1.0F);
 
-            if (target instanceof EntityLurker) {
-                System.out.println("-------------------- FOO 3 ---------------");
-                EntityPlayer player = e.getEntityPlayer();
+                    copy = fluidItem.getContainer().copy();
+                    itemstack.shrink(1);
 
-                IFluidHandlerItem bucket = FluidUtil.getFluidHandler(itemstack);
-                FluidStack milkStack = new FluidStack(MilkRegistry.liquid_milk, 1000);
-                int filled = bucket.fill(milkStack, true);
+                    if (itemstack.isEmpty()) {
+                        player.inventory.addItemStackToInventory(copy);
+                    } else if (!player.inventory.addItemStackToInventory(copy)) {
+                        player.dropItem(copy, false);
+                    }
+
+                    e.setCanceled(true);
+                }
             }
+        } else {
+            e.setCanceled(true);
         }
     }
 }

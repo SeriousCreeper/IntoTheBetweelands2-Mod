@@ -1,19 +1,16 @@
-package com.seriouscreeper.bladditions.items.tools;
+package com.seriouscreeper.bladditions.items.tools.roots;
 
 import com.google.common.collect.Multimap;
-import epicsquid.roots.item.ILivingRepair;
+import epicsquid.roots.item.terrastone.ItemTerrastoneShovel;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -26,10 +23,9 @@ import thebetweenlands.common.registries.BlockRegistry;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class PatchedItemLivingShovel extends PatchedRootsItemShovelBase implements ICorrodible, ILivingRepair {
-    public PatchedItemLivingShovel(ToolMaterial material, String name) {
-        super(material, name, 3, 192, () -> Ingredient.EMPTY);
-
+public class PatchedItemTerrastoneShovel extends ItemTerrastoneShovel implements ICorrodible {
+    public PatchedItemTerrastoneShovel(ToolMaterial material, String name) {
+        super(material, name);
         CorrosionHelper.addCorrosionPropertyOverrides(this);
     }
 
@@ -37,11 +33,13 @@ public class PatchedItemLivingShovel extends PatchedRootsItemShovelBase implemen
     @Override
     public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
         CorrosionHelper.updateCorrosion(stack, worldIn, entityIn, itemSlot, isSelected);
-        update(stack, worldIn, entityIn, itemSlot, isSelected, 40);
         super.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected);
     }
 
+
     public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        super.onItemUse(player, world, pos, hand, facing, hitX, hitY, hitZ);
+
         if (facing == EnumFacing.UP) {
             boolean dug = false;
             IBlockState blockState = world.getBlockState(pos);
@@ -83,20 +81,6 @@ public class PatchedItemLivingShovel extends PatchedRootsItemShovelBase implemen
             }
         }
 
-        ItemStack stack = player.getHeldItem(hand);
-        Block block = world.getBlockState(pos).getBlock();
-
-        if (facing != EnumFacing.DOWN && world.isAirBlock(pos.up()) && (block == Blocks.GRASS || block == Blocks.DIRT)) {
-            if (!world.isRemote) {
-                world.playSound(null, pos, Blocks.GRASS_PATH.getSoundType().getStepSound(), SoundCategory.BLOCKS, 1F, 1F);
-                world.setBlockState(pos, Blocks.GRASS_PATH.getDefaultState());
-                if (!player.capabilities.isCreativeMode) {
-                    stack.damageItem(1, player);
-                }
-            }
-            return EnumActionResult.SUCCESS;
-        }
-
         return EnumActionResult.PASS;
     }
 
@@ -107,13 +91,9 @@ public class PatchedItemLivingShovel extends PatchedRootsItemShovelBase implemen
         CorrosionHelper.addCorrosionTooltips(stack, tooltip, flagIn.isAdvanced());
     }
 
-
     @Override
     public float getDestroySpeed(ItemStack stack, IBlockState state) {
-        Material material = state.getMaterial();
-        float str = material != Material.WOOD && material != Material.PLANTS && material != Material.VINE ? super.getDestroySpeed(stack, state) : this.efficiency;
-        str = CorrosionHelper.getDestroySpeed(str, stack, state);
-        return str;
+        return CorrosionHelper.getDestroySpeed(super.getDestroySpeed(stack, state), stack, state);
     }
 
     @Override
@@ -130,12 +110,4 @@ public class PatchedItemLivingShovel extends PatchedRootsItemShovelBase implemen
     public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
         return CorrosionHelper.getAttributeModifiers(super.getAttributeModifiers(slot, stack), slot, stack, ATTACK_DAMAGE_MODIFIER, this.attackDamage);
     }
-
-
-    /*
-    @Override
-    public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
-        return toRepair.getItem() == this && RootsIngredients.BARK.test(repair);
-    }
-     */
 }

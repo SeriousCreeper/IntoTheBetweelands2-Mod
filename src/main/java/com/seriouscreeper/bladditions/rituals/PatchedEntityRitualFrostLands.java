@@ -65,6 +65,7 @@ public class PatchedEntityRitualFrostLands extends EntityRitualBase implements I
                 breakout++;
             }
 
+            /*
             if (Util.rand.nextInt(ritual.interval_spawn) == 0) {
                 EntitySnowman snowy = new EntitySnowman(world);
                 if (!positions.isEmpty()) {
@@ -74,6 +75,7 @@ public class PatchedEntityRitualFrostLands extends EntityRitualBase implements I
                     affectedPositions.add(snowy.getPosition());
                 }
             }
+             */
 
             positions = Util.getBlocksWithinRadius(world, getPosition(), ritual.radius_x, ritual.radius_y, ritual.radius_z, (BlockPos pos) -> (world.getBlockState(pos).getBlock() == BlockRegistry.SWAMP_WATER || world.getBlockState(pos).getBlock() == Blocks.LAVA) && world.isAirBlock(pos.up()));
             if (!positions.isEmpty()) {

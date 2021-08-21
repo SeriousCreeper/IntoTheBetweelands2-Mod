@@ -96,10 +96,7 @@ public class PatchedItemVoidPickaxe extends ItemPickaxe implements IWarpingGear,
 
     @Override
     public float getDestroySpeed(ItemStack stack, IBlockState state) {
-        Material material = state.getMaterial();
-        float str = material != Material.WOOD && material != Material.PLANTS && material != Material.VINE ? super.getDestroySpeed(stack, state) : this.efficiency;
-        str = CorrosionHelper.getDestroySpeed(str, stack, state);
-        return str;
+        return CorrosionHelper.getDestroySpeed(super.getDestroySpeed(stack, state), stack, state);
     }
 
     @Override

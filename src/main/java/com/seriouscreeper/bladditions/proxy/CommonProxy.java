@@ -13,6 +13,7 @@ import com.seriouscreeper.bladditions.items.PatchedItemDentrothystFluidVial;
 import com.seriouscreeper.bladditions.items.PatchedItemDentrothystVial;
 import com.seriouscreeper.bladditions.items.PatchedVerdantCharm;
 import com.seriouscreeper.bladditions.items.tools.*;
+import com.seriouscreeper.bladditions.items.tools.roots.*;
 import com.seriouscreeper.bladditions.libs.BLAdditionsUtils;
 import com.seriouscreeper.bladditions.mixins.modsupport.MixinBLFluidRegistry;
 import com.seriouscreeper.bladditions.rituals.PatchedEntityRitualHeavyStorms;
@@ -29,8 +30,11 @@ import com.tiviacz.pizzacraft.init.ModBlocks;
 import com.tiviacz.pizzacraft.init.ModItems;
 import epicsquid.mysticallib.LibRegistry;
 import epicsquid.mysticallib.entity.RenderNull;
+import epicsquid.roots.Roots;
+import epicsquid.roots.api.CreateToolEvent;
 import epicsquid.roots.config.RitualConfig;
 import epicsquid.roots.integration.jei.soil.SoilRecipe;
+import epicsquid.roots.item.materials.Materials;
 import epicsquid.roots.ritual.RitualRegistry;
 import growthcraft.core.shared.CoreRegistry;
 import growthcraft.core.shared.config.GrowthcraftCoreConfig;
@@ -43,6 +47,7 @@ import growthcraft.milk.shared.fluids.MilkFluidTags;
 import growthcraft.milk.shared.init.GrowthcraftMilkFluids;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPistonBase;
+import net.minecraft.block.material.MapColor;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -102,8 +107,7 @@ import thecodex6824.thaumicaugmentation.api.item.IMorphicItem;
 import thecodex6824.thaumicaugmentation.common.util.MorphicArmorHelper;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.*;
 import java.util.List;
 
 @Mod.EventBusSubscriber
@@ -114,6 +118,79 @@ public class CommonProxy {
     public static SoundEvent BEE_SWARM;
     public static PatchedItemDentrothystVial DENTROTHYST_VIAL;
     public static PatchedItemDentrothystFluidVial DENTROTHYST_FLUID_VIAL;
+
+
+    @SubscribeEvent
+    public static void onCreateTool(CreateToolEvent event) {
+        switch(event.getRegistryName()) {
+            case "living_shovel":
+                LibRegistry.setActiveMod("roots", Roots.CONTAINER);
+                event.setItemResult(new PatchedItemLivingShovel(Materials.LIVING, event.getRegistryName()));
+            break;
+
+            case "living_sword":
+                LibRegistry.setActiveMod("roots", Roots.CONTAINER);
+                event.setItemResult(new PatchedItemLivingSword(Materials.LIVING, event.getRegistryName()));
+                break;
+
+            case "living_axe":
+                LibRegistry.setActiveMod("roots", Roots.CONTAINER);
+                event.setItemResult(new PatchedItemLivingAxe(Materials.LIVING, event.getRegistryName()));
+                break;
+
+            case "living_pickaxe":
+                LibRegistry.setActiveMod("roots", Roots.CONTAINER);
+                event.setItemResult(new PatchedItemLivingPickaxe(Materials.LIVING, event.getRegistryName()));
+                break;
+
+
+            case "terrastone_shovel":
+                LibRegistry.setActiveMod("roots", Roots.CONTAINER);
+                event.setItemResult(new PatchedItemTerrastoneShovel(Materials.TERRASTONE, event.getRegistryName()));
+                break;
+
+            case "terrastone_sword":
+                LibRegistry.setActiveMod("roots", Roots.CONTAINER);
+                event.setItemResult(new PatchedItemTerrastoneSword(Materials.TERRASTONE, event.getRegistryName()));
+                break;
+
+            case "terrastone_axe":
+                LibRegistry.setActiveMod("roots", Roots.CONTAINER);
+                event.setItemResult(new PatchedItemTerrastoneAxe(Materials.TERRASTONE, event.getRegistryName()));
+                break;
+
+            case "terrastone_pickaxe":
+                LibRegistry.setActiveMod("roots", Roots.CONTAINER);
+                event.setItemResult(new PatchedItemTerrastonePickaxe(Materials.TERRASTONE, event.getRegistryName()));
+                break;
+
+
+            case "runed_shovel":
+                LibRegistry.setActiveMod("roots", Roots.CONTAINER);
+                event.setItemResult(new PatchedItemRunedShovel(Materials.RUNIC, event.getRegistryName()));
+                break;
+
+            case "runed_sword":
+                LibRegistry.setActiveMod("roots", Roots.CONTAINER);
+                event.setItemResult(new PatchedItemRunedSword(Materials.RUNIC, event.getRegistryName()));
+                break;
+
+            case "runed_axe":
+                LibRegistry.setActiveMod("roots", Roots.CONTAINER);
+                event.setItemResult(new PatchedItemRunedAxe(Materials.RUNIC, event.getRegistryName()));
+                break;
+
+            case "runed_pickaxe":
+                LibRegistry.setActiveMod("roots", Roots.CONTAINER);
+                event.setItemResult(new PatchedItemRunedPickaxe(Materials.RUNIC, event.getRegistryName()));
+                break;
+
+            case "wildwood_bow":
+                LibRegistry.setActiveMod("roots", Roots.CONTAINER);
+                event.setItemResult(new PatchedItemWildwoodBow(event.getRegistryName()));
+                break;
+        }
+    }
 
 
     private static SoundEvent registerSound(String name) {
@@ -234,7 +311,6 @@ public class CommonProxy {
         List<IBakewareRecipe> recipes = manager.getRecipeList();
 
         for(int i = recipes.size() - 1; i >= 0; i--) {
-            System.out.println("----------------- REMOVING RECIPE: " + recipes.get(i).toString());
             manager.removeRecipe(recipes.get(i));
         }
 

@@ -67,7 +67,6 @@ public class BLBeeHiveWorldGen extends BeeHiveWorldGen {
                 IBlockState blockState = world.getBlockState(pos);
                 if ( blockState.getBlock() instanceof BlockLeaves
                         && world.getBlockState(pos.down()).getBlock() instanceof BlockAir) {
-                    System.out.println("SPAWNED BEE HIVE");
                     setBlockToBeeHive(world, pos.down());
                     spawnedBeeHive++;
                 }

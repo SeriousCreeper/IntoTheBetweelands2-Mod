@@ -8,10 +8,7 @@ import com.seriouscreeper.bladditions.BLAdditions;
 import com.seriouscreeper.bladditions.blocks.*;
 import com.seriouscreeper.bladditions.crafting.PatchedRecipeMagicDust;
 import com.seriouscreeper.bladditions.entities.GreeblingMerchantEntity;
-import com.seriouscreeper.bladditions.items.ItemAngrierPebble;
-import com.seriouscreeper.bladditions.items.PatchedItemDentrothystFluidVial;
-import com.seriouscreeper.bladditions.items.PatchedItemDentrothystVial;
-import com.seriouscreeper.bladditions.items.PatchedVerdantCharm;
+import com.seriouscreeper.bladditions.items.*;
 import com.seriouscreeper.bladditions.items.tools.*;
 import com.seriouscreeper.bladditions.items.tools.roots.*;
 import com.seriouscreeper.bladditions.libs.BLAdditionsUtils;
@@ -301,7 +298,7 @@ public class CommonProxy {
 
         manager.addRecipe(new BaseShapelessOreRecipe(new ItemStack(ModBlocks.RAW_PIZZA_0, 1), "foodPizzaDough", "foodCheese"));
         manager.addRecipe(new BaseShapelessOreRecipe(new ItemStack(ModBlocks.RAW_PIZZA_1, 1), "foodPizzaDough", "foodCheese", "foodMushroom"));
-        manager.addRecipe(new BaseShapelessOreRecipe(new ItemStack(ModBlocks.RAW_PIZZA_2, 1), "foodPizzaDough", new ItemStack(ItemRegistry.ANGLER_MEAT_RAW), new ItemStack(ItemRegistry.SWAMP_KELP_ITEM)));
+        manager.addRecipe(new BaseShapelessOreRecipe(new ItemStack(ModBlocks.RAW_PIZZA_2, 1), "foodPizzaDough", new ItemStack(ItemRegistry.ANADIA_MEAT_SMOKED), new ItemStack(ItemRegistry.SWAMP_KELP_ITEM)));
         manager.addRecipe(new BaseShapelessOreRecipe(new ItemStack(ModBlocks.RAW_PIZZA_3, 1), "foodPizzaDough", "foodCheese", new ItemStack(ItemRegistry.SNAIL_FLESH_RAW), new ItemStack(ItemRegistry.MIRE_SNAIL_EGG_COOKED)));
         manager.addRecipe(new BaseShapelessOreRecipe(new ItemStack(ModBlocks.RAW_PIZZA_4, 1), "foodPizzaDough", "foodCheese", "foodMushroom", new ItemStack(ItemRegistry.FROG_LEGS_RAW), new ItemStack(BlockRegistry.NETTLE)));
         manager.addRecipe(new BaseShapelessOreRecipe(new ItemStack(ModBlocks.RAW_PIZZA_5, 1), "foodPizzaDough", "foodCheese", "foodMushroom", new ItemStack(ItemRegistry.SAP_BALL), new ItemStack(ItemRegistry.SAP_SPIT), new ItemStack(ItemRegistry.SLUDGE_BALL)));
@@ -371,7 +368,7 @@ public class CommonProxy {
         ThaumcraftApi.addInfusionCraftingRecipe(new ResourceLocation("thaumcraft:SealHarvest"), new InfusionRecipe("SEALHARVEST", GolemHelper.getSealStack("thaumcraft:harvest"), 0, (new AspectList()).add(Aspect.PLANT, 10).add(Aspect.SENSES, 10).add(Aspect.MAN, 10), new ItemStack(ItemsTC.seals), new Object[]{new ItemStack(ItemRegistry.MIDDLE_FRUIT_BUSH_SEEDS), new ItemStack(ItemRegistry.SWAMP_REED_ITEM), new ItemStack(ItemRegistry.SWAMP_KELP_ITEM), new ItemStack(ItemRegistry.BLACK_HAT_MUSHROOM_ITEM), new ItemStack(ItemRegistry.FLAT_HEAD_MUSHROOM_ITEM), new ItemStack(ItemRegistry.BULB_CAPPED_MUSHROOM_ITEM)}));
 
         ThaumcraftApi.getCraftingRecipes().remove(new ResourceLocation("thaumcraft:SealButcher"));
-        ThaumcraftApi.addInfusionCraftingRecipe(new ResourceLocation("thaumcraft:SealButcher"), new InfusionRecipe("SEALBUTCHER", GolemHelper.getSealStack("thaumcraft:butcher"), 0, (new AspectList()).add(Aspect.BEAST, 10).add(Aspect.SENSES, 10).add(Aspect.MAN, 10), GolemHelper.getSealStack("thaumcraft:guard"), new Object[]{"leather", new ItemStack(ItemRegistry.SNAIL_FLESH_RAW), new ItemStack(ItemRegistry.ITEMS_MISC, 1, 1), new ItemStack(ItemRegistry.ANGLER_MEAT_RAW), new ItemStack(ItemRegistry.ITEMS_MISC, 1, 3), new ItemStack(ItemRegistry.ITEMS_MISC, 1, 14)}));
+        ThaumcraftApi.addInfusionCraftingRecipe(new ResourceLocation("thaumcraft:SealButcher"), new InfusionRecipe("SEALBUTCHER", GolemHelper.getSealStack("thaumcraft:butcher"), 0, (new AspectList()).add(Aspect.BEAST, 10).add(Aspect.SENSES, 10).add(Aspect.MAN, 10), GolemHelper.getSealStack("thaumcraft:guard"), new Object[]{"leather", new ItemStack(ItemRegistry.SNAIL_FLESH_RAW), new ItemStack(ItemRegistry.ITEMS_MISC, 1, 1), new ItemStack(ItemRegistry.ANADIA_MEAT_RAW), new ItemStack(ItemRegistry.ITEMS_MISC, 1, 3), new ItemStack(ItemRegistry.ITEMS_MISC, 1, 14)}));
 
         ThaumcraftApi.getCraftingRecipes().remove(new ResourceLocation("thaumcraft:ArcaneBore"));
         ThaumcraftApi.addInfusionCraftingRecipe(new ResourceLocation("thaumcraft:ArcaneBore"), new InfusionRecipe("ARCANEBORE", new ItemStack(ItemsTC.turretPlacer, 1, 2), 4, (new AspectList()).add(Aspect.ENERGY, 25).add(Aspect.EARTH, 25).add(Aspect.MECHANISM, 100).add(Aspect.VOID, 25).add(Aspect.MOTION, 25), new ItemStack(ItemsTC.turretPlacer), new Object[]{new ItemStack(BlocksTC.plankGreatwood), new ItemStack(BlocksTC.plankGreatwood), new ItemStack(ItemsTC.mechanismComplex), "plateBrass", Ingredient.fromItem(ItemRegistry.OCTINE_PICKAXE), Ingredient.fromItem(ItemRegistry.OCTINE_SHOVEL), new ItemStack(ItemsTC.morphicResonator), new ItemStack(ItemsTC.nuggets, 1, 10)}));
@@ -395,7 +392,7 @@ public class CommonProxy {
         ThaumcraftApi.addInfusionCraftingRecipe(new ResourceLocation("thaumicperiphery", "magic_quiver"), new InfusionRecipe("MAGICQUIVER", new ItemStack(ModContent.magic_quiver), 4, (new AspectList()).add(Aspect.VOID, 100).add(Aspect.ORDER, 25).add(Aspect.DESIRE, 25).add(Aspect.MAGIC, 15).add(Aspect.AURA, 15), new ItemStack(ItemsTC.baubles, 1, 2), new Object[]{new ItemStack(ItemsTC.visResonator), "leather", new ItemStack(ItemsTC.fabric), new ItemStack(ItemRegistry.ANGLER_TOOTH_ARROW), new ItemStack(ItemsTC.fabric), "leather"}));
 
         ThaumcraftApi.getCraftingRecipes().remove(new ResourceLocation("thaumcraft:malignant_heart"));
-        ThaumcraftApi.addInfusionCraftingRecipe(new ResourceLocation("thaumicperiphery", "malignant_heart"), new InfusionRecipe("MALIGNANTHEART", new ItemStack(ModContent.malignant_heart), 6, (new AspectList()).add(Aspect.AVERSION, 50).add(Aspect.DEATH, 50).add(Aspect.UNDEAD, 25).add(Aspect.FLUX, 15).add(Aspect.ENTROPY, 10), new ItemStack(ItemRegistry.ITEMS_MISC, 1, 25), new Object[]{new ItemStack(ItemsTC.brain), new ItemStack(ItemRegistry.ITEMS_MISC, 1, 44), new ItemStack(ItemsTC.tallow), new ItemStack(Items.ROTTEN_FLESH), new ItemStack(ItemsTC.tallow), new ItemStack(ItemRegistry.WIGHT_HEART)}));
+        ThaumcraftApi.addInfusionCraftingRecipe(new ResourceLocation("thaumicperiphery", "malignant_heart"), new InfusionRecipe("MALIGNANTHEART", new ItemStack(ModContent.malignant_heart), 6, (new AspectList()).add(Aspect.AVERSION, 50).add(Aspect.DEATH, 50).add(Aspect.UNDEAD, 25).add(Aspect.FLUX, 15).add(Aspect.ENTROPY, 10), new ItemStack(ItemRegistry.ITEMS_MISC, 1, 25), new Object[]{new ItemStack(ItemsTC.brain), new ItemStack(ItemRegistry.ITEMS_MISC, 1, 44), new ItemStack(ItemsTC.tallow), new ItemStack(ItemRegistry.ITEMS_MISC, 1, 56), new ItemStack(ItemsTC.tallow), new ItemStack(ItemRegistry.WIGHT_HEART)}));
 
         ThaumcraftApi.getCraftingRecipes().remove(new ResourceLocation("thaumcraft:CausalityCollapser"));
         ThaumcraftApi.addInfusionCraftingRecipe(new ResourceLocation("thaumcraft:CausalityCollapser"), new InfusionRecipe("RIFTCLOSER", new ItemStack(ItemsTC.causalityCollapser), 8, (new AspectList()).add(Aspect.ELDRITCH, 50).add(Aspect.FLUX, 50), new ItemStack(ItemRegistry.ANGRY_PEBBLE), new Object[]{new ItemStack(ItemsTC.morphicResonator), "blockRedstone", new ItemStack(ItemsTC.alumentum), "nitor", new ItemStack(ItemsTC.visResonator), "blockRedstone", new ItemStack(ItemsTC.alumentum), "nitor"}));
@@ -614,6 +611,7 @@ public class CommonProxy {
         //event.getRegistry().register(ModItems.living_shovel = new PatchedItemLivingShovel(Materials.LIVING, "living_shovel"));
 
         event.getRegistry().register(new ItemAngrierPebble());
+        event.getRegistry().register(new ItemCorruptedBoneWayfinder());
     }
 
 

@@ -7,7 +7,9 @@ import growthcraft.core.shared.tileentity.GrowthcraftTileDeviceBase;
 import growthcraft.core.shared.tileentity.feature.IFluidTankOperable;
 import growthcraft.milk.shared.init.GrowthcraftMilkFluids;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -21,6 +23,8 @@ import net.minecraft.tileentity.TileEntityDispenser;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
@@ -42,6 +46,7 @@ import thaumcraft.api.capabilities.IPlayerKnowledge;
 import thaumcraft.api.capabilities.ThaumcraftCapabilities;
 import thaumcraft.api.research.ResearchCategories;
 import thaumcraft.api.research.ResearchCategory;
+import thebetweenlands.common.block.structure.BlockFenceBetweenlands;
 import thebetweenlands.common.entity.mobs.EntityLurker;
 import thebetweenlands.common.entity.projectiles.EntityBetweenstonePebble;
 import thebetweenlands.common.entity.projectiles.EntityPyradFlame;
@@ -51,6 +56,7 @@ import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.tile.TileEntityBarrel;
+import vazkii.quark.decoration.entity.EntityLeashKnot2TheKnotting;
 
 import java.util.Map;
 
@@ -239,6 +245,36 @@ public class BLAdditionsEventHandler {
                     e.setCanceled(true);
                 }
             }
+        }
+    }
+
+
+    @SubscribeEvent
+    public void onRightClick(PlayerInteractEvent.RightClickBlock event) {
+        World world = event.getWorld();
+        if(world.isRemote)
+            return;
+
+        EntityPlayer player = event.getEntityPlayer();
+        ItemStack stack = player.getHeldItem(event.getHand());
+        BlockPos pos = event.getPos();
+        IBlockState state = world.getBlockState(pos);
+
+        if(stack.getItem() == Items.LEAD && state.getBlock() instanceof BlockFenceBetweenlands) {
+            for(EntityLiving entityliving : world.getEntitiesWithinAABB(EntityLiving.class, new AxisAlignedBB(player.posX - 7, player.posY - 7, player.posZ - 7, player.posX + 7, player.posY + 7, player.posZ + 7))) {
+                if(entityliving.getLeashHolder() == player)
+                    return;
+            }
+
+            EntityLeashKnot2TheKnotting knot = new EntityLeashKnot2TheKnotting(world);
+            knot.setPosition(pos.getX() + 0.5, pos.getY() + 0.5 - 1F / 8F, pos.getZ() + 0.5);
+            world.spawnEntity(knot);
+            knot.setLeashHolder(player, true);
+
+            if(!player.isCreative())
+                stack.shrink(1);
+            world.playSound(null, pos, SoundEvents.ENTITY_LEASHKNOT_PLACE, SoundCategory.BLOCKS, 1F, 1F);
+            event.setCanceled(true);
         }
     }
 }

@@ -14,12 +14,14 @@
     "MixinFoodBase",
     "MixinMystgears",
     "MixinPizzaOven",
+    "quark.MixinEntityLeashKnot",
     "roots.MixinEntityRitualHeavyStorms",
-    "roots.spells.MixinSpellNaturesScythe",
     "thebetweenlands.MixinItemRegistry",
     "thebetweenlands.MixinItemRingOfDisperion"
   ],
-  "client": [],
+  "client": [
+    "quark.MixinRenderLeashKnot2"
+  ],
   "injectors": {
     "maxShiftBy": 10
   }

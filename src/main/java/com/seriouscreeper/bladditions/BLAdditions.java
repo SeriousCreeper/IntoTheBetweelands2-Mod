@@ -33,7 +33,7 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import thebetweenlands.common.block.farming.BlockGenericDugSoil;
-import thebetweenlands.common.entity.EntityAngryPebble;
+import thebetweenlands.common.entity.projectiles.EntityAngryPebble;
 import thebetweenlands.common.entity.projectiles.EntityBLArrow;
 import thebetweenlands.common.item.tools.bow.EnumArrowType;
 import thebetweenlands.common.registries.ItemRegistry;

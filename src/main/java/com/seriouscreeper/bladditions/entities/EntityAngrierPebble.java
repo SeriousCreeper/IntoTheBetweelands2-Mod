@@ -2,7 +2,7 @@ package com.seriouscreeper.bladditions.entities;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.world.World;
-import thebetweenlands.common.entity.EntityAngryPebble;
+import thebetweenlands.common.entity.projectiles.EntityAngryPebble;
 
 public class EntityAngrierPebble extends EntityAngryPebble {
     public EntityAngrierPebble(World world) {

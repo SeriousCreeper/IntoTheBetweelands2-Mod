@@ -239,8 +239,6 @@ public class BLAdditionsEventHandler {
                     e.setCanceled(true);
                 }
             }
-        } else {
-            e.setCanceled(true);
         }
     }
 }

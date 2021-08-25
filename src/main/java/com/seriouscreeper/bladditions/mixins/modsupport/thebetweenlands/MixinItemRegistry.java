@@ -1,4 +1,4 @@
-package com.seriouscreeper.bladditions.mixins.modsupport;
+package com.seriouscreeper.bladditions.mixins.modsupport.thebetweenlands;
 import com.seriouscreeper.bladditions.proxy.CommonProxy;
 import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.*;

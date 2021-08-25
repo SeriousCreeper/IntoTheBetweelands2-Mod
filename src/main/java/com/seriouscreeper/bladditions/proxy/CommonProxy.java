@@ -15,9 +15,6 @@ import com.seriouscreeper.bladditions.items.PatchedVerdantCharm;
 import com.seriouscreeper.bladditions.items.tools.*;
 import com.seriouscreeper.bladditions.items.tools.roots.*;
 import com.seriouscreeper.bladditions.libs.BLAdditionsUtils;
-import com.seriouscreeper.bladditions.mixins.modsupport.MixinBLFluidRegistry;
-import com.seriouscreeper.bladditions.rituals.PatchedEntityRitualHeavyStorms;
-import com.seriouscreeper.bladditions.rituals.PatchedRitualHeavyStorms;
 import com.seriouscreeper.bladditions.tiles.PatchedTilePotionSprayer;
 import com.seriouscreeper.bladditions.tiles.PatchedTileSpa;
 import com.seriouscreeper.bladditions.tiles.TileCrucibleSwamp;
@@ -27,19 +24,15 @@ import com.tiviacz.pizzacraft.crafting.bakeware.BaseShapelessOreRecipe;
 import com.tiviacz.pizzacraft.crafting.bakeware.IBakewareRecipe;
 import com.tiviacz.pizzacraft.crafting.bakeware.PizzaCraftingManager;
 import com.tiviacz.pizzacraft.init.ModBlocks;
-import com.tiviacz.pizzacraft.init.ModItems;
 import epicsquid.mysticallib.LibRegistry;
 import epicsquid.mysticallib.entity.RenderNull;
 import epicsquid.roots.Roots;
 import epicsquid.roots.api.CreateToolEvent;
-import epicsquid.roots.config.RitualConfig;
 import epicsquid.roots.integration.jei.soil.SoilRecipe;
 import epicsquid.roots.item.materials.Materials;
-import epicsquid.roots.ritual.RitualRegistry;
+import epicsquid.roots.spell.SpellNaturesScythe;
 import growthcraft.core.shared.CoreRegistry;
 import growthcraft.core.shared.config.GrowthcraftCoreConfig;
-import growthcraft.core.shared.fluids.FluidDictionary;
-import growthcraft.core.shared.fluids.FluidTag;
 import growthcraft.core.shared.legacy.FluidContainerRegistry;
 import growthcraft.core.shared.utils.TickUtils;
 import growthcraft.milk.common.Init;
@@ -47,7 +40,6 @@ import growthcraft.milk.shared.fluids.MilkFluidTags;
 import growthcraft.milk.shared.init.GrowthcraftMilkFluids;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPistonBase;
-import net.minecraft.block.material.MapColor;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -203,12 +195,6 @@ public class CommonProxy {
 
 
     public void preInit(FMLPreInitializationEvent e) {
-        LibRegistry.registerEntity(PatchedEntityRitualHeavyStorms.class);
-
-        if(BLAdditions.proxy instanceof ClientProxy) {
-            LibRegistry.registerEntityRenderer(PatchedEntityRitualHeavyStorms.class, new RenderNull.Factory());
-        }
-
         // Betweenlands gears
         BlockTurret.metalTextures.put(new OreIngredient("ingotSyrmorite"), "syrmorite");
         BlockTurret.metalTextures.put(new OreIngredient("ingotOctine"), "octine");
@@ -222,6 +208,8 @@ public class CommonProxy {
 
         SoilRecipe.recipes = Arrays.asList(SoilRecipe.EARTH, SoilRecipe.AIR, SoilRecipe.WATER);
 
+        //RitualRegistry.ritualRegistry.remove("ritual_heavy_storms");
+        //RitualRegistry.addRitual(RitualRegistry.ritual_heavy_storms = new PatchedRitualHeavyStorms("ritual_heavy_storms", RitualConfig.disableRitualCategory.disableHeavyStorms));
 
         registerEntities();
     }
@@ -263,9 +251,6 @@ public class CommonProxy {
         RecipeRegistry.fluidReactionRecipes.add(new FluidReactionRecipe(new FluidStack(RegistryManager.fluid_steam, 5), new FluidStack(FluidRegistry.SWAMP_WATER, 1), new Color(255, 255, 255)));
 
         NetworkRegistry.INSTANCE.registerGuiHandler(BLAdditions.instance, new GUIProxy());
-
-        RitualRegistry.ritualRegistry.remove("ritual_heavy_storms");
-        RitualRegistry.addRitual(RitualRegistry.ritual_heavy_storms = new PatchedRitualHeavyStorms("ritual_heavy_storms", RitualConfig.disableRitualCategory.disableWildGrowth));
 
         ScanningManager.addScannableThing(new ScanOreDictionary("f_MATIRON", new String[]{"oreSyrmorite", "ingotSyrmorite", "blockSyrmorite", "plateSyrmorite"}));
         ScanningManager.addScannableThing(new ScanItem("f_MATCLAY", new ItemStack(BlockRegistry.MUD)));

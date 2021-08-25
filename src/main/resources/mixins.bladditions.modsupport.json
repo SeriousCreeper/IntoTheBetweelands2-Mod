@@ -10,11 +10,14 @@
     "MixinBLFluidRegistry",
     "MixinBlockChoppingBoard",
     "MixinBlockPizza",
-    "MixinCheeseCurds",
+    "MixinCheese",
     "MixinFoodBase",
-    "MixinItemRegistry",
     "MixinMystgears",
-    "MixinPizzaOven"
+    "MixinPizzaOven",
+    "roots.MixinEntityRitualHeavyStorms",
+    "roots.spells.MixinSpellNaturesScythe",
+    "thebetweenlands.MixinItemRegistry",
+    "thebetweenlands.MixinItemRingOfDisperion"
   ],
   "client": [],
   "injectors": {

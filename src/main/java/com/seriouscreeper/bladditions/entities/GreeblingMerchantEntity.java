@@ -157,6 +157,16 @@ public class GreeblingMerchantEntity extends EntityCreature implements IEntityBL
         }
     }
 
+    @Override
+    public boolean canBePushed() {
+        return false;
+    }
+
+    @Override
+    public boolean canBeLeashedTo(EntityPlayer player) {
+        return false;
+    }
+
     public boolean isGreeblingAboveWater() {
         AxisAlignedBB floatingBox = new AxisAlignedBB(this.getEntityBoundingBox().minX + 0.25D, this.getEntityBoundingBox().minY + 0.11999999731779099D, this.getEntityBoundingBox().minZ + 0.25D, this.getEntityBoundingBox().maxX - 0.25D, this.getEntityBoundingBox().minY + 0.0625D, this.getEntityBoundingBox().maxZ - 0.25D);
         return this.getEntityWorld().containsAnyLiquid(floatingBox);

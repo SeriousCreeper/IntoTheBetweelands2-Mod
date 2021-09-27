@@ -63,9 +63,9 @@ public class MixinRenderLiving<T extends EntityLiving> {
             float f6;
             float f7;
             for(k = 0; k <= 24; ++k) {
-                f4 = 0.1F;
-                f5 = 0.6F;
-                f6 = 0.2F;
+                f4 = 0.37F;
+                f5 = 0.5F;
+                f6 = 0.22F;
                 if (k % 2 == 0) {
                     f4 *= 0.7F;
                     f5 *= 0.7F;

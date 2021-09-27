@@ -1,10 +1,14 @@
 package com.seriouscreeper.bladditions.mixins;
 
+import com.seriouscreeper.bladditions.proxy.CommonProxy;
 import crafttweaker.mc1120.brackets.BracketHandlerBlockState;
 import net.minecraft.block.BlockFence;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityHanging;
 import net.minecraft.entity.EntityLeashKnot;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
@@ -13,7 +17,7 @@ import thebetweenlands.common.block.structure.BlockFenceBetweenlands;
 
 import javax.annotation.Nullable;
 
-@Mixin(value = EntityLeashKnot.class)
+@Mixin(value = EntityLeashKnot.class, priority = 6000)
 public class MixinLeashKnot extends EntityHanging {
     public MixinLeashKnot(World worldIn) {
         super(worldIn);
@@ -24,7 +28,7 @@ public class MixinLeashKnot extends EntityHanging {
      */
     @Overwrite
     public boolean onValidSurface() {
-        return this.world.getBlockState(this.hangingPosition).getBlock() instanceof BlockFence || this.world.getBlockState(this.hangingPosition).getBlock() instanceof BlockFenceBetweenlands;
+        return CommonProxy.ALLOWED_FENCES.contains(this.world.getBlockState(this.hangingPosition).getBlock());
     }
 
     @Shadow

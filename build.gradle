@@ -52,6 +52,10 @@ configurations {
 repositories {
     mavenCentral()
     maven { url = 'https://repo.spongepowered.org/maven' }
+    maven {
+        name = "CurseForge"
+        url = "https://minecraft.curseforge.com/api/maven/"
+    }
 }
 
 dependencies {
@@ -109,6 +113,11 @@ jar {
     configurations.shade.each { dep ->
         from(project.zipTree(dep)) {
             rename 'LICENSE.txt', 'org/spongepowered/LICENSE.txt'
+
+            exclude 'META-INF/*.SF'
+            exclude 'META-INF/*.RSA'
+            exclude 'META-INF/*.MF'
+
             exclude '**/*.html'
         }
     }

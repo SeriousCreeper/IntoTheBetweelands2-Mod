@@ -12,12 +12,14 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -26,6 +28,8 @@ import thaumcraft.common.config.ConfigItems;
 import thaumcraft.common.items.IThaumcraftItems;
 import thebetweenlands.api.item.CorrosionHelper;
 import thebetweenlands.api.item.ICorrodible;
+import thebetweenlands.common.entity.mobs.EntityTinySludgeWorm;
+import thebetweenlands.common.registries.AdvancementCriterionRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
 
 import javax.annotation.Nullable;
@@ -90,11 +94,13 @@ public class PatchedItemThaumiumShovel extends ItemSpade implements IThaumcraftI
             if (blockState.getBlock() == BlockRegistry.SWAMP_DIRT) {
                 world.setBlockState(pos, BlockRegistry.DUG_SWAMP_DIRT.getDefaultState());
                 dug = true;
+                this.checkForWormSpawn(world, pos, player);
             }
 
             if (blockState.getBlock() == BlockRegistry.SWAMP_GRASS) {
                 world.setBlockState(pos, BlockRegistry.DUG_SWAMP_GRASS.getDefaultState());
                 dug = true;
+                this.checkForWormSpawn(world, pos, player);
             }
 
             if (blockState.getBlock() == BlockRegistry.PURIFIED_SWAMP_DIRT) {
@@ -121,6 +127,18 @@ public class PatchedItemThaumiumShovel extends ItemSpade implements IThaumcraftI
         }
 
         return EnumActionResult.PASS;
+    }
+
+
+    public void checkForWormSpawn(World world, BlockPos pos, EntityPlayer player) {
+        if (!world.isRemote && world.getDifficulty() != EnumDifficulty.PEACEFUL && world.rand.nextInt(12) == 0) {
+            EntityTinySludgeWorm entity = new EntityTinySludgeWorm(world);
+            entity.setLocationAndAngles((double)pos.getX() + 0.5D, (double)pos.getY() + 1.0D, (double)pos.getZ() + 0.5D, 0.0F, 0.0F);
+            world.spawnEntity(entity);
+            if (player instanceof EntityPlayerMP) {
+                AdvancementCriterionRegistry.WORM_FROM_DIRT.trigger((EntityPlayerMP)player);
+            }
+        }
     }
 
 

@@ -17,7 +17,7 @@ import vazkii.quark.world.client.render.ChainRenderer;
 
 import javax.annotation.Nullable;
 
-@Mixin(value = RenderLeashKnot2.class)
+@Mixin(value = RenderLeashKnot2.class, remap = false)
 public class MixinRenderLeashKnot2 extends Render<EntityLeashKnot2TheKnotting> {
     protected MixinRenderLeashKnot2(RenderManager renderManager) {
         super(renderManager);
@@ -68,8 +68,8 @@ public class MixinRenderLeashKnot2 extends Render<EntityLeashKnot2TheKnotting> {
         GlStateManager.disableTexture2D();
         GlStateManager.disableLighting();
         GlStateManager.disableCull();
-        ChainRenderer.drawChainSegment(x, y, z, bufferbuilder, d13, d14, d15, 0.025, 0, 0.1f, 0.6f, 0.2f, 1);
-        ChainRenderer.drawChainSegment(x, y, z, bufferbuilder, d13, d14, d15, 0, 0.025, 0.1f, 0.6f, 0.2f, 1);
+        ChainRenderer.drawChainSegment(x, y, z, bufferbuilder, d13, d14, d15, 0.025, 0, 0.37f, 0.5f, 0.22f, 1);
+        ChainRenderer.drawChainSegment(x, y, z, bufferbuilder, d13, d14, d15, 0, 0.025, 0.37f, 0.5f, 0.22f, 1);
         GlStateManager.enableLighting();
         GlStateManager.enableTexture2D();
         GlStateManager.enableCull();

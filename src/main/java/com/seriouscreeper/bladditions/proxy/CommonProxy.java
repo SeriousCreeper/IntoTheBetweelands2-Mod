@@ -1,9 +1,7 @@
 package com.seriouscreeper.bladditions.proxy;
 
+import com.google.common.collect.Maps;
 import com.mrbysco.anotherliquidmilkmod.init.MilkRegistry;
-import com.rcx.mystgears.MysticalGears;
-import com.rcx.mystgears.block.BlockTurret;
-import com.rcx.mystgears.item.ItemGear;
 import com.seriouscreeper.bladditions.BLAdditions;
 import com.seriouscreeper.bladditions.blocks.*;
 import com.seriouscreeper.bladditions.crafting.PatchedRecipeMagicDust;
@@ -12,6 +10,8 @@ import com.seriouscreeper.bladditions.items.*;
 import com.seriouscreeper.bladditions.items.tools.*;
 import com.seriouscreeper.bladditions.items.tools.roots.*;
 import com.seriouscreeper.bladditions.libs.BLAdditionsUtils;
+import com.seriouscreeper.bladditions.potion.PotionRegistery;
+import com.seriouscreeper.bladditions.potion.PotionThaumcraftResearch;
 import com.seriouscreeper.bladditions.tiles.PatchedTilePotionSprayer;
 import com.seriouscreeper.bladditions.tiles.PatchedTileSpa;
 import com.seriouscreeper.bladditions.tiles.TileCrucibleSwamp;
@@ -22,12 +22,12 @@ import com.tiviacz.pizzacraft.crafting.bakeware.IBakewareRecipe;
 import com.tiviacz.pizzacraft.crafting.bakeware.PizzaCraftingManager;
 import com.tiviacz.pizzacraft.init.ModBlocks;
 import epicsquid.mysticallib.LibRegistry;
-import epicsquid.mysticallib.entity.RenderNull;
+import epicsquid.mysticallib.event.RegisterContentEvent;
 import epicsquid.roots.Roots;
 import epicsquid.roots.api.CreateToolEvent;
+import epicsquid.roots.init.ModItems;
 import epicsquid.roots.integration.jei.soil.SoilRecipe;
 import epicsquid.roots.item.materials.Materials;
-import epicsquid.roots.spell.SpellNaturesScythe;
 import growthcraft.core.shared.CoreRegistry;
 import growthcraft.core.shared.config.GrowthcraftCoreConfig;
 import growthcraft.core.shared.legacy.FluidContainerRegistry;
@@ -36,6 +36,7 @@ import growthcraft.milk.common.Init;
 import growthcraft.milk.shared.fluids.MilkFluidTags;
 import growthcraft.milk.shared.init.GrowthcraftMilkFluids;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockCrops;
 import net.minecraft.block.BlockPistonBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -64,9 +65,6 @@ import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.OreIngredient;
-import teamroots.embers.RegistryManager;
-import teamroots.embers.recipe.FluidReactionRecipe;
-import teamroots.embers.recipe.RecipeRegistry;
 import thaumcraft.Thaumcraft;
 import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.ThaumcraftApiHelper;
@@ -84,8 +82,6 @@ import thaumcraft.common.lib.crafting.InfusionEnchantmentRecipe;
 import thaumcraft.common.lib.enchantment.EnumInfusionEnchantment;
 import thaumicperiphery.ModContent;
 import thebetweenlands.common.entity.mobs.*;
-import thebetweenlands.common.item.misc.ItemMisc;
-import thebetweenlands.common.recipe.misc.CompostRecipe;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -94,10 +90,15 @@ import thecodex6824.thaumicaugmentation.api.ThaumicAugmentationAPI;
 import thecodex6824.thaumicaugmentation.api.item.CapabilityMorphicTool;
 import thecodex6824.thaumicaugmentation.api.item.IMorphicItem;
 import thecodex6824.thaumicaugmentation.common.util.MorphicArmorHelper;
+import vazkii.quark.base.module.Feature;
+import vazkii.quark.tweaks.base.BlockStack;
 
+import javax.annotation.Nonnull;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Mod.EventBusSubscriber
 public class CommonProxy {
@@ -107,6 +108,11 @@ public class CommonProxy {
     public static SoundEvent BEE_SWARM;
     public static PatchedItemDentrothystVial DENTROTHYST_VIAL;
     public static PatchedItemDentrothystFluidVial DENTROTHYST_FLUID_VIAL;
+    public static HashMap<Block, List<PotionThaumcraftResearch.RESEARCH_CATEGORY>> WELLNESS_BLOCKS = new HashMap<>();
+
+
+    public static List<Block> ALLOWED_FENCES = new ArrayList<>();
+    public static final Map<BlockStack, BlockStack> CROPS = Maps.newHashMap();
 
 
     @SubscribeEvent
@@ -192,16 +198,7 @@ public class CommonProxy {
 
 
     public void preInit(FMLPreInitializationEvent e) {
-        // Betweenlands gears
-        BlockTurret.metalTextures.put(new OreIngredient("ingotSyrmorite"), "syrmorite");
-        BlockTurret.metalTextures.put(new OreIngredient("ingotOctine"), "octine");
-        BlockTurret.metalTextures.put(new OreIngredient("gemValonite"), "valonite");
-
-        MysticalGears.items.add(new ItemGear("Weedwood"));
-        MysticalGears.items.add(new ItemGear("Cragrock"));
-        MysticalGears.items.add(new ItemGear("Syrmorite"));
-        MysticalGears.items.add(new ItemGear("Octine"));
-        MysticalGears.items.add(new ItemGear("Valonite"));
+        PotionRegistery.RegisterPotions();
 
         SoilRecipe.recipes = Arrays.asList(SoilRecipe.EARTH, SoilRecipe.AIR, SoilRecipe.WATER);
 
@@ -244,9 +241,6 @@ public class CommonProxy {
 
          */
 
-        RecipeRegistry.fluidReactionRecipes.removeIf(n -> n.getOutput().getFluid() == net.minecraftforge.fluids.FluidRegistry.WATER);
-        RecipeRegistry.fluidReactionRecipes.add(new FluidReactionRecipe(new FluidStack(RegistryManager.fluid_steam, 5), new FluidStack(FluidRegistry.SWAMP_WATER, 1), new Color(255, 255, 255)));
-
         NetworkRegistry.INSTANCE.registerGuiHandler(BLAdditions.instance, new GUIProxy());
 
         ScanningManager.addScannableThing(new ScanOreDictionary("f_MATIRON", new String[]{"oreSyrmorite", "ingotSyrmorite", "blockSyrmorite", "plateSyrmorite"}));
@@ -285,6 +279,26 @@ public class CommonProxy {
                 GrowthcraftMilkFluids.cream.asFluidStack(2 * GrowthcraftCoreConfig.BOTTLE_CAPACITY), GrowthcraftMilkFluids.skimMilk.asFluidStack(Init.roundToBottles(FluidContainerRegistry.BUCKET_VOLUME - 2 * GrowthcraftCoreConfig.BOTTLE_CAPACITY)),
                 TickUtils.minutes(1));
 
+        ALLOWED_FENCES.add(BlockRegistry.HEARTHGROVE_PLANK_FENCE);
+        ALLOWED_FENCES.add(BlockRegistry.NIBBLETWIG_PLANK_FENCE);
+        ALLOWED_FENCES.add(BlockRegistry.ROTTEN_PLANK_FENCE);
+        ALLOWED_FENCES.add(BlockRegistry.WEEDWOOD_LOG_FENCE);
+        ALLOWED_FENCES.add(BlockRegistry.WEEDWOOD_PLANK_FENCE);
+        ALLOWED_FENCES.add(BlockRegistry.GIANT_ROOT_PLANK_FENCE);
+        ALLOWED_FENCES.add(BlockRegistry.RUBBER_TREE_PLANK_FENCE);
+
+        fillCropList();
+    }
+
+
+    private void fillCropList() {
+        CROPS.clear();
+
+        ForgeRegistries.BLOCKS.getValuesCollection().stream()
+                .filter(b -> !Feature.isVanilla(b) && b instanceof BlockCrops)
+                .forEach(b -> CROPS.put(new BlockStack(b, ((BlockCrops) b).getMaxAge()), new BlockStack(b)));
+
+        CROPS.put(new BlockStack(BlockRegistry.FUNGUS_CROP, 15), new BlockStack(BlockRegistry.FUNGUS_CROP));
     }
 
 
@@ -316,6 +330,23 @@ public class CommonProxy {
         registerSmeltingRecipes();
         registerAdditionalBLFurnaceIngots();
         setupPizzaRecipes();
+        setupWellnessBlocks();
+    }
+
+
+    private void setupWellnessBlocks() {
+        WELLNESS_BLOCKS.put(BlocksTC.crucible, Collections.singletonList(PotionThaumcraftResearch.RESEARCH_CATEGORY.ALCHEMY));
+        WELLNESS_BLOCKS.put(BlocksTC.golemBuilder, Collections.singletonList(PotionThaumcraftResearch.RESEARCH_CATEGORY.GOLEMANCY));
+        WELLNESS_BLOCKS.put(BlocksTC.auraTotem, Collections.singletonList(PotionThaumcraftResearch.RESEARCH_CATEGORY.AUROMANCY));
+
+        WELLNESS_BLOCKS.put(Blocks.BOOKSHELF, Stream.of(
+                PotionThaumcraftResearch.RESEARCH_CATEGORY.ALCHEMY,
+                PotionThaumcraftResearch.RESEARCH_CATEGORY.ARCANE,
+                PotionThaumcraftResearch.RESEARCH_CATEGORY.ARTIFICE,
+                PotionThaumcraftResearch.RESEARCH_CATEGORY.AUROMANCY,
+                PotionThaumcraftResearch.RESEARCH_CATEGORY.GOLEMANCY,
+                PotionThaumcraftResearch.RESEARCH_CATEGORY.ELDRITCH
+        ).collect(Collectors.toList()));
     }
 
 
@@ -543,6 +574,12 @@ public class CommonProxy {
 
 
     @SubscribeEvent
+    public static void registerBlocks(@Nonnull RegisterContentEvent event) {
+        //event.addBlock(epicsquid.roots.init.ModBlocks.baffle_cap_mushroom = new BlockCustomBaffleCap());
+    }
+
+
+    @SubscribeEvent
     public static void registerBlocks(RegistryEvent.Register<Block> event) {
         GameRegistry.registerTileEntity(TileCrucibleSwamp.class, "thaumcraft:tilecrucibleswamp");
         GameRegistry.registerTileEntity(TileWaterJugSwamp.class, "thaumcraft:tilewaterjug");
@@ -569,6 +606,7 @@ public class CommonProxy {
         //GrowthcraftBeesBlocks.beeHive = new BlockDefinition((new PatchedBeeHive("beehive")));
 
         BlocksTC.infernalFurnace = registerBlock(new PatchedBlockInfernalFurnace());
+
     }
 
 
@@ -612,6 +650,8 @@ public class CommonProxy {
 
         event.getRegistry().register(new ItemAngrierPebble());
         event.getRegistry().register(new ItemCorruptedBoneWayfinder());
+
+        ModItems.baffle_cap = ItemRegistry.YELLOW_DOTTED_FUNGUS;
     }
 
 
@@ -621,8 +661,8 @@ public class CommonProxy {
     public static void registerRecipes(RegistryEvent.Register<IRecipe> event) {
         event.getRegistry().register(new PatchedRecipeMagicDust().setRegistryName("thaumcraft:salismundus"));
 
-        CompostRecipe.removeRecipe(CompostRecipe.getCompostRecipe(ItemMisc.EnumItemMisc.DRY_BARK.create(1)));
-        CompostRecipe.addRecipe(6, 5000, ItemMisc.EnumItemMisc.DRY_BARK.create(1));
+        //CompostRecipe.removeRecipe(CompostRecipe.getCompostRecipe(ItemMisc.EnumItemMisc.DRY_BARK.create(1)));
+        //CompostRecipe.addRecipe(6, 5000, ItemMisc.EnumItemMisc.DRY_BARK.create(1));
     }
 
 

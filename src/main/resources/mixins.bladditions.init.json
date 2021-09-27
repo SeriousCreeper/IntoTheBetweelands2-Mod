@@ -7,9 +7,9 @@
   "refmap": "refmap.bladditions.json",
   "mixins": [
     "MapColorAccessor",
-    "MixinLeashKnot",
     "MixinMapColors",
-    "init.MixinLoader"
+    "init.MixinLoader",
+    "MixinLeashKnot"
   ],
   "client": [
     "MixinRenderLiving"

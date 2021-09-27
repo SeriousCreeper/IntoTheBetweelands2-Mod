@@ -4,6 +4,7 @@ import com.seriouscreeper.bladditions.commands.BLAdditionsCommands;
 import com.seriouscreeper.bladditions.events.BLAdditionsEventHandler;
 import com.seriouscreeper.bladditions.proxy.CommonProxy;
 import net.minecraft.block.BlockDispenser;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.dispenser.BehaviorDefaultDispenseItem;
 import net.minecraft.dispenser.BehaviorProjectileDispense;
 import net.minecraft.dispenser.IBlockSource;
@@ -11,6 +12,7 @@ import net.minecraft.dispenser.IPosition;
 import net.minecraft.entity.IProjectile;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityDispenser;
@@ -35,12 +37,13 @@ import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import thebetweenlands.common.block.farming.BlockGenericDugSoil;
 import thebetweenlands.common.entity.projectiles.EntityAngryPebble;
 import thebetweenlands.common.entity.projectiles.EntityBLArrow;
+import thebetweenlands.common.item.misc.ItemOctineIngot;
 import thebetweenlands.common.item.tools.bow.EnumArrowType;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.tile.TileEntityDugSoil;
 
-@Mod(modid = BLAdditions.MODID, name = BLAdditions.NAME, version = BLAdditions.VERSION, dependencies = "required-after:pizzacraft;required-after:growthcraft;required-after:crafttweaker;required-after:mystgears;required-after:deliverymerchants;required-after:thebetweenlands;required-after:roots;required-after:thaumcraft;required-after:thaumicperiphery;required-after:embers")
+@Mod(modid = BLAdditions.MODID, name = BLAdditions.NAME, version = BLAdditions.VERSION, dependencies = "required-after:pyrotech;required-after:pizzacraft;required-after:growthcraft;required-after:crafttweaker;required-after:deliverymerchants;required-after:thebetweenlands;required-after:roots;required-after:thaumcraft;required-after:thaumicperiphery")
 public class BLAdditions
 {
     public static final String MODID = "bladditions";
@@ -73,6 +76,38 @@ public class BLAdditions
     @EventHandler
     public void postInit(FMLPostInitializationEvent event) {
         proxy.postInit(event);
+
+        BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ItemRegistry.OCTINE_INGOT, new BehaviorDefaultDispenseItem()
+        {
+            @Override
+            protected ItemStack dispenseStack(IBlockSource source, ItemStack stack)
+            {
+                World world = source.getWorld();
+
+                if(!world.isRemote) {
+                    BlockPos blockPos = (source.getBlockState().getValue(BlockDispenser.FACING) == EnumFacing.UP) ? source.getBlockPos().up() : source.getBlockPos().offset(source.getBlockState().getValue(BlockDispenser.FACING));
+
+                    boolean hasTinder = false;
+                    boolean isBlockTinder = false;
+
+                    IBlockState blockState = world.getBlockState(blockPos);
+                    if(((ItemOctineIngot)stack.getItem()).isTinder(stack, ItemStack.EMPTY, blockState)) {
+                        hasTinder = true;
+                        isBlockTinder = true;
+                    }
+
+                    if(hasTinder && isBlockTinder) {
+                        IBlockState moss = world.getBlockState(blockPos);
+                        world.setBlockState(blockPos, Blocks.FIRE.getDefaultState());
+                        world.playSound(null, blockPos.getX(), blockPos.getY(), blockPos.getZ(), SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.PLAYERS, 1, 1);
+                    }
+
+                    return stack;
+                }
+
+                return super.dispenseStack(source, stack);
+            }
+        });
 
         BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ItemRegistry.ITEMS_MISC, new BehaviorDefaultDispenseItem()
         {

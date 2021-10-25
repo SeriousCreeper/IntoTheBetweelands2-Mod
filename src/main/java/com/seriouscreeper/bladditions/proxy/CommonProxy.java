@@ -2,6 +2,9 @@ package com.seriouscreeper.bladditions.proxy;
 
 import com.google.common.collect.Maps;
 import com.mrbysco.anotherliquidmilkmod.init.MilkRegistry;
+import com.rcx.mystgears.MysticalGears;
+import com.rcx.mystgears.block.BlockTurret;
+import com.rcx.mystgears.item.ItemGear;
 import com.seriouscreeper.bladditions.BLAdditions;
 import com.seriouscreeper.bladditions.blocks.*;
 import com.seriouscreeper.bladditions.crafting.PatchedRecipeMagicDust;
@@ -65,6 +68,7 @@ import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.OreIngredient;
+import roito.teastory.block.BlockRegister;
 import thaumcraft.Thaumcraft;
 import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.ThaumcraftApiHelper;
@@ -77,9 +81,12 @@ import thaumcraft.api.golems.GolemHelper;
 import thaumcraft.api.items.ItemsTC;
 import thaumcraft.api.research.*;
 import thaumcraft.common.config.ConfigItems;
+import thaumcraft.common.golems.seals.SealHandler;
+import thaumcraft.common.golems.seals.SealHarvest;
 import thaumcraft.common.lib.crafting.DustTriggerMultiblock;
 import thaumcraft.common.lib.crafting.InfusionEnchantmentRecipe;
 import thaumcraft.common.lib.enchantment.EnumInfusionEnchantment;
+import thaumcraft.common.lib.utils.CropUtils;
 import thaumicperiphery.ModContent;
 import thebetweenlands.common.entity.mobs.*;
 import thebetweenlands.common.registries.BlockRegistry;
@@ -205,6 +212,17 @@ public class CommonProxy {
         //RitualRegistry.ritualRegistry.remove("ritual_heavy_storms");
         //RitualRegistry.addRitual(RitualRegistry.ritual_heavy_storms = new PatchedRitualHeavyStorms("ritual_heavy_storms", RitualConfig.disableRitualCategory.disableHeavyStorms));
 
+        // Betweenlands gears
+        BlockTurret.metalTextures.put(new OreIngredient("ingotSyrmorite"), "syrmorite");
+        BlockTurret.metalTextures.put(new OreIngredient("ingotOctine"), "octine");
+        BlockTurret.metalTextures.put(new OreIngredient("gemValonite"), "valonite");
+
+        MysticalGears.items.add(new ItemGear("Weedwood"));
+        MysticalGears.items.add(new ItemGear("Cragrock"));
+        MysticalGears.items.add(new ItemGear("Syrmorite"));
+        MysticalGears.items.add(new ItemGear("Octine"));
+        MysticalGears.items.add(new ItemGear("Valonite"));
+
         registerEntities();
     }
 
@@ -288,6 +306,11 @@ public class CommonProxy {
         ALLOWED_FENCES.add(BlockRegistry.RUBBER_TREE_PLANK_FENCE);
 
         fillCropList();
+
+        SealHandler.types.put("thaumcraft:harvest", new PatchedSealHarvest());
+
+        CropUtils.addClickableCrop(new ItemStack(ItemRegistry.MIDDLE_FRUIT_BUSH_SEEDS), 15);
+        ThaumcraftApi.registerSeed(BlockRegistry.MIDDLE_FRUIT_BUSH, new ItemStack(ItemRegistry.MIDDLE_FRUIT_BUSH_SEEDS));
     }
 
 

@@ -131,20 +131,22 @@ public class BLAdditionsEventHandler {
         if(event.player instanceof EntityPlayerMP) {
             EntityPlayerMP player = (EntityPlayerMP) event.player;
 
-            IPlayerKnowledge knowledge = ThaumcraftCapabilities.getKnowledge(player);
-            ResearchCategory researchBasics = ResearchCategories.getResearchCategory("BASICS");
+            // TODO: Skip the addons ones
 
-            int value = knowledge.getKnowledgeRaw(IPlayerKnowledge.EnumKnowledgeType.THEORY, researchBasics);
+            if(!player.getEntityData().hasKey("free_thaumcraft_research")) {
+                IPlayerKnowledge knowledge = ThaumcraftCapabilities.getKnowledge(player);
 
-            if (value < 1600) {
-                for(Map.Entry<String, ResearchCategory> entry : ResearchCategories.researchCategories.entrySet()) {
+                for (Map.Entry<String, ResearchCategory> entry : ResearchCategories.researchCategories.entrySet()) {
                     ResearchCategory tempCategory = entry.getValue();
 
-                    knowledge.addKnowledge(IPlayerKnowledge.EnumKnowledgeType.THEORY, tempCategory, Math.max(0, 1600 - value));
+                    int value = knowledge.getKnowledgeRaw(IPlayerKnowledge.EnumKnowledgeType.THEORY, tempCategory);
+                    knowledge.addKnowledge(IPlayerKnowledge.EnumKnowledgeType.THEORY, tempCategory, Math.max(0, 320 - value));
 
                     value = knowledge.getKnowledgeRaw(IPlayerKnowledge.EnumKnowledgeType.OBSERVATION, tempCategory);
-                    knowledge.addKnowledge(IPlayerKnowledge.EnumKnowledgeType.OBSERVATION, tempCategory, Math.max(0, 3200 - value));
+                    knowledge.addKnowledge(IPlayerKnowledge.EnumKnowledgeType.OBSERVATION, tempCategory, Math.max(0, 160 - value));
                 }
+
+                player.getEntityData().setBoolean("free_thaumcraft_research", true);
             }
         }
     }
@@ -156,7 +158,7 @@ public class BLAdditionsEventHandler {
 
         if(block == BlockRegistry.SPREADING_SLUDGY_DIRT) {
             if(event.getWorld().rand.nextFloat() > 0.8) {
-                AuraHelper.polluteAura(event.getWorld(), event.getPos(), 1, true);
+                AuraHelper.polluteAura(event.getWorld(), event.getPos(), 2, true);
             }
         } else if(block == Blocks.DIRT) {
             event.getWorld().setBlockState(event.getPos(), BlockRegistry.SWAMP_DIRT.getDefaultState());

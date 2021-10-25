@@ -12,7 +12,10 @@
     "MixinCheese",
     "MixinDeviceBeeBox",
     "MixinFoodBase",
+    "MixinMystgears",
     "MixinPizzaOven",
+    "embers.MixinEntityEmberPacket",
+    "ignitehud.MixinGuiWidget",
     "immersiveengineering.MixinTileEntityLightningrod",
     "pyrotech.MixinBlockOreDenseRedstoneBase",
     "pyrotech.MixinTileMechanicalMulchSpreader",
@@ -22,12 +25,14 @@
     "roots.MixinEntityRitualHeavyStorms",
     "teastory.MixinKettle",
     "teastory.MixinTeaDrink",
+    "teastory.MixinTeaPlant",
     "thebetweenlands.MixinBlockPlant",
     "thebetweenlands.MixinItemMummyBait",
     "thebetweenlands.MixinItemRegistry",
     "thebetweenlands.MixinItemRingOfDisperion"
   ],
   "client": [
+    "embers.MixinRenderEmberPacket",
     "quark.MixinRenderLeashKnot2"
   ],
   "injectors": {

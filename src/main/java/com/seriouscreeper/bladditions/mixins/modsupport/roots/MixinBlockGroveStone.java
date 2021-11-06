@@ -50,14 +50,9 @@ public class MixinBlockGroveStone extends BlockBase {
     public void randomTick(World world, BlockPos pos, IBlockState state, Random random) {
         super.randomTick(world, pos, state, random);
 
-        System.out.println("1");
-
         if (GeneralConfig.EnableGroveStoneEnvironment) {
-            System.out.println("2");
             if (!world.isRemote) {
-                System.out.println("3");
                 if ((Boolean)state.getValue(VALID)) {
-                    System.out.println("4");
                     if (random.nextInt(GeneralConfig.GroveStoneChance) == 1) {
                         DecoratorPositionProvider provider = new DecoratorPositionProvider();
                         provider.init(world, world.getBiome(pos), (IChunkGenerator)null, world.rand, pos.getX(), pos.getY(), pos.getZ());

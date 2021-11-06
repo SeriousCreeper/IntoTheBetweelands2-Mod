@@ -31,6 +31,7 @@ import epicsquid.roots.api.CreateToolEvent;
 import epicsquid.roots.init.ModItems;
 import epicsquid.roots.integration.jei.soil.SoilRecipe;
 import epicsquid.roots.item.materials.Materials;
+import growthcraft.bees.shared.init.GrowthcraftBeesItems;
 import growthcraft.core.shared.CoreRegistry;
 import growthcraft.core.shared.config.GrowthcraftCoreConfig;
 import growthcraft.core.shared.legacy.FluidContainerRegistry;
@@ -446,7 +447,7 @@ public class CommonProxy {
         ThaumcraftApi.addInfusionCraftingRecipe(new ResourceLocation("thaumicperiphery", "magic_quiver"), new InfusionRecipe("MAGICQUIVER", new ItemStack(ModContent.magic_quiver), 4, (new AspectList()).add(Aspect.VOID, 100).add(Aspect.ORDER, 25).add(Aspect.DESIRE, 25).add(Aspect.MAGIC, 15).add(Aspect.AURA, 15), new ItemStack(ItemsTC.baubles, 1, 2), new Object[]{new ItemStack(ItemsTC.visResonator), "leather", new ItemStack(ItemsTC.fabric), new ItemStack(ItemRegistry.ANGLER_TOOTH_ARROW), new ItemStack(ItemsTC.fabric), "leather"}));
 
         ThaumcraftApi.getCraftingRecipes().remove(new ResourceLocation("thaumcraft:malignant_heart"));
-        ThaumcraftApi.addInfusionCraftingRecipe(new ResourceLocation("thaumicperiphery", "malignant_heart"), new InfusionRecipe("MALIGNANTHEART", new ItemStack(ModContent.malignant_heart), 6, (new AspectList()).add(Aspect.AVERSION, 50).add(Aspect.DEATH, 50).add(Aspect.UNDEAD, 25).add(Aspect.FLUX, 15).add(Aspect.ENTROPY, 10), new ItemStack(ItemRegistry.ITEMS_MISC, 1, 25), new Object[]{new ItemStack(ItemsTC.brain), new ItemStack(ItemRegistry.ITEMS_MISC, 1, 44), new ItemStack(ItemsTC.tallow), new ItemStack(ItemRegistry.ITEMS_MISC, 1, 56), new ItemStack(ItemsTC.tallow), new ItemStack(ItemRegistry.WIGHT_HEART)}));
+        ThaumcraftApi.addInfusionCraftingRecipe(new ResourceLocation("thaumicperiphery", "malignant_heart"), new InfusionRecipe("MALIGNANTHEART", new ItemStack(ModContent.malignant_heart), 6, (new AspectList()).add(Aspect.AVERSION, 50).add(Aspect.DEATH, 50).add(Aspect.UNDEAD, 25).add(Aspect.FLUX, 15).add(Aspect.ENTROPY, 10), new ItemStack(ItemRegistry.ITEMS_MISC, 1, 25), new Object[]{new ItemStack(ItemsTC.brain), new ItemStack(ItemRegistry.ITEMS_MISC, 1, 44), new ItemStack(GrowthcraftBeesItems.beesWax.getItem(), 1, OreDictionary.WILDCARD_VALUE), new ItemStack(ItemRegistry.ITEMS_MISC, 1, 56), new ItemStack(GrowthcraftBeesItems.beesWax.getItem(), 1, OreDictionary.WILDCARD_VALUE), new ItemStack(ItemRegistry.WIGHT_HEART)}));
 
         ThaumcraftApi.getCraftingRecipes().remove(new ResourceLocation("thaumcraft:CausalityCollapser"));
         ThaumcraftApi.addInfusionCraftingRecipe(new ResourceLocation("thaumcraft:CausalityCollapser"), new InfusionRecipe("RIFTCLOSER", new ItemStack(ItemsTC.causalityCollapser), 8, (new AspectList()).add(Aspect.ELDRITCH, 50).add(Aspect.FLUX, 50), new ItemStack(ItemRegistry.ANGRY_PEBBLE), new Object[]{new ItemStack(ItemsTC.morphicResonator), "blockRedstone", new ItemStack(ItemsTC.alumentum), "nitor", new ItemStack(ItemsTC.visResonator), "blockRedstone", new ItemStack(ItemsTC.alumentum), "nitor"}));
@@ -505,7 +506,7 @@ public class CommonProxy {
             new InfusionRecipe("RIFT_POWER@2", new ItemStack(TAItems.MATERIAL, 1, 3), 8, new AspectList().add(Aspect.ELDRITCH, 25).add(Aspect.VOID, 50).add(Aspect.ENERGY, 100),
                     new ItemStack(ItemsTC.voidSeed), new Object[] {
                     "plateVoid", ItemsTC.primordialPearl, "plateVoid", ThaumcraftApiHelper.makeCrystal(Aspect.ELDRITCH),
-                    "plateVoid", "dustColoredRedstone", "plateVoid", "gemAmber"
+                    "plateVoid", "dustRedstone", "plateVoid", "gemAmber"
             }
         ));
 
@@ -529,7 +530,7 @@ public class CommonProxy {
         ThaumcraftApi.addInfusionCraftingRecipe(new ResourceLocation(ThaumicAugmentationAPI.MODID, "thaumostatic_gyroscope"), new InfusionRecipe(
                 "THAUMOSTATIC_GYROSCOPE", new ItemStack(TAItems.THAUMOSTATIC_HARNESS_AUGMENT, 1, 0), 5, new AspectList().add(Aspect.TRAP, 35).add(Aspect.AIR, 25).add(Aspect.FLIGHT, 25),
                 new ItemStack(ItemsTC.baubles, 1, 2), new Object[] {
-                "dustColoredRedstone", "plateThaumium", ThaumcraftApiHelper.makeCrystal(Aspect.TRAP), "plateThaumium"
+                "dustRedstone", "plateThaumium", ThaumcraftApiHelper.makeCrystal(Aspect.TRAP), "plateThaumium"
         }
         ));
 

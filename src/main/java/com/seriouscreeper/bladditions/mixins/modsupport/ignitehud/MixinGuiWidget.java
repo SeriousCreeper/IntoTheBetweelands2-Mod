@@ -105,7 +105,7 @@ public class MixinGuiWidget {
         ItemStack feet = player.getItemStackFromSlot(EntityEquipmentSlot.FEET);
         ItemStack mainhand = player.getHeldItemMainhand();
         ItemStack offhand = player.getHeldItemOffhand();
-        int pos = -40;
+        int pos = 0;
         RenderHelper.addDurabilityDisplay(head, pos);
         if (head != null && head.getItem() != Items.AIR) {
             pos += 25;

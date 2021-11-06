@@ -1,11 +1,17 @@
 package com.seriouscreeper.bladditions.events;
 
+import com.codetaylor.mc.athenaeum.network.tile.spi.ITileDataFluidTank;
+import com.codetaylor.mc.athenaeum.util.SoundHelper;
 import com.codetaylor.mc.pyrotech.library.spi.block.IBlockIgnitableWithIgniterItem;
+import com.codetaylor.mc.pyrotech.library.spi.tile.TileCombustionWorkerBase;
+import com.codetaylor.mc.pyrotech.library.spi.tile.TileEntityDataWorkerBase;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.potion.PotionFocused;
+import com.codetaylor.mc.pyrotech.modules.tech.basic.tile.TileCampfire;
 import com.mrbysco.anotherliquidmilkmod.init.MilkRegistry;
 import com.seriouscreeper.bladditions.config.ConfigBLAdditions;
 import com.seriouscreeper.bladditions.potion.PotionThaumcraftResearch;
 import com.seriouscreeper.bladditions.proxy.CommonProxy;
+import crafttweaker.api.event.BlockPlaceEvent;
 import growthcraft.core.shared.tileentity.GrowthcraftTileDeviceBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCrops;
@@ -42,13 +48,18 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.PotionEvent;
 import net.minecraftforge.event.entity.player.BonemealEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.terraingen.ChunkGeneratorEvent;
+import net.minecraftforge.event.terraingen.InitMapGenEvent;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
+import net.minecraftforge.fluids.capability.TileFluidHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -70,10 +81,12 @@ import thebetweenlands.common.block.farming.BlockFungusCrop;
 import thebetweenlands.common.block.farming.BlockGenericDugSoil;
 import thebetweenlands.common.block.structure.BlockFenceBetweenlands;
 import thebetweenlands.common.entity.mobs.EntityGreebling;
+import thebetweenlands.common.entity.mobs.EntityLurker;
 import thebetweenlands.common.entity.projectiles.EntityBetweenstonePebble;
 import thebetweenlands.common.entity.projectiles.EntityPyradFlame;
 import thebetweenlands.common.entity.projectiles.EntitySapSpit;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntityBarrel;
 import thebetweenlands.common.tile.TileEntityDugSoil;
@@ -83,6 +96,7 @@ import vazkii.quark.decoration.feature.IronLadders;
 import vazkii.quark.tweaks.base.BlockStack;
 import vazkii.quark.tweaks.feature.HoeSickle;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
@@ -171,18 +185,35 @@ public class BLAdditionsEventHandler {
 
 
     @SubscribeEvent
-    public static void onBottleUsed(PlayerInteractEvent.RightClickBlock event) {
+    public static void onBottleUsed(PlayerInteractEvent.RightClickBlock event) throws NoSuchFieldException, IllegalAccessException {
         World world = event.getWorld();
-
-        if(world.isRemote)
-            return;
 
         EntityPlayer player = event.getEntityPlayer();
         ItemStack stack = event.getItemStack();
 
         TileEntity te = world.getTileEntity(event.getPos());
 
+        if(te instanceof TileCampfire && stack != ItemStack.EMPTY && stack.getItem() == ItemRegistry.BL_BUCKET && FluidUtil.getFluidContained(stack) != null && FluidUtil.getFluidContained(stack).getFluid() == FluidRegistry.SWAMP_WATER) {
+            TileCampfire campfire = (TileCampfire) te;
+
+            if(campfire.workerIsActive()) {
+                Field field = TileCampfire.class.getDeclaredField("extinguishedByRain");
+                field.setAccessible(true);
+                boolean b = field.getBoolean(campfire);
+                b = true;
+
+                campfire.workerSetActive(false);
+
+                if (!world.isRemote) {
+                    SoundHelper.playSoundServer(world, te.getPos(), SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS);
+                }
+            }
+        }
+
         if(stack != ItemStack.EMPTY && (te instanceof GrowthcraftTileDeviceBase || te instanceof TileEntityBarrel)) {
+            if(world.isRemote)
+                return;
+
             int itemDamage = stack.getItemDamage();
             IFluidHandler fluidHandler = FluidUtil.getFluidHandler(world, event.getPos(), null);
             ItemStack singleStack = stack.copy();
@@ -211,7 +242,8 @@ public class BLAdditionsEventHandler {
 
                     event.setCanceled(true);
                 }
-            } else if(stack.getItem() == CommonProxy.DENTROTHYST_FLUID_VIAL && (stack.getItemDamage() == 0 || stack.getItemDamage() == 1)) {
+            }
+            else if(stack.getItem() == CommonProxy.DENTROTHYST_FLUID_VIAL && (stack.getItemDamage() == 0 || stack.getItemDamage() == 1)) {
                 // for filling the kettle
                 FluidStack fluidStack = fluidItem.drain(250, false);
                 FluidActionResult result = fluidStack != null ? FluidUtil.tryEmptyContainer(singleStack, fluidHandler, 250, player, false) : FluidActionResult.FAILURE;
@@ -238,19 +270,21 @@ public class BLAdditionsEventHandler {
                     event.setCanceled(true);
                 }
             }
+        } else if(stack != ItemStack.EMPTY && (stack.getItem() == CommonProxy.DENTROTHYST_VIAL || stack.getItem() == CommonProxy.DENTROTHYST_FLUID_VIAL)) {
+            event.setCanceled(true);
         }
     }
 
+    /*
     @SubscribeEvent
     public void onEntityInteract(PlayerInteractEvent.EntityInteract e) {
         World world = e.getWorld();
 
-        if(world.isRemote)
-            return;
-
         ItemStack itemstack = e.getItemStack();
 
-        if (itemstack != ItemStack.EMPTY && itemstack.getItem() == ItemRegistry.BL_BUCKET && e.getHand() == EnumHand.MAIN_HAND) {
+        System.out.println(e.getTarget().getName());
+
+        if (e.getTarget() instanceof EntityLurker && itemstack != ItemStack.EMPTY && itemstack.getItem() == ItemRegistry.BL_BUCKET && e.getHand() == EnumHand.MAIN_HAND) {
             ItemStack copy = ItemHandlerHelper.copyStackWithSize(itemstack, 1);
             IFluidHandlerItem fluidItem = FluidUtil.getFluidHandler(copy);
 
@@ -262,13 +296,15 @@ public class BLAdditionsEventHandler {
                     player.playSound(SoundEvents.ENTITY_COW_MILK, 1.0F, 1.0F);
                     world.playSound(null, player.posX, player.posY + 0.5D, player.posZ, SoundEvents.ENTITY_COW_MILK, SoundCategory.BLOCKS, 1.0F, 1.0F);
 
-                    copy = fluidItem.getContainer().copy();
-                    itemstack.shrink(1);
+                    if(!world.isRemote) {
+                        copy = fluidItem.getContainer().copy();
+                        itemstack.shrink(1);
 
-                    if (itemstack.isEmpty()) {
-                        player.inventory.addItemStackToInventory(copy);
-                    } else if (!player.inventory.addItemStackToInventory(copy)) {
-                        player.dropItem(copy, false);
+                        if (itemstack.isEmpty()) {
+                            player.setHeldItem(e.getHand(), copy);
+                        } else if (!player.inventory.addItemStackToInventory(copy)) {
+                            player.dropItem(copy, false);
+                        }
                     }
 
                     e.setCanceled(true);
@@ -276,6 +312,7 @@ public class BLAdditionsEventHandler {
             }
         }
     }
+     */
 
 
     @SubscribeEvent

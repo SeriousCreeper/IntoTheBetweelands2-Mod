@@ -33,6 +33,7 @@ import java.util.List;
 public class PatchedVerdantCharm extends ItemTCBase implements IBauble, IRechargable {
     public PatchedVerdantCharm() {
         super("thaumcraft:verdant_charm", new String[0]);
+        this.setTranslationKey("verdant_charm");
         this.maxStackSize = 1;
         this.canRepair = false;
         this.setMaxDamage(0);

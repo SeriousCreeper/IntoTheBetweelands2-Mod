@@ -2,6 +2,7 @@ package com.seriouscreeper.bladditions;
 
 import com.seriouscreeper.bladditions.commands.BLAdditionsCommands;
 import com.seriouscreeper.bladditions.events.BLAdditionsEventHandler;
+import com.seriouscreeper.bladditions.items.FairyLightsRecipes;
 import com.seriouscreeper.bladditions.proxy.CommonProxy;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.block.state.IBlockState;

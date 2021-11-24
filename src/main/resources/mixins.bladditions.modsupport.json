@@ -14,10 +14,13 @@
     "MixinFoodBase",
     "MixinMystgears",
     "MixinPizzaOven",
-    "embers.MixinEntityEmberPacket",
+    "embers.MixinBlockSteamEngine",
+    "embers.MixinMysticalMechanicsIntegration",
+    "fairylights.MixinFairyLightsRecipes",
     "ignitehud.MixinGuiWidget",
     "pyrotech.MixinTileMechanicalMulchSpreader",
     "quark.MixinEntityLeashKnot",
+    "redstonepaste.MixinBlockRedstonePaste",
     "roots.MixinBlockCropBase",
     "roots.MixinBlockGroveStone",
     "roots.MixinEntityRitualHeavyStorms",
@@ -33,10 +36,10 @@
     "thebetweenlands.MixinEntityLurker",
     "thebetweenlands.MixinItemMummyBait",
     "thebetweenlands.MixinItemRegistry",
-    "thebetweenlands.MixinItemRingOfDisperion"
+    "thebetweenlands.MixinItemRingOfDisperion",
+    "thebetweenlands.MixinWorldGenWightFortress"
   ],
   "client": [
-    "embers.MixinRenderEmberPacket",
     "quark.MixinRenderLeashKnot2"
   ],
   "injectors": {

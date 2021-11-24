@@ -85,6 +85,7 @@ import thebetweenlands.common.entity.mobs.EntityLurker;
 import thebetweenlands.common.entity.projectiles.EntityBetweenstonePebble;
 import thebetweenlands.common.entity.projectiles.EntityPyradFlame;
 import thebetweenlands.common.entity.projectiles.EntitySapSpit;
+import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -738,6 +739,28 @@ public class BLAdditionsEventHandler {
                     }
 
                     break;
+                }
+            }
+        }
+    }
+
+
+    @SubscribeEvent
+    public void handleTorchInWater(TickEvent.PlayerTickEvent event) {
+        if(event.player == null || event.player.world.isRemote) {
+            return;
+        }
+
+        if(event.player.isInWater()) {
+            IBlockState blockState = event.player.world.getBlockState(new BlockPos(event.player.posX, event.player.getEntityBoundingBox().maxY + 0.1D, event.player.posZ));
+            if(blockState.getMaterial().isLiquid()) {
+                for(EnumHand hand : EnumHand.values()) {
+                    ItemStack torches = event.player.getHeldItem(hand);
+
+                    if(torches != ItemStack.EMPTY && torches.getItem() == Item.getItemFromBlock(BlockRegistry.SULFUR_TORCH)) {
+                        event.player.setHeldItem(hand, new ItemStack(BlockRegistry.SULFUR_TORCH_EXTINGUISHED, torches.getCount()));
+                        event.player.world.playSound((EntityPlayer)null, event.player.getPosition(), SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.AMBIENT, 1.0F, 1.0F);
+                    }
                 }
             }
         }

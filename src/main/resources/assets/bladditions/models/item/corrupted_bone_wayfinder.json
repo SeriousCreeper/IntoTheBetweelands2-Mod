@@ -1,0 +1,6 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "bladditions:items/corrupted_bone_wayfinder"
+  }
+}

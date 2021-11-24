@@ -2,9 +2,13 @@ package com.seriouscreeper.bladditions.items;
 
 import com.blamejared.ctgui.reference.Reference;
 import com.seriouscreeper.bladditions.BLAdditions;
+import com.seriouscreeper.bladditions.libs.AdminExecute;
 import com.seriouscreeper.bladditions.libs.CustomTeleporter;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.command.FunctionObject;
+import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -13,6 +17,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
@@ -22,6 +27,7 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.handler.ItemTooltipHandler;
@@ -34,6 +40,7 @@ import thebetweenlands.common.world.teleporter.TeleporterHandler;
 import thebetweenlands.util.PlayerUtil;
 
 import javax.annotation.Nullable;
+import java.util.Arrays;
 import java.util.List;
 
 public class ItemCorruptedBoneWayfinder extends ItemBoneWayfinder {
@@ -41,6 +48,11 @@ public class ItemCorruptedBoneWayfinder extends ItemBoneWayfinder {
         setRegistryName("corrupted_bone_wayfinder");
         setTranslationKey(BLAdditions.MODID + ".corrupted_bone_wayfinder");
         this.setMaxDamage(1);
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void initModel() {
+        ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(getRegistryName(), "inventory"));
     }
 
     @Override
@@ -96,7 +108,27 @@ public class ItemCorruptedBoneWayfinder extends ItemBoneWayfinder {
         System.out.println(stack.getItemDamage());
 
         if (!worldIn.isRemote && stack.getItemDamage() < stack.getMaxDamage()) {
-            BlockPos waystone = this.getTeleportPos(stack);
+            //BlockPos waystone = this.getTeleportPos(stack);
+
+            if(entity.isRiding())
+                entity.dismountRidingEntity();
+
+            this.playThunderSounds(worldIn, entity.posX, entity.posY, entity.posZ);
+
+            MinecraftServer server = worldIn.getMinecraftServer();
+            ICommandSender sender = new AdminExecute((EntityPlayer)entity, entity.getPosition());
+
+            String command = "tpj " + getDimension(stack);
+
+            FunctionObject func = FunctionObject.create(server.getFunctionManager(), Arrays.asList(command));
+
+            server.getFunctionManager().execute(func, sender);
+
+            this.playThunderSounds(worldIn, entity.posX, entity.posY, entity.posZ);
+
+            stack.shrink(1);
+
+            /*
 
             if (waystone != null) {
                 EntityPlayerMP playerMP = (EntityPlayerMP)entity;
@@ -117,6 +149,8 @@ public class ItemCorruptedBoneWayfinder extends ItemBoneWayfinder {
                 //entity.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 60, 1));
                 stack.shrink(1);
             }
+
+             */
         }
 
         return stack;

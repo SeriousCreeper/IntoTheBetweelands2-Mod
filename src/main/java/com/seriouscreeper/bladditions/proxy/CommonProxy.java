@@ -55,6 +55,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -70,6 +71,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.OreIngredient;
 import roito.teastory.block.BlockRegister;
+import teamroots.embers.util.EmberGenUtil;
 import thaumcraft.Thaumcraft;
 import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.ThaumcraftApiHelper;
@@ -90,6 +92,7 @@ import thaumcraft.common.lib.enchantment.EnumInfusionEnchantment;
 import thaumcraft.common.lib.utils.CropUtils;
 import thaumicperiphery.ModContent;
 import thebetweenlands.common.entity.mobs.*;
+import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -118,9 +121,9 @@ public class CommonProxy {
     public static PatchedItemDentrothystFluidVial DENTROTHYST_FLUID_VIAL;
     public static HashMap<Block, List<PotionThaumcraftResearch.RESEARCH_CATEGORY>> WELLNESS_BLOCKS = new HashMap<>();
 
-
     public static List<Block> ALLOWED_FENCES = new ArrayList<>();
     public static final Map<BlockStack, BlockStack> CROPS = Maps.newHashMap();
+    public static Fluid SWAMP_WATER;
 
 
     @SubscribeEvent
@@ -312,6 +315,12 @@ public class CommonProxy {
 
         CropUtils.addClickableCrop(new ItemStack(ItemRegistry.MIDDLE_FRUIT_BUSH_SEEDS), 15);
         ThaumcraftApi.registerSeed(BlockRegistry.MIDDLE_FRUIT_BUSH, new ItemStack(ItemRegistry.MIDDLE_FRUIT_BUSH_SEEDS));
+
+
+        // Embers efficiencies
+        EmberGenUtil.registerMetalCoefficient("blockOctine",1.0f);
+        EmberGenUtil.registerMetalCoefficient("blockSyrmorite",0.75f);
+
     }
 
 
@@ -355,6 +364,7 @@ public class CommonProxy {
         registerAdditionalBLFurnaceIngots();
         setupPizzaRecipes();
         setupWellnessBlocks();
+        SWAMP_WATER = FluidRegistry.SWAMP_WATER;
     }
 
 

@@ -53,6 +53,8 @@ public class BLAdditionsCommands extends CommandBase {
 
         if(args.length >= 5) {
             rand = new Random(parseInt(args[4]));
+        } else if(args.length == 2) {
+            rand = new Random(parseInt(args[1]));
         } else {
             rand = world.rand;
         }
@@ -69,7 +71,8 @@ public class BLAdditionsCommands extends CommandBase {
             case "sludgeon":
                 DecoratorPositionProvider provider = new DecoratorPositionProvider();
                 provider.init(world, world.getBiome(pos), null, rand, pos.getX(), pos.getY(), pos.getZ());
-                DecorationHelper.generateSludgePlainsClearingDungeon(provider);
+                DecorationHelper.GEN_SLUDGE_WORM_DUNGEON.generate(world, rand, pos);
+                //DecorationHelper.generateSludgePlainsClearingDungeon(provider);
                 break;
 
             case "raised_island":

@@ -20,8 +20,6 @@ public class MixinRenderEmberPacket {
             double ry = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * (double)pTicks;
             double rz = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * (double)pTicks;
 
-            System.out.println("glowing");
-
             ShaderHelper.INSTANCE.getWorldShader().addLight(new LightSource(rx, ry, rz, 8.0F, 1.0F, 0.5F, 0.2F));
         }
     }

@@ -40,7 +40,8 @@
     "thebetweenlands.MixinWorldGenWightFortress"
   ],
   "client": [
-    "quark.MixinRenderLeashKnot2"
+    "quark.MixinRenderLeashKnot2",
+    "thaumcraft.MixinGuiFocalManipulator"
   ],
   "injectors": {
     "maxShiftBy": 10

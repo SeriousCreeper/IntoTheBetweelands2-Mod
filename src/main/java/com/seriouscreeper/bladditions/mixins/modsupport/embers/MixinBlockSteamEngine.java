@@ -16,9 +16,7 @@ public class MixinBlockSteamEngine {
      * @author SC
      */
     @Overwrite
-    public TileEntity func_149915_a(World worldIn, int meta) {
-        System.out.println("foo2");
-
+    public TileEntity createNewTileEntity(World worldIn, int meta) {
         return new PatchedTileEntitySteamEngine();
     }
 
@@ -26,9 +24,7 @@ public class MixinBlockSteamEngine {
      * @author SC
      */
     @Overwrite
-    public void func_189540_a(IBlockState state, World world, BlockPos pos, Block block, BlockPos fromPos) {
-        System.out.println("bar2");
-
+    public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block, BlockPos fromPos) {
         PatchedTileEntitySteamEngine p = (PatchedTileEntitySteamEngine)world.getTileEntity(pos);
         p.updateNearby();
         p.markDirty();

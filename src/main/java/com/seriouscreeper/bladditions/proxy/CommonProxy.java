@@ -120,6 +120,7 @@ public class CommonProxy {
     public static PatchedItemDentrothystVial DENTROTHYST_VIAL;
     public static PatchedItemDentrothystFluidVial DENTROTHYST_FLUID_VIAL;
     public static HashMap<Block, List<PotionThaumcraftResearch.RESEARCH_CATEGORY>> WELLNESS_BLOCKS = new HashMap<>();
+    public static HashMap<ItemStack, ItemStack> FLUXABLE_ITEMS = new HashMap<>();
 
     public static List<Block> ALLOWED_FENCES = new ArrayList<>();
     public static final Map<BlockStack, BlockStack> CROPS = Maps.newHashMap();
@@ -365,6 +366,8 @@ public class CommonProxy {
         setupPizzaRecipes();
         setupWellnessBlocks();
         SWAMP_WATER = FluidRegistry.SWAMP_WATER;
+
+        FLUXABLE_ITEMS.put(new ItemStack(ItemRegistry.ITEMS_MISC, 1, 1), new ItemStack(Items.APPLE));
     }
 
 

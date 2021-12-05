@@ -32,6 +32,7 @@
     "thaumcraft.MixinModConfig",
     "thaumcraft.MixinPacketFXScanSource",
     "thaumcraft.MixinUtils",
+    "thebetweenlands.MixinBLFurnace",
     "thebetweenlands.MixinBlockPlant",
     "thebetweenlands.MixinEntityLurker",
     "thebetweenlands.MixinItemMummyBait",

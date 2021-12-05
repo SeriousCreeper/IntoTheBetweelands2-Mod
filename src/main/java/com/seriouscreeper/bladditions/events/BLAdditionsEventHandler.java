@@ -205,6 +205,8 @@ public class BLAdditionsEventHandler {
 
                 campfire.workerSetActive(false);
 
+                // TODO: Replace bucket with empty bucket
+
                 if (!world.isRemote) {
                     SoundHelper.playSoundServer(world, te.getPos(), SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS);
                 }

@@ -1,6 +1,7 @@
 package com.seriouscreeper.bladditions;
 
 import com.seriouscreeper.bladditions.commands.BLAdditionsCommands;
+import com.seriouscreeper.bladditions.config.ConfigBLAdditions;
 import com.seriouscreeper.bladditions.events.BLAdditionsEventHandler;
 import com.seriouscreeper.bladditions.items.FairyLightsRecipes;
 import com.seriouscreeper.bladditions.proxy.CommonProxy;
@@ -44,7 +45,7 @@ import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.tile.TileEntityDugSoil;
 
-@Mod(modid = BLAdditions.MODID, name = BLAdditions.NAME, version = BLAdditions.VERSION, dependencies = "required-after:mysticalmechanics;required-after:embers;required-after:fairylights;required-after:pyrotech;required-after:pizzacraft;required-after:growthcraft;required-after:crafttweaker;required-after:deliverymerchants;required-after:thebetweenlands;required-after:roots;required-after:thaumcraft;required-after:thaumicperiphery")
+@Mod(modid = BLAdditions.MODID, name = BLAdditions.NAME, version = BLAdditions.VERSION, dependencies = "required-after:growthcraft;required-after:mysticalmechanics;required-after:embers;required-after:fairylights;required-after:pyrotech;required-after:pizzacraft;required-after:crafttweaker;required-after:deliverymerchants;required-after:thebetweenlands;required-after:roots;required-after:thaumcraft;required-after:thaumicperiphery")
 public class BLAdditions
 {
     public static final String MODID = "bladditions";
@@ -77,6 +78,8 @@ public class BLAdditions
     @EventHandler
     public void postInit(FMLPostInitializationEvent event) {
         proxy.postInit(event);
+
+        ConfigBLAdditions.parseFluxItems();
 
         BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ItemRegistry.OCTINE_INGOT, new BehaviorDefaultDispenseItem()
         {

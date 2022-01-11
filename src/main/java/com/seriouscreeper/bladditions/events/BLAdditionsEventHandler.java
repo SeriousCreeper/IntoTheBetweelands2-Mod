@@ -11,6 +11,7 @@ import com.mrbysco.anotherliquidmilkmod.init.MilkRegistry;
 import com.seriouscreeper.bladditions.config.ConfigBLAdditions;
 import com.seriouscreeper.bladditions.potion.PotionThaumcraftResearch;
 import com.seriouscreeper.bladditions.proxy.CommonProxy;
+import crafttweaker.api.event.BlockBreakEvent;
 import crafttweaker.api.event.BlockPlaceEvent;
 import growthcraft.core.shared.tileentity.GrowthcraftTileDeviceBase;
 import net.minecraft.block.Block;
@@ -205,7 +206,7 @@ public class BLAdditionsEventHandler {
 
                 campfire.workerSetActive(false);
 
-                // TODO: Replace bucket with empty bucket
+                player.setHeldItem(event.getHand(), new ItemStack(ItemRegistry.BL_BUCKET, 1, stack.getMetadata()));
 
                 if (!world.isRemote) {
                     SoundHelper.playSoundServer(world, te.getPos(), SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS);
@@ -742,6 +743,24 @@ public class BLAdditionsEventHandler {
 
                     break;
                 }
+            }
+        }
+    }
+
+
+    @SubscribeEvent
+    public void explodySulfur(BlockEvent.BreakEvent event) {
+        if(event.getWorld().isRemote || event.getPlayer() == null || ConfigBLAdditions.configGeneral.SulfurExplosionDamage == -1)
+            return;
+
+        IBlockState state = event.getState();
+
+        if(state.getBlock() == BlockRegistry.SULFUR_ORE) {
+            EntityPlayer player = event.getPlayer();
+            ItemStack pick = event.getPlayer().getHeldItem(EnumHand.MAIN_HAND);
+
+            if(pick != ItemStack.EMPTY && pick.getItem() == ItemRegistry.OCTINE_PICKAXE && event.getWorld().rand.nextInt(ConfigBLAdditions.configGeneral.SulfurExplosionDamage) == 0) {
+                event.getWorld().createExplosion(null, event.getPos().getX(), event.getPos().getY(), event.getPos().getZ(), ConfigBLAdditions.configGeneral.SulfurExplosionDamage, true);
             }
         }
     }

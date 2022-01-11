@@ -111,7 +111,6 @@ public class PatchedVerdantCharm extends ItemTCBase implements IBauble, IRecharg
                     IDecayCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
 
                     if (cap != null && cap.getDecayStats().getDecayLevel() > 0 && RechargeHelper.consumeCharge(itemstack, player, 2)) {
-                        System.out.println("HEAL DECAY");
                         cap.getDecayStats().addStats(-1, 0);
                     }
 

@@ -7,6 +7,7 @@ import com.rcx.mystgears.block.BlockTurret;
 import com.rcx.mystgears.item.ItemGear;
 import com.seriouscreeper.bladditions.BLAdditions;
 import com.seriouscreeper.bladditions.blocks.*;
+import com.seriouscreeper.bladditions.config.ConfigBLAdditions;
 import com.seriouscreeper.bladditions.crafting.PatchedRecipeMagicDust;
 import com.seriouscreeper.bladditions.entities.GreeblingMerchantEntity;
 import com.seriouscreeper.bladditions.items.*;
@@ -91,11 +92,14 @@ import thaumcraft.common.lib.crafting.InfusionEnchantmentRecipe;
 import thaumcraft.common.lib.enchantment.EnumInfusionEnchantment;
 import thaumcraft.common.lib.utils.CropUtils;
 import thaumicperiphery.ModContent;
+import thebetweenlands.api.recipes.ISmokingRackRecipe;
 import thebetweenlands.common.entity.mobs.*;
 import thebetweenlands.common.item.misc.ItemMisc;
+import thebetweenlands.common.recipe.misc.SmokingRackRecipe;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.compat.jei.recipes.smoking_rack.SmokingRackRecipeCategory;
 import thecodex6824.thaumicaugmentation.api.TAItems;
 import thecodex6824.thaumicaugmentation.api.ThaumicAugmentationAPI;
 import thecodex6824.thaumicaugmentation.api.item.CapabilityMorphicTool;
@@ -367,7 +371,7 @@ public class CommonProxy {
         setupWellnessBlocks();
         SWAMP_WATER = FluidRegistry.SWAMP_WATER;
 
-        FLUXABLE_ITEMS.put(new ItemStack(ItemRegistry.ITEMS_MISC, 1, 1), new ItemStack(Items.APPLE));
+//        FLUXABLE_ITEMS.put(new ItemStack(ItemRegistry.ITEMS_MISC, 1, 1), new ItemStack(Items.APPLE));
     }
 
 
@@ -698,8 +702,19 @@ public class CommonProxy {
     public static void registerRecipes(RegistryEvent.Register<IRecipe> event) {
         event.getRegistry().register(new PatchedRecipeMagicDust().setRegistryName("thaumcraft:salismundus"));
 
-        //CompostRecipe.removeRecipe(CompostRecipe.getCompostRecipe(ItemMisc.EnumItemMisc.DRY_BARK.create(1)));
-        //CompostRecipe.addRecipe(6, 5000, ItemMisc.EnumItemMisc.DRY_BARK.create(1));
+        int recipeCount = SmokingRackRecipe.RECIPES.size();
+
+        for(int i = 0; i < recipeCount; i++) {
+            ISmokingRackRecipe recipe = SmokingRackRecipe.RECIPES.get(i);
+            int time = recipe.getSmokingTime(recipe.getInput());
+            time *= ConfigBLAdditions.configGeneral.SmokingRackRecipeModifier;
+            SmokingRackRecipe.addRecipe(recipe.getOutput(recipe.getInput()), time, recipe.getInput());
+        }
+
+        for(int i = 0; i < recipeCount; i++) {
+            ISmokingRackRecipe recipe = SmokingRackRecipe.RECIPES.get(0);
+            SmokingRackRecipe.removeRecipe(recipe);
+        }
     }
 
 

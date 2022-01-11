@@ -1,4 +1,4 @@
-package com.seriouscreeper.bladditions.mixins.modsupport;
+package com.seriouscreeper.bladditions.mixins.modsupport.growthcraft;
 
 import growthcraft.milk.common.tileentity.struct.Cheese;
 import org.spongepowered.asm.mixin.Mixin;

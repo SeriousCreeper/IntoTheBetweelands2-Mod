@@ -1,4 +1,4 @@
-package com.seriouscreeper.bladditions.mixins.modsupport;
+package com.seriouscreeper.bladditions.mixins.modsupport.growthcraft;
 
 import growthcraft.bees.common.tileentity.TileEntityBeeBox;
 import growthcraft.bees.common.tileentity.device.DeviceBeeBox;

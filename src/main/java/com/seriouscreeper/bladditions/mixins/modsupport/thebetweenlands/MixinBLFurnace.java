@@ -23,9 +23,6 @@ public class MixinBLFurnace extends TileEntityBasicInventory {
     private void smeltItem(TileEntityAbstractBLFurnace.FurnaceData data) {
         ItemStack inputStack = this.getStackInSlot(data.getInputSlot());
 
-        if(inputStack != ItemStack.EMPTY)
-            System.out.println(inputStack.getItem());
-
         if (this.canSmelt(data) && !isFluxableItem(inputStack)) {
             ItemStack smeltingResult = FurnaceRecipes.instance().getSmeltingResult(inputStack);
             ItemStack outputStack = this.getStackInSlot(data.getOutputSlot());
@@ -41,8 +38,6 @@ public class MixinBLFurnace extends TileEntityBasicInventory {
             }
         } else if(isFluxableItem(inputStack)) { // TODO: probably have to use a method to compare items and meta instead? in case it also considers stack size
             ItemStack fluxStack = this.getStackInSlot(data.getFluxSlot());
-
-            System.out.println("FLUX ITEM");
 
             if (fluxStack.isEmpty()) {
                 return;

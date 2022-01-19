@@ -45,6 +45,7 @@ import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.event.ForgeEventFactory;
+import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.PotionEvent;
 import net.minecraftforge.event.entity.player.BonemealEvent;
@@ -81,9 +82,11 @@ import thebetweenlands.api.environment.IEnvironmentEvent;
 import thebetweenlands.common.block.farming.BlockFungusCrop;
 import thebetweenlands.common.block.farming.BlockGenericDugSoil;
 import thebetweenlands.common.block.structure.BlockFenceBetweenlands;
+import thebetweenlands.common.entity.mobs.EntityAnadia;
 import thebetweenlands.common.entity.mobs.EntityGreebling;
 import thebetweenlands.common.entity.mobs.EntityLurker;
 import thebetweenlands.common.entity.projectiles.EntityBetweenstonePebble;
+import thebetweenlands.common.entity.projectiles.EntityFishingSpear;
 import thebetweenlands.common.entity.projectiles.EntityPyradFlame;
 import thebetweenlands.common.entity.projectiles.EntitySapSpit;
 import thebetweenlands.common.item.misc.ItemMisc;
@@ -784,6 +787,30 @@ public class BLAdditionsEventHandler {
                     }
                 }
             }
+        }
+    }
+
+
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
+    public void onAnadiaHit(LivingHurtEvent event) {
+        if(event.getEntity().world.isRemote || !(event.getEntityLiving() instanceof EntityAnadia)) {
+            return;
+        }
+
+        /*
+        if(event.getSource().getImmediateSource() != null)
+            System.out.println(event.getSource().getImmediateSource().getName());
+
+        if(event.getSource().getTrueSource() != null)
+            System.out.println(event.getSource().getTrueSource().getName());
+        */
+
+        Entity trueSource = event.getSource().getTrueSource();
+        Entity damageSource = event.getSource().getImmediateSource();
+
+        if(trueSource instanceof EntityPlayer && !(damageSource instanceof EntityFishingSpear)) {
+            ((EntityPlayer)trueSource).sendStatusMessage(new TextComponentString("This fish is too slippery to hit!"), true);
+            event.setCanceled(true);
         }
     }
 }

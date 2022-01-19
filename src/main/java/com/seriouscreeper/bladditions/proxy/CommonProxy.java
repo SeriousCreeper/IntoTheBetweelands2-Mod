@@ -1,6 +1,7 @@
 package com.seriouscreeper.bladditions.proxy;
 
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import com.mrbysco.anotherliquidmilkmod.init.MilkRegistry;
 import com.rcx.mystgears.MysticalGears;
 import com.rcx.mystgears.block.BlockTurret;
@@ -32,6 +33,9 @@ import epicsquid.roots.api.CreateToolEvent;
 import epicsquid.roots.init.ModItems;
 import epicsquid.roots.integration.jei.soil.SoilRecipe;
 import epicsquid.roots.item.materials.Materials;
+import gigaherz.eyes.ConfigData;
+import gigaherz.eyes.EyesInTheDarkness;
+import gigaherz.eyes.entity.EntityEyes;
 import growthcraft.bees.shared.init.GrowthcraftBeesItems;
 import growthcraft.core.shared.CoreRegistry;
 import growthcraft.core.shared.config.GrowthcraftCoreConfig;
@@ -43,6 +47,8 @@ import growthcraft.milk.shared.init.GrowthcraftMilkFluids;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCrops;
 import net.minecraft.block.BlockPistonBase;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -55,6 +61,7 @@ import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.world.biome.Biome;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -726,5 +733,51 @@ public class CommonProxy {
 
     public static void registerEntities() {
         //net.minecraftforge.fml.common.registry.EntityRegistry.registerModEntity(new ResourceLocation(BLAdditions.MODID, "angrier_pebble"), EntityAngrierPebble.class, "bladditions." + "angrier_pebble", 0, BLAdditions.instance, 64, 3, true);
+    }
+
+
+    @SubscribeEvent
+    public static void registerEntities(RegistryEvent.Register<EntityEntry> event) {
+        int entityId = 1;
+
+        EntityEntryBuilder<Entity> builder = EntityEntryBuilder.create().name("eyes_fixed")
+                .id(EyesInTheDarkness.location("eyes"), entityId++)
+                .entity(EntityEyes.class).factory(EntityEyes::new)
+                .tracker(80, 3, true)
+                .egg(0x000000, 0x7F0000);
+
+        if(ConfigData.EnableNaturalSpawn)
+        {
+            int currentWeight = ConfigData.OverrideWeight;
+
+            if (currentWeight > 0)
+            {
+                Collection<Biome> biomes = ForgeRegistries.BIOMES.getValuesCollection();
+
+                if (ConfigData.BiomeWhitelist != null && ConfigData.BiomeWhitelist.length > 0)
+                {
+                    Set<String> whitelist = Sets.newHashSet(ConfigData.BiomeWhitelist);
+                    biomes = biomes.stream().filter(b -> {
+                        System.out.println("BIOME: " + b.getRegistryName().toString() + " | " + whitelist.contains(b.getRegistryName().toString()));
+                        return whitelist.contains(b.getRegistryName().toString());
+                    }).collect(Collectors.toList());
+                }
+                else if (ConfigData.BiomeBlacklist != null && ConfigData.BiomeBlacklist.length > 0)
+                {
+                    Set<String> blacklist = Sets.newHashSet(ConfigData.BiomeBlacklist);
+                    biomes = biomes.stream().filter(b -> !blacklist.contains(b.getRegistryName().toString())).collect(Collectors.toList());
+                }
+
+                builder = builder.spawn(EnumCreatureType.MONSTER, currentWeight,
+                        ConfigData.MinimumPackSize, ConfigData.MaximumPackSize,
+                        biomes);
+            }
+        }
+
+        event.getRegistry().registerAll(
+                builder
+                        .build()
+        );
+
     }
 }

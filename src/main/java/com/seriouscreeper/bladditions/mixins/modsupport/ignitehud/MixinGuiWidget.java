@@ -47,6 +47,8 @@ public class MixinGuiWidget {
             priority = EventPriority.HIGHEST
     )
     public void renderOverlay(RenderGameOverlayEvent.Pre event) {
+        IgniteHUD.hasToughAsNails = false;
+
         RenderGameOverlayEvent.ElementType type = event.getType();
         if (type == RenderGameOverlayEvent.ElementType.AIR || type == RenderGameOverlayEvent.ElementType.POTION_ICONS) {
             event.setCanceled(true);

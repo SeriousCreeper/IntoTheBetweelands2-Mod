@@ -11,7 +11,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -31,6 +34,15 @@ public class MixinTeaPlant extends BlockBush {
     @Final
     @Shadow
     public static final PropertyInteger AGE = PropertyInteger.create("age", 0, 15);
+
+    private static final AxisAlignedBB[] CROPS_AABB = new AxisAlignedBB[]{
+            new AxisAlignedBB(0.25D, 0.0D, 0.25D, 0.75D, 0.1875D, 0.75D),
+            new AxisAlignedBB(0.25D, 0.0D, 0.25D, 0.75D, 0.1875D, 0.75D),
+            new AxisAlignedBB(0.25D, 0.0D, 0.25D, 0.75D, 0.5D, 0.75D),
+            new AxisAlignedBB(0.25D, 0.0D, 0.25D, 0.75D, 0.5D, 0.75D),
+            new AxisAlignedBB(0.25D, 0.0D, 0.25D, 0.75D, 0.8125D, 0.75D),
+            new AxisAlignedBB(0.25D, 0.0D, 0.25D, 0.75D, 0.8125D, 0.75D),
+            new AxisAlignedBB(0.25D, 0.0D, 0.25D, 0.75D, 0.75D, 0.75D)};
 
 
     /**
@@ -55,8 +67,32 @@ public class MixinTeaPlant extends BlockBush {
                 }
             }
         }
-
     }
+
+    /**
+     * @author SC
+     */
+    @Overwrite
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+        int age = MathHelper.clamp(state.getValue(this.getAgeProperty()), 0, 6);
+        return CROPS_AABB[age];
+    }
+
+
+    /**
+     * @author SC
+     */
+    @Overwrite
+    public boolean canGrow(World worldIn, BlockPos pos, IBlockState state, boolean isClient) {
+        TileEntityDugSoil te = BlockGenericDugSoil.getTile(worldIn, pos.down());
+
+        if (te != null && te.isComposted()) {
+            return !this.isMaxAge(state) && te.isComposted();
+        }
+
+        return false;
+    }
+
 
     /**
      * @author SC
@@ -83,9 +119,11 @@ public class MixinTeaPlant extends BlockBush {
                         if (((BlockGenericDugSoil)stateDown.getBlock()).isPurified(worldIn, pos.down(), stateDown)) {
                             te.setPurifiedHarvests(te.getPurifiedHarvests() + 1);
                         }
+
+                        return true;
                     }
 
-                    return true;
+                    return false;
                 case 10:
                 case 11:
                 case 12:
@@ -107,8 +145,10 @@ public class MixinTeaPlant extends BlockBush {
                         if (((BlockGenericDugSoil)stateDown.getBlock()).isPurified(worldIn, pos.down(), stateDown)) {
                             te.setPurifiedHarvests(te.getPurifiedHarvests() + 1);
                         }
+                        return true;
                     }
-                    return true;
+
+                return false;
             }
         } else {
             return true;
@@ -135,5 +175,15 @@ public class MixinTeaPlant extends BlockBush {
     @Shadow
     protected Item getSeed() {
         return ItemRegister.tea_seeds;
+    }
+
+    @Shadow
+    public boolean isMaxAge(IBlockState state) {
+        return true;
+    }
+
+    @Shadow
+    protected PropertyInteger getAgeProperty() {
+        return AGE;
     }
 }

@@ -105,8 +105,6 @@ public class ItemCorruptedBoneWayfinder extends ItemBoneWayfinder {
 
     @Override
     public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityLivingBase entity) {
-        System.out.println(stack.getItemDamage());
-
         if (!worldIn.isRemote && stack.getItemDamage() < stack.getMaxDamage()) {
             //BlockPos waystone = this.getTeleportPos(stack);
 

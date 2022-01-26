@@ -1,10 +1,18 @@
 package com.seriouscreeper.bladditions.events;
 
+import baubles.api.BaublesApi;
+import blusunrize.immersiveengineering.common.util.compat.BaublesHelper;
+import com.codetaylor.mc.athenaeum.interaction.spi.IInteraction;
 import com.codetaylor.mc.athenaeum.network.tile.spi.ITileDataFluidTank;
+import com.codetaylor.mc.athenaeum.util.BlockRegistrationHelper;
 import com.codetaylor.mc.athenaeum.util.SoundHelper;
 import com.codetaylor.mc.pyrotech.library.spi.block.IBlockIgnitableWithIgniterItem;
 import com.codetaylor.mc.pyrotech.library.spi.tile.TileCombustionWorkerBase;
 import com.codetaylor.mc.pyrotech.library.spi.tile.TileEntityDataWorkerBase;
+import com.codetaylor.mc.pyrotech.modules.ignition.ModuleIgnition;
+import com.codetaylor.mc.pyrotech.modules.tech.basic.ModuleTechBasic;
+import com.codetaylor.mc.pyrotech.modules.tech.basic.block.BlockCampfire;
+import com.codetaylor.mc.pyrotech.modules.tech.basic.block.BlockKilnPit;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.potion.PotionFocused;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.tile.TileCampfire;
 import com.mrbysco.anotherliquidmilkmod.init.MilkRegistry;
@@ -13,10 +21,14 @@ import com.seriouscreeper.bladditions.potion.PotionThaumcraftResearch;
 import com.seriouscreeper.bladditions.proxy.CommonProxy;
 import crafttweaker.api.event.BlockBreakEvent;
 import crafttweaker.api.event.BlockPlaceEvent;
+import epicsquid.roots.block.BlockPyre;
+import epicsquid.roots.tileentity.TileEntityPyre;
 import growthcraft.core.shared.tileentity.GrowthcraftTileDeviceBase;
+import mcp.mobius.waila.api.event.WailaRenderEvent;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCrops;
 import net.minecraft.block.BlockLadder;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -64,6 +76,7 @@ import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.TileFluidHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
@@ -77,11 +90,13 @@ import thaumcraft.api.capabilities.ThaumcraftCapabilities;
 import thaumcraft.api.items.ItemsTC;
 import thaumcraft.api.research.ResearchCategories;
 import thaumcraft.api.research.ResearchCategory;
+import thaumcraft.common.items.armor.ItemGoggles;
 import thaumcraft.common.lib.utils.EntityUtils;
 import thebetweenlands.api.environment.IEnvironmentEvent;
 import thebetweenlands.common.block.farming.BlockFungusCrop;
 import thebetweenlands.common.block.farming.BlockGenericDugSoil;
 import thebetweenlands.common.block.structure.BlockFenceBetweenlands;
+import thebetweenlands.common.block.terrain.BlockSwampWater;
 import thebetweenlands.common.entity.mobs.EntityAnadia;
 import thebetweenlands.common.entity.mobs.EntityGreebling;
 import thebetweenlands.common.entity.mobs.EntityLurker;
@@ -89,6 +104,8 @@ import thebetweenlands.common.entity.projectiles.EntityBetweenstonePebble;
 import thebetweenlands.common.entity.projectiles.EntityFishingSpear;
 import thebetweenlands.common.entity.projectiles.EntityPyradFlame;
 import thebetweenlands.common.entity.projectiles.EntitySapSpit;
+import thebetweenlands.common.item.armor.amphibious.AmphibiousArmorUpgrades;
+import thebetweenlands.common.item.armor.amphibious.ItemAmphibiousArmor;
 import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.FluidRegistry;
@@ -759,7 +776,6 @@ public class BLAdditionsEventHandler {
         IBlockState state = event.getState();
 
         if(state.getBlock() == BlockRegistry.SULFUR_ORE) {
-            EntityPlayer player = event.getPlayer();
             ItemStack pick = event.getPlayer().getHeldItem(EnumHand.MAIN_HAND);
 
             if(pick != ItemStack.EMPTY && pick.getItem() == ItemRegistry.OCTINE_PICKAXE && event.getWorld().rand.nextInt(ConfigBLAdditions.configGeneral.SulfurExplosionDamage) == 0) {
@@ -810,6 +826,68 @@ public class BLAdditionsEventHandler {
 
         if(trueSource instanceof EntityPlayer && !(damageSource instanceof EntityFishingSpear)) {
             ((EntityPlayer)trueSource).sendStatusMessage(new TextComponentString("This fish is too slippery to hit!"), true);
+            event.setCanceled(true);
+        }
+    }
+
+
+    @SubscribeEvent
+    public void onRightClickKiln(PlayerInteractEvent.RightClickBlock event) {
+        World world = event.getWorld();
+        BlockPos hitPos = event.getPos();
+        ItemStack itemHeld = event.getItemStack();
+
+        if(itemHeld == ItemStack.EMPTY || itemHeld.getItem() != Item.getItemFromBlock(BlockRegistry.THATCH) || !(world.getBlockState(hitPos).getBlock() instanceof BlockKilnPit)) {
+            return;
+        }
+
+        if (!world.isRemote && world.getBlockState(hitPos).getValue(BlockKilnPit.VARIANT) == BlockKilnPit.EnumType.EMPTY) {
+            itemHeld.setCount(itemHeld.getCount() - 1);
+            world.setBlockState(hitPos, ModuleTechBasic.Blocks.KILN_PIT.getDefaultState().withProperty(BlockKilnPit.VARIANT, BlockKilnPit.EnumType.THATCH));
+            world.playSound((EntityPlayer)null, hitPos, SoundEvents.BLOCK_GRASS_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F);
+            event.setCanceled(true);
+        }
+    }
+
+
+    @SubscribeEvent
+    public void onRightClickCampfire(PlayerInteractEvent.RightClickBlock event) {
+        World world = event.getWorld();
+        BlockPos hitPos = event.getPos();
+        EntityPlayer player = event.getEntityPlayer();
+        ItemStack itemHeld = event.getItemStack();
+
+        if(itemHeld == ItemStack.EMPTY || itemHeld.getItem() != Item.getItemFromBlock(BlockRegistry.SULFUR_TORCH_EXTINGUISHED) || !(world.getBlockState(hitPos).getBlock() instanceof BlockCampfire)) {
+            return;
+        }
+
+        if (!world.isRemote && world.getBlockState(hitPos).getValue(BlockCampfire.VARIANT) == BlockCampfire.EnumType.LIT) {
+            itemHeld.setCount(itemHeld.getCount() - 1);
+            player.addItemStackToInventory(new ItemStack(Item.getItemFromBlock(BlockRegistry.SULFUR_TORCH)));
+            world.playSound((EntityPlayer)null, hitPos, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, SoundCategory.BLOCKS, 1.0F, 1.0F);
+            event.setCanceled(true);
+        }
+    }
+
+
+    @SubscribeEvent
+    public void preTooltipRender (WailaRenderEvent.Pre event) {
+        EntityPlayer player = event.getAccessor().getPlayer();
+        boolean hasGogglesOfRevealing = false;
+
+        for (ItemStack armor : player.getArmorInventoryList()) {
+            if (armor.getItem() instanceof ItemGoggles) {
+                hasGogglesOfRevealing = true;
+                break;
+            }
+        }
+
+        // check for baubles too
+        if(!hasGogglesOfRevealing && BaublesApi.isBaubleEquipped(player, ItemsTC.goggles) > -1) {
+            hasGogglesOfRevealing = true;
+        }
+
+        if (!hasGogglesOfRevealing) {
             event.setCanceled(true);
         }
     }

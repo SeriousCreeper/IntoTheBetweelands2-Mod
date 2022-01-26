@@ -63,7 +63,7 @@ public class MixinTileEntityDawnstoneAnvil extends TileEntity {
     @Overwrite
     public boolean isValid(ItemStack stack1, ItemStack stack2) {
         DawnstoneAnvilRecipe recipe = RecipeRegistry.getDawnstoneAnvilRecipe(stack1, stack2);
-        return recipe != null || stack1.getItem() instanceof BlockBloom.ItemBlockBloom;
+        return recipe != null || stack1.getItem() instanceof BlockBloom.ItemBlockBloom || stack2.getItem() instanceof BlockBloom.ItemBlockBloom;
     }
 
 
@@ -73,7 +73,7 @@ public class MixinTileEntityDawnstoneAnvil extends TileEntity {
     @Inject(method = "onHit()V", at = @At("HEAD"), cancellable = true)
     public void onHit(CallbackInfo ci) {
         // TODO:
-        // - maybe prevnet tinker hammer from working
+        // - maybe prevent tinker hammer from working
         if(this.inventory.getStackInSlot(0).getItem() instanceof BlockBloom.ItemBlockBloom || this.inventory.getStackInSlot(1).getItem() instanceof BlockBloom.ItemBlockBloom) {
             ++this.progress;
 
@@ -95,7 +95,7 @@ public class MixinTileEntityDawnstoneAnvil extends TileEntity {
                 BlockBloom.ItemBlockBloom bloom = (BlockBloom.ItemBlockBloom)this.inventory.getStackInSlot(inventorySlot).getItem();
 
                 // check integrity of bloom
-                int integrity = bloom.getIntegrity(this.inventory.getStackInSlot(0));
+                int integrity = bloom.getIntegrity(this.inventory.getStackInSlot(inventorySlot));
                 integrity -= 1;
                 bloom.setIntegrity(this.inventory.getStackInSlot(inventorySlot), integrity);
 
@@ -121,7 +121,7 @@ public class MixinTileEntityDawnstoneAnvil extends TileEntity {
                 }
 
                 if(integrity <= 0) {
-                    this.inventory.setStackInSlot(0, ItemStack.EMPTY);
+                    this.inventory.setStackInSlot(inventorySlot, ItemStack.EMPTY);
                 }
 
                 if (!this.getWorld().isRemote) {

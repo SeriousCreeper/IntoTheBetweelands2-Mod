@@ -3,6 +3,7 @@ package com.seriouscreeper.bladditions.init;
 import com.seriouscreeper.bladditions.blocks.BlockItemShelf;
 import com.seriouscreeper.bladditions.items.ItemAngrierPebble;
 import com.seriouscreeper.bladditions.items.ItemCorruptedBoneWayfinder;
+import com.seriouscreeper.bladditions.items.ItemWaterBowl;
 import com.seriouscreeper.bladditions.proxy.CommonProxy;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;

@@ -28,8 +28,12 @@
     "redstonepaste.MixinBlockRedstonePaste",
     "roots.MixinBlockCropBase",
     "roots.MixinBlockGroveStone",
+    "roots.MixinEntityRitualDivineProtection",
+    "roots.MixinEntityRitualFrostLands",
     "roots.MixinEntityRitualHeavyStorms",
+    "roots.MixinEntityRitualSummonCreatures",
     "roots.MixinILivingRepair",
+    "roots.MixinRitualSummonCreatures",
     "roots.MixinRunicShears",
     "roots.spells.MixinSpellShatter",
     "sanity.MixinIConsequences",
@@ -43,6 +47,7 @@
     "thaumcraft.MixinModConfig",
     "thaumcraft.MixinPacketFXScanSource",
     "thaumcraft.MixinUtils",
+    "thebetweenlands.MixinBetweenlandsSpawnerLogic",
     "thebetweenlands.MixinBLFurnace",
     "thebetweenlands.MixinBlockPlant",
     "thebetweenlands.MixinBlockSwampWater",
@@ -50,7 +55,8 @@
     "thebetweenlands.MixinItemBarkAmulet",
     "thebetweenlands.MixinItemMummyBait",
     "thebetweenlands.MixinItemRegistry",
-    "thebetweenlands.MixinItemRingOfDisperion"
+    "thebetweenlands.MixinItemRingOfDisperion",
+    "thebetweenlands.MixinTileEntityBarrel"
   ],
   "client": [
     "quark.MixinRenderLeashKnot2",

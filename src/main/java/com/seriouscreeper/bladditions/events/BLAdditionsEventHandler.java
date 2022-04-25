@@ -66,10 +66,7 @@ import net.minecraftforge.event.terraingen.ChunkGeneratorEvent;
 import net.minecraftforge.event.terraingen.InitMapGenEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.WorldEvent;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidActionResult;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.*;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
@@ -215,6 +212,10 @@ public class BLAdditionsEventHandler {
 
         TileEntity te = world.getTileEntity(event.getPos());
 
+        if(stack != ItemStack.EMPTY&& FluidUtil.getFluidContained(stack) != null && FluidUtil.getFluidContained(stack).getFluid() == net.minecraftforge.fluids.FluidRegistry.WATER) {
+            event.setCanceled(true);
+        }
+
         if(te instanceof TileCampfire && stack != ItemStack.EMPTY && stack.getItem() == ItemRegistry.BL_BUCKET && FluidUtil.getFluidContained(stack) != null && FluidUtil.getFluidContained(stack).getFluid() == FluidRegistry.SWAMP_WATER) {
             TileCampfire campfire = (TileCampfire) te;
 
@@ -234,6 +235,7 @@ public class BLAdditionsEventHandler {
             }
         }
 
+        /*
         if(stack != ItemStack.EMPTY && (te instanceof GrowthcraftTileDeviceBase || te instanceof TileEntityBarrel)) {
             if(world.isRemote)
                 return;
@@ -297,6 +299,7 @@ public class BLAdditionsEventHandler {
         } else if(stack != ItemStack.EMPTY && (stack.getItem() == CommonProxy.DENTROTHYST_VIAL || stack.getItem() == CommonProxy.DENTROTHYST_FLUID_VIAL)) {
             event.setCanceled(true);
         }
+         */
     }
 
     /*

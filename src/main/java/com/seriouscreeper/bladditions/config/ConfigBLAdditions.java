@@ -49,6 +49,8 @@ public class ConfigBLAdditions {
         public int SulfurExplosionChance = 5;
         public int SmokingRackRecipeModifier = 5;
         public String[] FluxItems = new String[] { "thebetweenlands:syrmorite_ore:0,thebetweenlands:items_misc:11" };
+        public int BarrelFillWithWaterChance = 300;
+        public int BarrelFillWithWaterAmount = 10;
     }
 
 

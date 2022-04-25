@@ -9,6 +9,7 @@
     "MapColorAccessor",
     "MixinLeashKnot",
     "MixinMapColors",
+    "MixinPotionUtils",
     "init.MixinLoader"
   ],
   "client": [

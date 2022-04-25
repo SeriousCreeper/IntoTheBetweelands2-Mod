@@ -698,6 +698,7 @@ public class CommonProxy {
 
         event.getRegistry().register(new ItemAngrierPebble());
         event.getRegistry().register(new ItemCorruptedBoneWayfinder());
+        //event.getRegistry().register(new ItemWaterBowl());
 
         ModItems.baffle_cap = ItemRegistry.YELLOW_DOTTED_FUNGUS;
     }

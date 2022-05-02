@@ -51,6 +51,7 @@ public class ConfigBLAdditions {
         public String[] FluxItems = new String[] { "thebetweenlands:syrmorite_ore:0,thebetweenlands:items_misc:11" };
         public int BarrelFillWithWaterChance = 300;
         public int BarrelFillWithWaterAmount = 10;
+        public String RedstoneOreBlock = "minecraft:redstone_ore";
     }
 
 

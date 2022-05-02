@@ -20,6 +20,9 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import thebetweenlands.common.block.farming.BlockGenericDugSoil;
+import thebetweenlands.common.block.terrain.BlockDeadGrass;
+import thebetweenlands.common.block.terrain.BlockSwampDirt;
+import thebetweenlands.common.block.terrain.BlockSwampGrass;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntityDugSoil;
@@ -60,6 +63,11 @@ public class MixinTileMechanicalMulchSpreader extends TileEntity {
             BlockHelper.forBlocksInCubeShuffled(this.world, origin, cogRange, 0, cogRange, (w, p, bs) -> {
                 int var10002;
 
+                if (bs.getBlock() instanceof BlockSwampGrass || bs.getBlock() instanceof BlockSwampDirt || bs.getBlock() instanceof BlockDeadGrass) {
+                    w.setBlockState(p, BlockRegistry.DUG_SWAMP_DIRT.getDefaultState());
+                    bs = w.getBlockState(p);
+                }
+
                 if (bs.getBlock() instanceof BlockGenericDugSoil) {
                     TileEntityDugSoil te = BlockGenericDugSoil.getTile(w, p);
 
@@ -76,7 +84,7 @@ public class MixinTileMechanicalMulchSpreader extends TileEntity {
                 var10002 = cogAttempts[0]--;
                 return cogAttempts[0] > 0;
             });
-            return ModuleTechMachineConfig.MECHANICAL_MULCH_SPREADER.COG_DAMAGE_TYPE == ModuleTechMachineConfig.MechanicalMulchSpreader.EnumCogDamageType.PerItem ? Math.max(1, placedMulch[0]) : 1;
+            return ModuleTechMachineConfig.MECHANICAL_MULCH_SPREADER.COG_DAMAGE_TYPE == ModuleTechMachineConfig.MechanicalMulchSpreader.EnumCogDamageType.PerItem ? Math.max(0, placedMulch[0]) : 1;
         }
     }
 

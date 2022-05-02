@@ -1,7 +1,6 @@
 package com.seriouscreeper.bladditions.events;
 
 import baubles.api.BaublesApi;
-import blusunrize.immersiveengineering.common.util.compat.BaublesHelper;
 import com.codetaylor.mc.athenaeum.interaction.spi.IInteraction;
 import com.codetaylor.mc.athenaeum.network.tile.spi.ITileDataFluidTank;
 import com.codetaylor.mc.athenaeum.util.BlockRegistrationHelper;
@@ -853,6 +852,7 @@ public class BLAdditionsEventHandler {
     }
 
 
+    /*
     @SubscribeEvent
     public void onRightClickCampfire(PlayerInteractEvent.RightClickBlock event) {
         World world = event.getWorld();
@@ -871,6 +871,7 @@ public class BLAdditionsEventHandler {
             event.setCanceled(true);
         }
     }
+     */
 
 
     @SubscribeEvent

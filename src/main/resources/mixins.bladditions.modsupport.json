@@ -24,6 +24,7 @@
     "ignitehud.MixinGuiWidget",
     "pyrotech.MixinBlockKilnPit",
     "pyrotech.MixinTileMechanicalMulchSpreader",
+    "pyrotech.MixinWorldGenDenseRedstoneOre",
     "quark.MixinEntityLeashKnot",
     "redstonepaste.MixinBlockRedstonePaste",
     "roots.MixinBlockCropBase",
@@ -50,17 +51,17 @@
     "thebetweenlands.MixinBetweenlandsSpawnerLogic",
     "thebetweenlands.MixinBLFurnace",
     "thebetweenlands.MixinBlockPlant",
-    "thebetweenlands.MixinBlockSwampWater",
     "thebetweenlands.MixinEntityLurker",
     "thebetweenlands.MixinItemBarkAmulet",
     "thebetweenlands.MixinItemMummyBait",
     "thebetweenlands.MixinItemRegistry",
     "thebetweenlands.MixinItemRingOfDisperion",
-    "thebetweenlands.MixinTileEntityBarrel"
+    "waterstrainer.MixinAPIUtils"
   ],
   "client": [
     "quark.MixinRenderLeashKnot2",
-    "thaumcraft.MixinGuiFocalManipulator"
+    "thaumcraft.MixinGuiFocalManipulator",
+    "waterstrainer.MixinGuiStrainer"
   ],
   "injectors": {
     "maxShiftBy": 10

@@ -21,7 +21,7 @@ public class ModItems {
     public static void initModels() {
         angrierPebble.initModel();
         corrupted_bone_wayfinder.initModel();
-        TheBetweenlands.proxy.registerDefaultItemRenderer(CommonProxy.DENTROTHYST_VIAL);
-        TheBetweenlands.proxy.registerDefaultItemRenderer(CommonProxy.DENTROTHYST_FLUID_VIAL);
+        //TheBetweenlands.proxy.registerDefaultItemRenderer(CommonProxy.DENTROTHYST_VIAL);
+        //TheBetweenlands.proxy.registerDefaultItemRenderer(CommonProxy.DENTROTHYST_FLUID_VIAL);
     }
 }

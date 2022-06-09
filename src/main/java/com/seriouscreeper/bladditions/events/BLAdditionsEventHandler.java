@@ -21,9 +21,12 @@ import com.seriouscreeper.bladditions.proxy.CommonProxy;
 import crafttweaker.api.event.BlockBreakEvent;
 import crafttweaker.api.event.BlockPlaceEvent;
 import epicsquid.roots.block.BlockPyre;
+import epicsquid.roots.init.ModItems;
+import epicsquid.roots.item.living.ItemLivingPickaxe;
 import epicsquid.roots.tileentity.TileEntityPyre;
 import growthcraft.core.shared.tileentity.GrowthcraftTileDeviceBase;
 import mcp.mobius.waila.api.event.WailaRenderEvent;
+import mcp.mobius.waila.api.event.WailaTooltipEvent;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCrops;
 import net.minecraft.block.BlockLadder;
@@ -40,6 +43,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemHoe;
@@ -54,6 +58,7 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.entity.EntityEvent;
@@ -64,6 +69,7 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.terraingen.ChunkGeneratorEvent;
 import net.minecraftforge.event.terraingen.InitMapGenEvent;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fluids.*;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
@@ -79,6 +85,7 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.items.ItemHandlerHelper;
 import thaumcraft.api.ThaumcraftApi;
+import thaumcraft.api.ThaumcraftApiHelper;
 import thaumcraft.api.aura.AuraHelper;
 import thaumcraft.api.capabilities.IPlayerKnowledge;
 import thaumcraft.api.capabilities.IPlayerWarp;
@@ -86,6 +93,7 @@ import thaumcraft.api.capabilities.ThaumcraftCapabilities;
 import thaumcraft.api.items.ItemsTC;
 import thaumcraft.api.research.ResearchCategories;
 import thaumcraft.api.research.ResearchCategory;
+import thaumcraft.common.blocks.world.ore.BlockCrystal;
 import thaumcraft.common.items.armor.ItemGoggles;
 import thaumcraft.common.lib.utils.EntityUtils;
 import thebetweenlands.api.environment.IEnvironmentEvent;
@@ -788,6 +796,43 @@ public class BLAdditionsEventHandler {
 
 
     @SubscribeEvent
+    public void tcCrystal(BlockEvent.BreakEvent event) {
+        if(event.getWorld().isRemote || event.getPlayer() == null)
+            return;
+
+        IBlockState state = event.getState();
+
+        if(state.getBlock() instanceof BlockCrystal) {
+            ItemStack pick = event.getPlayer().getHeldItem(EnumHand.MAIN_HAND);
+
+            if(pick != ItemStack.EMPTY &&
+                    pick.getItem() != ItemRegistry.BONE_PICKAXE &&
+                    pick.getItem() != ItemRegistry.WEEDWOOD_PICKAXE &&
+                    pick.getItem() != ModItems.living_pickaxe) {
+                BlockCrystal crystalBlock = (BlockCrystal)state.getBlock();
+                int count = crystalBlock.getGrowth(state) + 1;
+
+                for(int i = 0; i < count; ++i) {
+                    InventoryHelper.spawnItemStack(event.getWorld(), event.getPos().getX(), event.getPos().getY(), event.getPos().getZ(), ThaumcraftApiHelper.makeCrystal(crystalBlock.aspect));
+                }
+            }
+        }
+    }
+
+
+    @SubscribeEvent()
+    public static void onEvent(BlockEvent event) {
+        if(event.getWorld().provider.getDimension() != 0) {
+            if (event.getState().getBlock() == Blocks.WATER) {
+                event.getWorld().setBlockState(event.getPos(), BlockRegistry.SWAMP_WATER.getDefaultState());
+            } else if (event.getState().getBlock() == Blocks.LAVA) {
+                event.getWorld().setBlockState(event.getPos(), BlockRegistry.TAR.getDefaultState());
+            }
+        }
+    }
+
+
+    @SubscribeEvent
     public void handleTorchInWater(TickEvent.PlayerTickEvent event) {
         if(event.player == null || event.player.world.isRemote) {
             return;
@@ -874,6 +919,7 @@ public class BLAdditionsEventHandler {
      */
 
 
+    /*
     @SubscribeEvent
     public void preTooltipRender (WailaRenderEvent.Pre event) {
         EntityPlayer player = event.getAccessor().getPlayer();
@@ -893,6 +939,41 @@ public class BLAdditionsEventHandler {
 
         if (!hasGogglesOfRevealing) {
             event.setCanceled(true);
+        }
+    }
+     */
+
+
+    @SubscribeEvent
+    public void getTooltipText (WailaTooltipEvent event) {
+        EntityPlayer player = event.getAccessor().getPlayer();
+        boolean hasGogglesOfRevealing = false;
+
+        for (ItemStack armor : player.getArmorInventoryList()) {
+            if (armor.getItem() instanceof ItemGoggles) {
+                hasGogglesOfRevealing = true;
+                break;
+            }
+        }
+
+        // check for baubles too
+        if(!hasGogglesOfRevealing && BaublesApi.isBaubleEquipped(player, ItemsTC.goggles) > -1) {
+            hasGogglesOfRevealing = true;
+        }
+
+        if(!hasGogglesOfRevealing) {
+            boolean isFirst = false;
+
+            for (final Iterator<String> iterator = event.getCurrentTip().iterator(); iterator.hasNext(); ) {
+                final String line = iterator.next();
+
+                if(!isFirst) {
+                    isFirst = true;
+                    continue;
+                }
+
+                iterator.remove();
+            }
         }
     }
 }

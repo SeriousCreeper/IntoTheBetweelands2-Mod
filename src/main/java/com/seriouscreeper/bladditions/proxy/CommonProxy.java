@@ -56,11 +56,11 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.nbt.NBTTagByte;
-import net.minecraft.nbt.NBTTagInt;
+import net.minecraft.nbt.*;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fluids.Fluid;
@@ -378,7 +378,22 @@ public class CommonProxy {
         setupWellnessBlocks();
         SWAMP_WATER = FluidRegistry.SWAMP_WATER;
 
+        overrideThaumcraftBook();
+
 //        FLUXABLE_ITEMS.put(new ItemStack(ItemRegistry.ITEMS_MISC, 1, 1), new ItemStack(Items.APPLE));
+    }
+
+
+    private void overrideThaumcraftBook () {
+        NBTTagCompound contents = new NBTTagCompound();
+        contents.setInteger("generation", 3);
+        contents.setString("title", I18n.translateToLocal("Strange Visions"));
+        NBTTagList pages = new NBTTagList();
+        pages.appendTag(new NBTTagString("I had the strangest vision.\\n\\nIn the vision, I took three of those strange crystals I've been finding and ground them with a handful of bluedust in a bowl, using a bone."));
+        pages.appendTag(new NBTTagString("If I did it properly then the result was a strange, glowing dust.\n\nIn the vision, I took the dust and sprinkled it on a bookcase, but the vision ended before I saw what happened."));
+        pages.appendTag(new NBTTagString("I wonder, should I do what the vision showed?\n\nI have the impression the dust was going to reveal something wondrous, but dangerous."));
+        contents.setTag("pages", pages);
+        ConfigItems.startBook.setTagCompound(contents);
     }
 
 
@@ -689,8 +704,9 @@ public class CommonProxy {
         event.getRegistry().register(ItemsTC.voidShovel = new PatchedItemVoidShovel(ThaumcraftMaterials.TOOLMAT_VOID));
         event.getRegistry().register(ItemsTC.voidSword = new PatchedItemVoidSword(ThaumcraftMaterials.TOOLMAT_VOID));
 
-        event.getRegistry().register(DENTROTHYST_VIAL = new PatchedItemDentrothystVial());
-        event.getRegistry().register(DENTROTHYST_FLUID_VIAL = new PatchedItemDentrothystFluidVial());
+        //event.getRegistry().register(DENTROTHYST_VIAL = new PatchedItemDentrothystVial());
+        //event.getRegistry().register(DENTROTHYST_FLUID_VIAL = new PatchedItemDentrothystFluidVial());
+
 
 
 

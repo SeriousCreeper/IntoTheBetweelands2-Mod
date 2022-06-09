@@ -1,9 +1,9 @@
 tile.bladditions.item_shelf.name=Item Shelf
 item.bladditions.angrier_pebble.name=Angrier Pebble
 item.bladditions.corrupted_bone_wayfinder.name=Unstable Fabricated Wayfinder
-bladditions.potion.tc_alchemy=Contemplating Alchemy
-bladditions.potion.tc_auromancy=Contemplating Auromancy
-bladditions.potion.tc_golemancy=Contemplating Golemancy
-bladditions.potion.tc_eldritch=Contemplating Eldritch Knowledge
-bladditions.potion.tc_artifice=Contemplating Artifice
-bladditions.potion.tc_arcane=Contemplating Arcane Knowledge
+bladditions.potion.tc_alchemy=Epiphany: Alchemy
+bladditions.potion.tc_auromancy=Epiphany: Auromancy
+bladditions.potion.tc_golemancy=Epiphany: Golemancy
+bladditions.potion.tc_eldritch=Epiphany: Eldritch
+bladditions.potion.tc_artifice=Epiphany: Artifice
+bladditions.potion.tc_arcane=Epiphany: Arcane

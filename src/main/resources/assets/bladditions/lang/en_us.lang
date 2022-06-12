@@ -1,9 +1,11 @@
 tile.bladditions.item_shelf.name=Item Shelf
 item.bladditions.angrier_pebble.name=Angrier Pebble
 item.bladditions.corrupted_bone_wayfinder.name=Unstable Fabricated Wayfinder
-bladditions.potion.tc_alchemy=Epiphany: Alchemy
-bladditions.potion.tc_auromancy=Epiphany: Auromancy
-bladditions.potion.tc_golemancy=Epiphany: Golemancy
-bladditions.potion.tc_eldritch=Epiphany: Eldritch
-bladditions.potion.tc_artifice=Epiphany: Artifice
-bladditions.potion.tc_arcane=Epiphany: Arcane
+bladditions.potion.tc_alchemy=Focus: Alchemy
+bladditions.potion.tc_auromancy=Focus: Auromancy
+bladditions.potion.tc_golemancy=Focus: Golemancy
+bladditions.potion.tc_eldritch=Focus: Eldritch
+bladditions.potion.tc_artifice=Focus: Artifice
+bladditions.potion.tc_arcane=Focus: Arcane
+
+entity.greeblingmerchant.name=Greebling Merchant

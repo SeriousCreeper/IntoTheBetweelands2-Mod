@@ -10,10 +10,12 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nonnull;
+
 public class PotionThaumcraftResearch extends Potion {
     public final RESEARCH_CATEGORY Category;
 
-    private ResourceLocation texture = new ResourceLocation(BLAdditions.MODID, "textures/gui/potions.png");
+    public static final ResourceLocation texture = new ResourceLocation("bladditions", "textures/gui/potions.png");
 
 
     protected PotionThaumcraftResearch(RESEARCH_CATEGORY category, String name) {
@@ -32,8 +34,24 @@ public class PotionThaumcraftResearch extends Potion {
 
     @SideOnly(Side.CLIENT)
     public int getStatusIconIndex() {
-        Minecraft.getMinecraft().getTextureManager().bindTexture(this.texture);
+        Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
         return super.getStatusIconIndex();
+    }
+
+
+    @Override
+    public boolean shouldRender(PotionEffect effect) {
+        return true;
+    }
+
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void renderHUDEffect(@Nonnull PotionEffect effect, Gui gui, int x, int y, float z, float alpha) {
+        Minecraft minecraft = Minecraft.getMinecraft();
+        minecraft.getTextureManager().bindTexture(texture);
+        int icon = getStatusIconIndex();
+        minecraft.ingameGUI.drawTexturedModalRect(x + 2, y + 3, icon % 8 * 18, 198 + icon / 8 * 18, 18, 18);
     }
 
 

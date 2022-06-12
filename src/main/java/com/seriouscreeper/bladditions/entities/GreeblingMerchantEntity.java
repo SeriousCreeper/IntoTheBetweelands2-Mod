@@ -48,16 +48,11 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 public class GreeblingMerchantEntity extends EntityCreature implements IEntityBL {
-    protected static final byte EVENT_DISAPPEAR = 41;
-    protected static final byte EVENT_SPOUT = 42;
-    public static final DataParameter<Integer> TYPE;
-    private static final DataParameter<Integer> SINKING_TICKS;
-    private static final DataParameter<Integer> LOOT_CLICKS;
+    public static final DataParameter<Integer> TYPE = EntityDataManager.createKey(GreeblingMerchantEntity.class, DataSerializers.VARINT);
+    public static final DataParameter<Integer> LAST_SHOP_CHANGE = EntityDataManager.createKey(GreeblingMerchantEntity.class, DataSerializers.VARINT);
     private EntityAvoidEntityFlatPath<EntityPlayer> avoidPlayer;
     private GreeblingMerchantEntity.AIWaterWander waterWander;
     private EntityAILookIdle lookIdle;
-    private boolean hasSetAIForEmptyBoat = false;
-    private boolean looted = false;
     private NonNullList<ItemStack> loot = NonNullList.create();
     private int shutUpFFSTime;
     public int rowTicks;
@@ -73,11 +68,11 @@ public class GreeblingMerchantEntity extends EntityCreature implements IEntityBL
         this.stepHeight = 0.0F;
     }
 
+    @Override
     protected void entityInit() {
         super.entityInit();
-        this.dataManager.register(SINKING_TICKS, 0);
-        this.dataManager.register(LOOT_CLICKS, 0);
-        this.dataManager.register(TYPE, 0);
+        dataManager.register(TYPE, 0);
+        dataManager.register(LAST_SHOP_CHANGE, 0);
     }
 
     protected void initEntityAI() {
@@ -95,6 +90,7 @@ public class GreeblingMerchantEntity extends EntityCreature implements IEntityBL
         livingdata = super.onInitialSpawn(difficulty, livingdata);
         MerchantType type = MerchantType.getRandomType(this.world.rand);
         this.dataManager.set(TYPE, MerchantType.TYPES.indexOf(type));
+        this.dataManager.set(LAST_SHOP_CHANGE, (int)(this.world.getTotalWorldTime() / 24000));
         super.onInitialSpawn(difficulty, livingdata);
         return livingdata;
     }
@@ -107,18 +103,15 @@ public class GreeblingMerchantEntity extends EntityCreature implements IEntityBL
         return this.world.getBlockState(pos).getMaterial() == Material.WATER ? 10.0F + this.world.getLightBrightness(pos) - 0.5F : super.getBlockPathWeight(pos);
     }
 
+    @Override
     public boolean getCanSpawnHere() {
-        int y = MathHelper.floor(this.getEntityBoundingBox().minY);
-        if (y <= 120 && y > 110) {
-            return this.getEntityWorld().checkNoEntityCollision(this.getEntityBoundingBox()) && this.getEntityWorld().getCollisionBoxes(this, this.getEntityBoundingBox()).isEmpty() && this.getEntityWorld().isMaterialInBB(this.getEntityBoundingBox(), Material.WATER);
-        } else {
-            return false;
-        }
+        return false;
     }
 
+    @Override
     public void onUpdate() {
         super.onUpdate();
-        if (this.world.isRemote && this.getSinkingTicks() <= 0) {
+        if (this.world.isRemote) {
             ++this.rowTicks;
             if (!this.isSilent() && this.posX != this.lastTickPosX && this.posZ != this.lastTickPosZ) {
                 float rowAngle1 = MathHelper.cos((float)this.rowTicks * this.rowSpeed);
@@ -127,6 +120,19 @@ public class GreeblingMerchantEntity extends EntityCreature implements IEntityBL
                     this.world.playSound(this.posX, this.posY, this.posZ, SoundEvents.ENTITY_GENERIC_SWIM, this.getSoundCategory(), 0.2F, 0.8F + 0.4F * this.rand.nextFloat(), false);
                 }
             }
+
+            // check time of day?
+            if((int)(this.world.getWorldTime() / 24000) != LastDaySinceChange()) {
+                int currentType = GetMerchantType();
+                MerchantType type;
+
+                do {
+                    type = MerchantType.getRandomType(this.world.rand);
+                } while(currentType == MerchantType.TYPES.indexOf(type));
+
+                this.dataManager.set(TYPE, MerchantType.TYPES.indexOf(type));
+                this.dataManager.set(LAST_SHOP_CHANGE, (int)(this.world.getWorldTime() / 24000));
+            }
         }
 
         if (this.shutUpFFSTime > 0) {
@@ -134,11 +140,11 @@ public class GreeblingMerchantEntity extends EntityCreature implements IEntityBL
             this.livingSoundTime = -this.getTalkInterval();
         }
 
-        if (this.getEntityWorld().containsAnyLiquid(this.getEntityBoundingBox()) && this.getSinkingTicks() <= 200) {
+        if (this.getEntityWorld().containsAnyLiquid(this.getEntityBoundingBox())) {
             this.motionY += 0.06D;
         }
 
-        if (this.isGreeblingAboveWater() && this.getSinkingTicks() <= 200) {
+        if (this.isGreeblingAboveWater()) {
             if (this.motionY < 0.0D) {
                 this.motionY = 0.0D;
             }
@@ -172,99 +178,17 @@ public class GreeblingMerchantEntity extends EntityCreature implements IEntityBL
         return this.getEntityWorld().containsAnyLiquid(floatingBox);
     }
 
-    public void setSinkingTicks(int count) {
-        this.dataManager.set(SINKING_TICKS, count);
-    }
-
-    public int getSinkingTicks() {
-        return (Integer)this.dataManager.get(SINKING_TICKS);
-    }
-
-    public void setLootClicks(int count) {
-        this.dataManager.set(LOOT_CLICKS, count);
-    }
-
-    public int getLootClicks() {
-        return (Integer)this.dataManager.get(LOOT_CLICKS);
-    }
 
     public void writeEntityToNBT(NBTTagCompound nbt) {
         super.writeEntityToNBT(nbt);
         nbt.setInteger("_merch", (Integer)this.dataManager.get(TYPE));
-        nbt.setInteger("sinkingTicks", this.getSinkingTicks());
-        nbt.setBoolean("Looted", this.looted);
-        nbt.setInteger("LootCount", this.loot.size());
-        nbt.setInteger("LootClicks", this.getLootClicks());
-        nbt.setTag("Loot", ItemStackHelper.saveAllItems(new NBTTagCompound(), this.loot, false));
+        nbt.setInteger("last_shop_change", this.dataManager.get(LAST_SHOP_CHANGE));
     }
 
     public void readEntityFromNBT(NBTTagCompound nbt) {
         super.readEntityFromNBT(nbt);
         this.dataManager.set(TYPE, nbt.getInteger("_merch"));
-        this.setSinkingTicks(nbt.getInteger("sinkingTicks"));
-        this.looted = nbt.getBoolean("Looted");
-        this.loot = NonNullList.withSize(nbt.getInteger("LootCount"), ItemStack.EMPTY);
-        this.setLootClicks(nbt.getInteger("lootClicks"));
-        ItemStackHelper.loadAllItems(nbt.getCompoundTag("Loot"), this.loot);
-    }
-
-    @SideOnly(Side.CLIENT)
-    public void handleStatusUpdate(byte id) {
-        super.handleStatusUpdate(id);
-        if (id == 41) {
-            this.doLeafEffects();
-        }
-
-        if (id == 42) {
-            this.doSpoutEffects();
-        }
-
-    }
-
-    @SideOnly(Side.CLIENT)
-    private void doSpoutEffects() {
-        if (this.getEntityWorld().isRemote) {
-            int count = this.getSinkingTicks() <= 240 ? 40 : 10;
-            float x = (float)this.posX;
-            float y = (float)(this.posY + 0.25D);
-            float z = (float)this.posZ;
-
-            while(count-- > 0) {
-                float dx = this.getEntityWorld().rand.nextFloat() * 0.25F - 0.1255F;
-                float dy = this.getEntityWorld().rand.nextFloat() * 0.25F - 0.1255F;
-                float dz = this.getEntityWorld().rand.nextFloat() * 0.25F - 0.1255F;
-                float mag = 0.08F + this.getEntityWorld().rand.nextFloat() * 0.07F;
-                int waterColor = BiomeColorHelper.getWaterColorAtPos(this.world, new BlockPos(this));
-                float r = (float)(waterColor >> 16 & 255) / 255.0F;
-                float g = (float)(waterColor >> 8 & 255) / 255.0F;
-                float b = (float)(waterColor & 255) / 255.0F;
-                if (this.getSinkingTicks() <= 240) {
-                    BLParticles.RAIN.spawn(this.getEntityWorld(), (double)x, (double)y, (double)z, ParticleFactory.ParticleArgs.get().withMotion((double)(dx * mag), (double)(dy * mag), (double)(dz * mag)).withColor(r, g, b + 0.075F, 1.0F));
-                } else if (this.getSinkingTicks() > 240 && this.getSinkingTicks() <= 400 && this.getSinkingTicks() % 5 == 0) {
-                    BLParticles.BUBBLE_WATER.spawn(this.getEntityWorld(), (double)x, (double)y, (double)z, ParticleFactory.ParticleArgs.get().withMotion((double)(dx * mag), (double)(dy * mag), (double)(dz * mag)).withColor(r + 0.05F, g + 0.15F, b + 0.05F, 1.0F));
-                }
-            }
-        }
-
-    }
-
-    @SideOnly(Side.CLIENT)
-    private void doLeafEffects() {
-        if (this.getEntityWorld().isRemote) {
-            int leafCount = 40;
-            float x = (float)this.posX;
-            float y = (float)(this.posY + 0.75D);
-            float z = (float)this.posZ;
-
-            while(leafCount-- > 0) {
-                float dx = this.getEntityWorld().rand.nextFloat() * 1.0F - 0.5F;
-                float dy = this.getEntityWorld().rand.nextFloat() * 1.0F - 0.1F;
-                float dz = this.getEntityWorld().rand.nextFloat() * 1.0F - 0.5F;
-                float mag = 0.08F + this.getEntityWorld().rand.nextFloat() * 0.07F;
-                BLParticles.WEEDWOOD_LEAF.spawn(this.getEntityWorld(), (double)x, (double)y, (double)z, ParticleFactory.ParticleArgs.get().withMotion((double)(dx * mag), (double)(dy * mag), (double)(dz * mag)));
-            }
-        }
-
+        this.dataManager.set(LAST_SHOP_CHANGE, nbt.getInteger("last_shop_change"));
     }
 
     protected float getSoundVolume() {
@@ -272,15 +196,11 @@ public class GreeblingMerchantEntity extends EntityCreature implements IEntityBL
     }
 
     protected SoundEvent getAmbientSound() {
-        if (this.getSinkingTicks() <= 0) {
-            if (this.rand.nextInt(4) == 0 && this.shutUpFFSTime <= 0) {
-                this.shutUpFFSTime = 120;
-                return SoundRegistry.GREEBLING_HUM;
-            } else {
-                return SoundRegistry.GREEBLING_GIGGLE;
-            }
+        if (this.rand.nextInt(4) == 0 && this.shutUpFFSTime <= 0) {
+            this.shutUpFFSTime = 120;
+            return SoundRegistry.GREEBLING_HUM;
         } else {
-            return null;
+            return SoundRegistry.GREEBLING_GIGGLE;
         }
     }
 
@@ -293,7 +213,7 @@ public class GreeblingMerchantEntity extends EntityCreature implements IEntityBL
     }
 
     public boolean processInteract(EntityPlayer player, EnumHand hand) {
-        MerchantType type = (MerchantType)MerchantType.TYPES.get((Integer)this.dataManager.get(TYPE));
+        MerchantType type = MerchantType.TYPES.get(this.dataManager.get(TYPE));
 
         if (type.isEnabled() && this.world.isRemote) {
             DeliveryClient.sendStoreMessage(type.getName(), false);
@@ -302,27 +222,12 @@ public class GreeblingMerchantEntity extends EntityCreature implements IEntityBL
         return super.processInteract(player, hand);
     }
 
-    public void dropLoot(EntityPlayer player) {
-        if (!this.getEntityWorld().isRemote) {
-            if (!this.looted) {
-                this.looted = true;
-                LootTable lootTable = this.getEntityWorld().getLootTableManager().getLootTableFromLocation(LootTableRegistry.GREEBLING_CORACLE);
-                LootContext.Builder builder = (new LootContext.Builder((WorldServer)this.getEntityWorld())).withLootedEntity(this).withPlayer(player).withLuck(player.getLuck());
-                this.loot = new NonNullDelegateList(lootTable.generateLootForPools(this.rand, builder.build()), ItemStack.EMPTY);
-            }
-
-            ItemStack stack = (ItemStack)this.loot.get(this.getLootClicks());
-            if (!stack.isEmpty()) {
-                this.entityDropItem(stack, 0.0F);
-                this.loot.set(this.getLootClicks(), ItemStack.EMPTY);
-            }
-        }
+    public int LastDaySinceChange() {
+        return dataManager.get(LAST_SHOP_CHANGE);
     }
 
-    static {
-        TYPE = EntityDataManager.createKey(GreeblingMerchantEntity.class, DataSerializers.VARINT);
-        SINKING_TICKS = EntityDataManager.createKey(GreeblingMerchantEntity.class, DataSerializers.VARINT);
-        LOOT_CLICKS = EntityDataManager.createKey(GreeblingMerchantEntity.class, DataSerializers.VARINT);
+    public int GetMerchantType() {
+        return dataManager.get(TYPE);
     }
 
     public class AIWaterWander extends EntityAIWander {

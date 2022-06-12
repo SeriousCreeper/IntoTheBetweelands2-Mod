@@ -41,6 +41,7 @@
     "sanity.MixinIConsequences",
     "sanity.MixinLightSeekerConsequence",
     "simpledifficulty.MixinThirstUtilInternal",
+    "soot.MixinCraftingRegistry",
     "teastory.MixinKettle",
     "teastory.MixinTeaDrink",
     "teastory.MixinTeaPlant",
@@ -49,6 +50,7 @@
     "thaumcraft.MixinFocusEffectFrost",
     "thaumcraft.MixinModConfig",
     "thaumcraft.MixinPacketFXScanSource",
+    "thaumcraft.MixinThaumcraftWorldGenerator",
     "thaumcraft.MixinUtils",
     "thebetweenlands.MixinBetweenlandsSpawnerLogic",
     "thebetweenlands.MixinBLFurnace",
@@ -63,6 +65,7 @@
   "client": [
     "quark.MixinRenderLeashKnot2",
     "thaumcraft.MixinGuiFocalManipulator",
+    "thebetweenlands.MixinGuiFirefly",
     "waterstrainer.MixinGuiStrainer"
   ],
   "injectors": {

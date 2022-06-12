@@ -411,11 +411,7 @@ public class ModelMerchantGreebling extends MowzieModelBase {
         this.setToInitPose();
         GreeblingMerchantEntity coracle = (GreeblingMerchantEntity)entity;
         float frame = (float)coracle.ticksExisted + partialRenderTicks;
-        if (coracle.getSinkingTicks() > 10) {
-            this.body_base.showModel = false;
-        } else {
             this.body_base.showModel = true;
-        }
 
         if (coracle.isGreeblingAboveWater()) {
             this.bob(this.coracle_base, 0.1F, 0.2F, false, frame, 1.0F);

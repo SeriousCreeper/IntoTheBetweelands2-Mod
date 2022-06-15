@@ -50,14 +50,15 @@ public class MixinTileEntityBoilerBottom extends TileFluidHandler {
      * @author SC
      */
     @Overwrite
-    public void func_73660_a() {
+    public void update() { // func_73660_a
         this.upgrades = UpgradeUtil.getUpgrades(this.world, this.pos, EnumFacing.HORIZONTALS);
         UpgradeUtil.verifyUpgrades(this, this.upgrades);
         if (!UpgradeUtil.doTick(this, this.upgrades)) {
             TileEntity tile = this.getWorld().getTileEntity(this.getPos().up());
             int i = this.random.nextInt(this.inventory.getSlots());
             ItemStack emberStack = this.inventory.getStackInSlot(i);
-            if (this.tank.getFluid() != null && this.tank.getFluid().getFluid() == FluidRegistry.SWAMP_WATER && this.tank.getFluidAmount() >= 25 && !emberStack.isEmpty()) {
+
+            if (this.tank.getFluid() != null && this.tank.getFluid().getFluid().getUnlocalizedName().equals("fluid.swamp_water") && this.tank.getFluidAmount() >= 25 && !emberStack.isEmpty()) {
                 boolean cancel = UpgradeUtil.doWork(this, this.upgrades);
                 if (!cancel && tile instanceof TileEntityBoilerTop) {
                     TileEntityBoilerTop top = (TileEntityBoilerTop)tile;

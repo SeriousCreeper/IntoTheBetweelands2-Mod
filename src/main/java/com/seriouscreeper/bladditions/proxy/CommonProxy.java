@@ -65,6 +65,7 @@ import net.minecraft.world.biome.Biome;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -79,6 +80,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.OreIngredient;
 import roito.teastory.block.BlockRegister;
+import teamroots.embers.RegistryManager;
 import teamroots.embers.util.EmberGenUtil;
 import thaumcraft.Thaumcraft;
 import thaumcraft.api.ThaumcraftApi;
@@ -91,6 +93,7 @@ import thaumcraft.api.crafting.*;
 import thaumcraft.api.golems.GolemHelper;
 import thaumcraft.api.items.ItemsTC;
 import thaumcraft.api.research.*;
+import thaumcraft.common.config.ConfigBlocks;
 import thaumcraft.common.config.ConfigItems;
 import thaumcraft.common.golems.seals.SealHandler;
 import thaumcraft.common.golems.seals.SealHarvest;
@@ -380,6 +383,10 @@ public class CommonProxy {
 
         overrideThaumcraftBook();
 
+
+        ThaumcraftApi.getCraftingRecipes().remove(new ResourceLocation("thaumcraft:LiquidDeath"));
+        ThaumcraftApi.addCrucibleRecipe(new ResourceLocation("thaumcraft:LiquidDeath"), new CrucibleRecipe("LIQUIDDEATH", ItemRegistry.BL_BUCKET.withFluid(1, ConfigBlocks.FluidDeath.instance), new ItemStack(ItemRegistry.BL_BUCKET, 1, 1), (new AspectList()).add(Aspect.DEATH, 100).add(Aspect.ALCHEMY, 20).add(Aspect.ENTROPY, 50)));
+
 //        FLUXABLE_ITEMS.put(new ItemStack(ItemRegistry.ITEMS_MISC, 1, 1), new ItemStack(Items.APPLE));
     }
 
@@ -573,7 +580,6 @@ public class CommonProxy {
         }
         ));
 
-
         ThaumcraftApi.getCraftingRecipes().remove(new ResourceLocation("thaumicaugmentation:thaumostatic_girdle"));
         ThaumcraftApi.addInfusionCraftingRecipe(new ResourceLocation(ThaumicAugmentationAPI.MODID, "thaumostatic_girdle"), new InfusionRecipe(
                 "THAUMOSTATIC_GIRDLE", new ItemStack(TAItems.THAUMOSTATIC_HARNESS_AUGMENT, 1, 1), 8, new AspectList().add(Aspect.AIR, 50).add(Aspect.MOTION, 25).add(Aspect.FLIGHT, 25),
@@ -581,6 +587,15 @@ public class CommonProxy {
                 new ItemStack(ItemRegistry.ITEMS_MISC, 1, 3), ThaumcraftApiHelper.makeCrystal(Aspect.FLIGHT), "ingotOctine", new ItemStack(ItemRegistry.ITEMS_MISC, 1, 3), ThaumcraftApiHelper.makeCrystal(Aspect.AIR), "ingotOctine"
         }
         ));
+
+        ThaumcraftApi.getCraftingRecipes().remove(new ResourceLocation("thaumicperiphery", "caster_ember"));
+        ThaumcraftApi.addInfusionCraftingRecipe(new ResourceLocation("thaumicperiphery", "caster_ember"), new InfusionRecipe(
+            "CASTEREMBER", new ItemStack(ModContent.caster_ember), 6, (new AspectList()).add(Aspect.FIRE, 50).add(Aspect.MAGIC, 15).add(Aspect.EXCHANGE, 25).add(Aspect.MECHANISM, 25).add(Aspect.ENERGY, 50),
+            new ItemStack(RegistryManager.wildfire_core),
+            new Object[]{new ItemStack(RegistryManager.shard_ember), "ingotDawnstone", "plateIron", new ItemStack(ItemsTC.mechanismComplex), "ingotOctine", new ItemStack(ItemsTC.morphicResonator), "plateIron", "ingotDawnstone"
+        }
+        ));
+
 
 
         // Enchanting recipes

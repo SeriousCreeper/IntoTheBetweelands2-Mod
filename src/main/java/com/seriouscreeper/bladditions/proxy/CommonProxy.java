@@ -1,5 +1,6 @@
 package com.seriouscreeper.bladditions.proxy;
 
+import com.charles445.simpledifficulty.api.SDFluids;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.mrbysco.anotherliquidmilkmod.init.MilkRegistry;
@@ -17,6 +18,8 @@ import com.seriouscreeper.bladditions.items.tools.roots.*;
 import com.seriouscreeper.bladditions.libs.BLAdditionsUtils;
 import com.seriouscreeper.bladditions.potion.PotionRegistery;
 import com.seriouscreeper.bladditions.potion.PotionThaumcraftResearch;
+import com.seriouscreeper.bladditions.recipes.CustomItemLiverStampingRecipe;
+import com.seriouscreeper.bladditions.recipes.CustomItemRenameStampingRecipe;
 import com.seriouscreeper.bladditions.tiles.PatchedTilePotionSprayer;
 import com.seriouscreeper.bladditions.tiles.PatchedTileSpa;
 import com.seriouscreeper.bladditions.tiles.TileCrucibleSwamp;
@@ -26,6 +29,8 @@ import com.tiviacz.pizzacraft.crafting.bakeware.BaseShapelessOreRecipe;
 import com.tiviacz.pizzacraft.crafting.bakeware.IBakewareRecipe;
 import com.tiviacz.pizzacraft.crafting.bakeware.PizzaCraftingManager;
 import com.tiviacz.pizzacraft.init.ModBlocks;
+import crafttweaker.api.item.IItemStack;
+import crafttweaker.api.minecraft.CraftTweakerMC;
 import epicsquid.mysticallib.LibRegistry;
 import epicsquid.mysticallib.event.RegisterContentEvent;
 import epicsquid.roots.Roots;
@@ -47,8 +52,10 @@ import growthcraft.milk.shared.init.GrowthcraftMilkFluids;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCrops;
 import net.minecraft.block.BlockPistonBase;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.entity.monster.EntityGolem;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -80,7 +87,17 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.OreIngredient;
 import roito.teastory.block.BlockRegister;
+import soot.Registry;
+import soot.recipe.ItemLiverStampingRecipe;
+import soot.recipe.ItemRenameStampingRecipe;
 import teamroots.embers.RegistryManager;
+import teamroots.embers.block.BlockSeedNew;
+import teamroots.embers.compat.crafttweaker.Stamper;
+import teamroots.embers.entity.EntityAncientGolem;
+import teamroots.embers.recipe.FluidReactionRecipe;
+import teamroots.embers.recipe.ItemStampingRecipe;
+import teamroots.embers.recipe.RecipeRegistry;
+import teamroots.embers.tileentity.TileEntitySeedNew;
 import teamroots.embers.util.EmberGenUtil;
 import thaumcraft.Thaumcraft;
 import thaumcraft.api.ThaumcraftApi;
@@ -122,7 +139,9 @@ import javax.annotation.Nonnull;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 @Mod.EventBusSubscriber
@@ -139,6 +158,9 @@ public class CommonProxy {
     public static List<Block> ALLOWED_FENCES = new ArrayList<>();
     public static final Map<BlockStack, BlockStack> CROPS = Maps.newHashMap();
     public static Fluid SWAMP_WATER;
+
+    public static Block seed_syrmorite;
+    public static Block seed_octine;
 
 
     @SubscribeEvent
@@ -242,7 +264,32 @@ public class CommonProxy {
         MysticalGears.items.add(new ItemGear("Octine"));
         MysticalGears.items.add(new ItemGear("Valonite"));
 
+        RegistryManager.blocks.add(seed_syrmorite = createSimpleSeed(Material.ROCK, "seed_syrmorite", new ResourceLocation("embers:textures/blocks/material_syrmorite.png"), (tile, i) -> {
+            return ItemMisc.EnumItemMisc.SYRMORITE_NUGGET.create(1);
+        }));
+
+        RegistryManager.blocks.add(seed_octine = createSimpleSeed(Material.ROCK, "seed_octine", new ResourceLocation("embers:textures/blocks/material_octine.png"), (tile, i) -> {
+            return ItemMisc.EnumItemMisc.OCTINE_NUGGET.create(1);
+        }));
+
         registerEntities();
+    }
+
+
+    private static BlockSeedNew createSimpleSeed(Material material, String name, final ResourceLocation texture, final BiFunction<TileEntitySeedNew, Integer, ItemStack> nuggetGenerator) {
+        return new BlockSeedNew(material, name, true) {
+            public ResourceLocation getTexture(TileEntitySeedNew tile) {
+                return texture;
+            }
+
+            public ItemStack[] getNuggetDrops(TileEntitySeedNew tile, int n) {
+                return (ItemStack[]) IntStream.range(0, n).mapToObj((i) -> {
+                    return (ItemStack)nuggetGenerator.apply(tile, n);
+                }).toArray((x$0) -> {
+                    return new ItemStack[x$0];
+                });
+            }
+        };
     }
 
 
@@ -304,6 +351,9 @@ public class CommonProxy {
         ScanningManager.addScannableThing(new ScanItem("!DRAGONBREATH", ItemRegistry.DENTROTHYST_FLUID_VIAL.withFluid(1, FluidRegistry.SHALLOWBREATH)));
 
         ScanningManager.addScannableThing(new ScanEntity("!Firebat", EntityPyrad.class, true));
+
+        ScanningManager.addScannableThing(new ScanEntity("f_golem", EntityBarrishee.class, true));
+        ScanningManager.addScannableThing(new ScanEntity("f_golem", EntityAncientGolem.class, true));
 
         ScanningManager.addScannableThing(new ScanItem("m_CREEPER", new ItemStack(ItemRegistry.ANGRY_PEBBLE)));
 
@@ -381,9 +431,6 @@ public class CommonProxy {
         setupWellnessBlocks();
         SWAMP_WATER = FluidRegistry.SWAMP_WATER;
 
-        overrideThaumcraftBook();
-
-
         ThaumcraftApi.getCraftingRecipes().remove(new ResourceLocation("thaumcraft:LiquidDeath"));
         ThaumcraftApi.addCrucibleRecipe(new ResourceLocation("thaumcraft:LiquidDeath"), new CrucibleRecipe("LIQUIDDEATH", ItemRegistry.BL_BUCKET.withFluid(1, ConfigBlocks.FluidDeath.instance), new ItemStack(ItemRegistry.BL_BUCKET, 1, 1), (new AspectList()).add(Aspect.DEATH, 100).add(Aspect.ALCHEMY, 20).add(Aspect.ENTROPY, 50)));
 
@@ -391,14 +438,14 @@ public class CommonProxy {
     }
 
 
-    private void overrideThaumcraftBook () {
+    private static void overrideThaumcraftBook () {
         NBTTagCompound contents = new NBTTagCompound();
         contents.setInteger("generation", 3);
-        contents.setString("title", I18n.translateToLocal("Strange Visions"));
+        contents.setString("title", I18n.translateToLocal("book.custom.start.title"));
         NBTTagList pages = new NBTTagList();
-        pages.appendTag(new NBTTagString("I had the strangest vision.\\n\\nIn the vision, I took three of those strange crystals I've been finding and ground them with a handful of bluedust in a bowl, using a bone."));
-        pages.appendTag(new NBTTagString("If I did it properly then the result was a strange, glowing dust.\n\nIn the vision, I took the dust and sprinkled it on a bookcase, but the vision ended before I saw what happened."));
-        pages.appendTag(new NBTTagString("I wonder, should I do what the vision showed?\n\nI have the impression the dust was going to reveal something wondrous, but dangerous."));
+        pages.appendTag(new NBTTagString(I18n.translateToLocal("book.custom.start.1")));
+        pages.appendTag(new NBTTagString(I18n.translateToLocal("book.custom.start.2")));
+        pages.appendTag(new NBTTagString(I18n.translateToLocal("book.custom.start.3")));
         contents.setTag("pages", pages);
         ConfigItems.startBook.setTagCompound(contents);
     }
@@ -469,7 +516,7 @@ public class CommonProxy {
         ThaumcraftApi.addInfusionCraftingRecipe(new ResourceLocation("thaumcraft:SealHarvest"), new InfusionRecipe("SEALHARVEST", GolemHelper.getSealStack("thaumcraft:harvest"), 0, (new AspectList()).add(Aspect.PLANT, 10).add(Aspect.SENSES, 10).add(Aspect.MAN, 10), new ItemStack(ItemsTC.seals), new Object[]{new ItemStack(ItemRegistry.MIDDLE_FRUIT_BUSH_SEEDS), new ItemStack(ItemRegistry.SWAMP_REED_ITEM), new ItemStack(ItemRegistry.SWAMP_KELP_ITEM), new ItemStack(ItemRegistry.BLACK_HAT_MUSHROOM_ITEM), new ItemStack(ItemRegistry.FLAT_HEAD_MUSHROOM_ITEM), new ItemStack(ItemRegistry.BULB_CAPPED_MUSHROOM_ITEM)}));
 
         ThaumcraftApi.getCraftingRecipes().remove(new ResourceLocation("thaumcraft:SealButcher"));
-        ThaumcraftApi.addInfusionCraftingRecipe(new ResourceLocation("thaumcraft:SealButcher"), new InfusionRecipe("SEALBUTCHER", GolemHelper.getSealStack("thaumcraft:butcher"), 0, (new AspectList()).add(Aspect.BEAST, 10).add(Aspect.SENSES, 10).add(Aspect.MAN, 10), GolemHelper.getSealStack("thaumcraft:guard"), new Object[]{"leather", new ItemStack(ItemRegistry.SNAIL_FLESH_RAW), new ItemStack(ItemRegistry.ITEMS_MISC, 1, 1), new ItemStack(ItemRegistry.ANADIA_MEAT_RAW), new ItemStack(ItemRegistry.ITEMS_MISC, 1, 3), new ItemStack(ItemRegistry.ITEMS_MISC, 1, 14)}));
+        ThaumcraftApi.addInfusionCraftingRecipe(new ResourceLocation("thaumcraft:SealButcher"), new InfusionRecipe("SEALBUTCHER", GolemHelper.getSealStack("thaumcraft:butcher"), 0, (new AspectList()).add(Aspect.BEAST, 10).add(Aspect.SENSES, 10).add(Aspect.MAN, 10), GolemHelper.getSealStack("thaumcraft:guard"), new Object[]{"leather", new ItemStack(ItemRegistry.SNAIL_FLESH_RAW), new ItemStack(ItemRegistry.ITEMS_MISC, 1, 1), new ItemStack(ItemRegistry.ANADIA_MEAT_RAW), "feather", new ItemStack(ItemRegistry.ITEMS_MISC, 1, 14)}));
 
         ThaumcraftApi.getCraftingRecipes().remove(new ResourceLocation("thaumcraft:ArcaneBore"));
         ThaumcraftApi.addInfusionCraftingRecipe(new ResourceLocation("thaumcraft:ArcaneBore"), new InfusionRecipe("ARCANEBORE", new ItemStack(ItemsTC.turretPlacer, 1, 2), 4, (new AspectList()).add(Aspect.ENERGY, 25).add(Aspect.EARTH, 25).add(Aspect.MECHANISM, 100).add(Aspect.VOID, 25).add(Aspect.MOTION, 25), new ItemStack(ItemsTC.turretPlacer), new Object[]{new ItemStack(BlocksTC.plankGreatwood), new ItemStack(BlocksTC.plankGreatwood), new ItemStack(ItemsTC.mechanismComplex), "plateBrass", Ingredient.fromItem(ItemRegistry.OCTINE_PICKAXE), Ingredient.fromItem(ItemRegistry.OCTINE_SHOVEL), new ItemStack(ItemsTC.morphicResonator), new ItemStack(ItemsTC.nuggets, 1, 10)}));
@@ -542,7 +589,7 @@ public class CommonProxy {
             new InfusionRecipe("BOOTS_VOID", new ItemStack(TAItems.VOID_BOOTS), 6,
                     new AspectList().add(Aspect.VOID, 50).add(Aspect.ELDRITCH, 50).add(Aspect.MOTION, 150).add(Aspect.FLIGHT, 150),
                     ItemsTC.travellerBoots, new Object[] {
-                    ItemsTC.fabric, ItemsTC.fabric, "plateVoid", "plateVoid", new ItemStack(ItemRegistry.ITEMS_MISC, 1, 3),
+                    ItemsTC.fabric, ItemsTC.fabric, "plateVoid", "plateVoid", "feather",
                     new ItemStack(ItemRegistry.ITEMS_MISC, 1, 4), ItemsTC.primordialPearl, "quicksilver"
             }
         ));
@@ -584,7 +631,7 @@ public class CommonProxy {
         ThaumcraftApi.addInfusionCraftingRecipe(new ResourceLocation(ThaumicAugmentationAPI.MODID, "thaumostatic_girdle"), new InfusionRecipe(
                 "THAUMOSTATIC_GIRDLE", new ItemStack(TAItems.THAUMOSTATIC_HARNESS_AUGMENT, 1, 1), 8, new AspectList().add(Aspect.AIR, 50).add(Aspect.MOTION, 25).add(Aspect.FLIGHT, 25),
                 new ItemStack(ItemsTC.baubles, 1, 2), new Object[] {
-                new ItemStack(ItemRegistry.ITEMS_MISC, 1, 3), ThaumcraftApiHelper.makeCrystal(Aspect.FLIGHT), "ingotOctine", new ItemStack(ItemRegistry.ITEMS_MISC, 1, 3), ThaumcraftApiHelper.makeCrystal(Aspect.AIR), "ingotOctine"
+                "feather", ThaumcraftApiHelper.makeCrystal(Aspect.FLIGHT), "ingotOctine", "feather", ThaumcraftApiHelper.makeCrystal(Aspect.AIR), "ingotOctine"
         }
         ));
 
@@ -732,6 +779,9 @@ public class CommonProxy {
         //event.getRegistry().register(new ItemWaterBowl());
 
         ModItems.baffle_cap = ItemRegistry.YELLOW_DOTTED_FUNGUS;
+        ModItems.wildewheet = ItemRegistry.WEEPING_BLUE_PETAL;
+
+        overrideThaumcraftBook();
     }
 
 
@@ -754,6 +804,24 @@ public class CommonProxy {
             ISmokingRackRecipe recipe = SmokingRackRecipe.RECIPES.get(0);
             SmokingRackRecipe.removeRecipe(recipe);
         }
+
+        RecipeRegistry.stampingRecipes.remove(new ItemRenameStampingRecipe());
+
+        RecipeRegistry.stampingRecipes.removeAll(getEmbersRecipesByOutput(new ItemStack(Registry.SULFUR)));
+
+        RecipeRegistry.stampingRecipes.add(new CustomItemLiverStampingRecipe());
+        RecipeRegistry.stampingRecipes.add(new CustomItemRenameStampingRecipe());
+
+        RecipeRegistry.fluidReactionRecipes.clear();
+        RecipeRegistry.fluidReactionRecipes.add(new FluidReactionRecipe(new FluidStack(RegistryManager.fluid_steam, 5), new FluidStack(SDFluids.purifiedWater, 1), new Color(255,255,255)));
+        RecipeRegistry.fluidReactionRecipes.add(new FluidReactionRecipe(new FluidStack(RegistryManager.fluid_gas, 1), new FluidStack(RegistryManager.fluid_steam, 5), new Color(128,192,255)));
+    }
+
+
+    private static List<ItemStampingRecipe> getEmbersRecipesByOutput(ItemStack stack) {
+        return (List)RecipeRegistry.stampingRecipes.stream().filter((recipe) -> {
+            return ItemStack.areItemStacksEqual(stack, recipe.result);
+        }).collect(Collectors.toCollection(ArrayList::new));
     }
 
 

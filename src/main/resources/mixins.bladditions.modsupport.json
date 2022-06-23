@@ -20,8 +20,10 @@
     "embers.MixinTileEntityDawnstoneAnvil",
     "eyesinthedarkness.MixinEntityEyes",
     "fairylights.MixinFairyLightsRecipes",
+    "ftbquests.MixinButtonOpenInGuide",
     "growthcraft.MixinCheese",
     "growthcraft.MixinDeviceBeeBox",
+    "growthcraft.MixinInitBees",
     "ignitehud.MixinGuiWidget",
     "pyrotech.MixinBlockKilnPit",
     "pyrotech.MixinItemAxe",
@@ -48,6 +50,7 @@
     "teastory.MixinTeaPlant",
     "thaumcraft.MixinBlockCrystal",
     "thaumcraft.MixinBlockStonePorous",
+    "thaumcraft.MixinFocusEffectFire",
     "thaumcraft.MixinFocusEffectFrost",
     "thaumcraft.MixinModConfig",
     "thaumcraft.MixinPacketFXScanSource",
@@ -64,6 +67,7 @@
     "waterstrainer.MixinAPIUtils"
   ],
   "client": [
+    "corpse.MixinGuiDeathHistory",
     "quark.MixinRenderLeashKnot2",
     "thaumcraft.MixinGuiFocalManipulator",
     "thebetweenlands.MixinGuiFirefly",

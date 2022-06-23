@@ -84,18 +84,25 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.items.ItemHandlerHelper;
+import soot.item.ItemAlchemyGauntlet;
 import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.ThaumcraftApiHelper;
 import thaumcraft.api.aura.AuraHelper;
 import thaumcraft.api.capabilities.IPlayerKnowledge;
 import thaumcraft.api.capabilities.IPlayerWarp;
 import thaumcraft.api.capabilities.ThaumcraftCapabilities;
+import thaumcraft.api.casters.FocusEffect;
+import thaumcraft.api.casters.FocusPackage;
 import thaumcraft.api.items.ItemsTC;
 import thaumcraft.api.research.ResearchCategories;
 import thaumcraft.api.research.ResearchCategory;
 import thaumcraft.common.blocks.world.ore.BlockCrystal;
 import thaumcraft.common.items.armor.ItemGoggles;
+import thaumcraft.common.items.casters.ItemCaster;
+import thaumcraft.common.items.casters.ItemFocus;
+import thaumcraft.common.items.casters.foci.FocusEffectFire;
 import thaumcraft.common.lib.utils.EntityUtils;
+import thaumcraft.common.lib.utils.RandomItemChooser;
 import thebetweenlands.api.environment.IEnvironmentEvent;
 import thebetweenlands.common.block.farming.BlockFungusCrop;
 import thebetweenlands.common.block.farming.BlockGenericDugSoil;
@@ -117,6 +124,7 @@ import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntityBarrel;
 import thebetweenlands.common.tile.TileEntityDugSoil;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thecodex6824.thaumicaugmentation.common.item.ItemTieredCasterGauntlet;
 import vazkii.quark.decoration.entity.EntityLeashKnot2TheKnotting;
 import vazkii.quark.decoration.feature.IronLadders;
 import vazkii.quark.tweaks.base.BlockStack;
@@ -160,7 +168,7 @@ public class BLAdditionsEventHandler {
     public static void BonemealEvent(BonemealEvent event) {
         EntityPlayer player = event.getEntityPlayer();
 
-        if(player != null && player.getHeldItem(event.getHand()) != ItemStack.EMPTY && player.getHeldItem(event.getHand()).getItem() == new ItemStack(Items.DYE, 1, 15).getItem()) {
+        if(player != null && event.getHand() != null && player.getHeldItem(event.getHand()) != ItemStack.EMPTY && player.getHeldItem(event.getHand()).getItem() == new ItemStack(Items.DYE, 1, 15).getItem()) {
             event.setCanceled(true);
         }
     }
@@ -177,13 +185,17 @@ public class BLAdditionsEventHandler {
                 IPlayerKnowledge knowledge = ThaumcraftCapabilities.getKnowledge(player);
 
                 for (Map.Entry<String, ResearchCategory> entry : ResearchCategories.researchCategories.entrySet()) {
+                    if(entry.getKey().equals("THAUMIC_AUGMENTATION") || entry.getKey().equals("MECHANICS") || entry.getKey().equals("PERIPHERY")) {
+                        continue;
+                    }
+
                     ResearchCategory tempCategory = entry.getValue();
 
                     int value = knowledge.getKnowledgeRaw(IPlayerKnowledge.EnumKnowledgeType.THEORY, tempCategory);
-                    knowledge.addKnowledge(IPlayerKnowledge.EnumKnowledgeType.THEORY, tempCategory, Math.max(0, 320 - value));
+                    knowledge.addKnowledge(IPlayerKnowledge.EnumKnowledgeType.THEORY, tempCategory, Math.max(0, 160 - value));
 
                     value = knowledge.getKnowledgeRaw(IPlayerKnowledge.EnumKnowledgeType.OBSERVATION, tempCategory);
-                    knowledge.addKnowledge(IPlayerKnowledge.EnumKnowledgeType.OBSERVATION, tempCategory, Math.max(0, 160 - value));
+                    knowledge.addKnowledge(IPlayerKnowledge.EnumKnowledgeType.OBSERVATION, tempCategory, Math.max(0, 80 - value));
                 }
 
                 player.getEntityData().setBoolean("free_thaumcraft_research", true);
@@ -219,7 +231,7 @@ public class BLAdditionsEventHandler {
 
         TileEntity te = world.getTileEntity(event.getPos());
 
-        if(stack != ItemStack.EMPTY&& FluidUtil.getFluidContained(stack) != null && FluidUtil.getFluidContained(stack).getFluid() == net.minecraftforge.fluids.FluidRegistry.WATER) {
+        if(stack != ItemStack.EMPTY && FluidUtil.getFluidContained(stack) != null && FluidUtil.getFluidContained(stack).getFluid() == net.minecraftforge.fluids.FluidRegistry.WATER) {
             event.setCanceled(true);
         }
 
@@ -689,10 +701,44 @@ public class BLAdditionsEventHandler {
         BlockPos pos = event.getPos();
         IBlockState state = event.getWorld().getBlockState(pos);
 
-        if (state.getBlock() instanceof IBlockIgnitableWithIgniterItem) {
-            if(event.getItemStack() != ItemStack.EMPTY && event.getItemStack().getItem() == ItemRegistry.OCTINE_INGOT) {
+        if (state.getBlock() instanceof IBlockIgnitableWithIgniterItem && event.getItemStack() != ItemStack.EMPTY) {
+            if(event.getItemStack().getItem() == ItemRegistry.OCTINE_INGOT) {
                 ((IBlockIgnitableWithIgniterItem) state.getBlock()).igniteWithIgniterItem(world, pos, state, event.getFace());
                 world.playSound(null, event.getPos().getX(), event.getPos().getY() + 0.5D, event.getPos().getZ(), SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.PLAYERS, 1.0F, 1.0F);
+            } else if(event.getItemStack().getItem() instanceof ItemCaster || event.getItemStack().getItem() instanceof ItemTieredCasterGauntlet) {
+                FocusPackage focusPackage;
+
+                if(event.getItemStack().getItem() instanceof ItemCaster) {
+                    ItemCaster caster = (ItemCaster) event.getItemStack().getItem();
+                    ItemStack focusStack = caster.getFocusStack(event.getItemStack());
+                    focusPackage = ItemFocus.getPackage(focusStack);
+
+                    if(!caster.consumeVis(event.getItemStack(), event.getEntityPlayer(), caster.getFocus(event.getItemStack()).getVisCost(focusStack), false, true)) {
+                        return;
+                    }
+                } else {
+                    ItemTieredCasterGauntlet caster = (ItemTieredCasterGauntlet) event.getItemStack().getItem();
+                    ItemStack focusStack = caster.getFocusStack(event.getItemStack());
+                    focusPackage = ItemFocus.getPackage(focusStack);
+
+                    if(!caster.consumeVis(event.getItemStack(), event.getEntityPlayer(), ((ItemFocus)caster.getFocus(event.getItemStack())).getVisCost(focusStack), false, true)) {
+                        return;
+                    }
+                }
+
+                if(focusPackage == null) {
+                    return;
+                }
+
+                FocusEffect[] focusEffects = focusPackage.getFocusEffects();
+
+                for(FocusEffect effect : focusEffects) {
+                    if(effect instanceof FocusEffectFire) {
+                        ((IBlockIgnitableWithIgniterItem) state.getBlock()).igniteWithIgniterItem(world, pos, state, event.getFace());
+                        world.playSound(null, event.getPos().getX(), event.getPos().getY() + 0.5D, event.getPos().getZ(), SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.PLAYERS, 1.0F, 1.0F);
+                        break;
+                    }
+                }
             }
         }
     }
@@ -919,29 +965,14 @@ public class BLAdditionsEventHandler {
      */
 
 
-    /*
     @SubscribeEvent
     public void preTooltipRender (WailaRenderEvent.Pre event) {
         EntityPlayer player = event.getAccessor().getPlayer();
-        boolean hasGogglesOfRevealing = false;
 
-        for (ItemStack armor : player.getArmorInventoryList()) {
-            if (armor.getItem() instanceof ItemGoggles) {
-                hasGogglesOfRevealing = true;
-                break;
-            }
-        }
-
-        // check for baubles too
-        if(!hasGogglesOfRevealing && BaublesApi.isBaubleEquipped(player, ItemsTC.goggles) > -1) {
-            hasGogglesOfRevealing = true;
-        }
-
-        if (!hasGogglesOfRevealing) {
+        if(player.world.provider.getDimension() == -2) {
             event.setCanceled(true);
         }
     }
-     */
 
 
     @SubscribeEvent

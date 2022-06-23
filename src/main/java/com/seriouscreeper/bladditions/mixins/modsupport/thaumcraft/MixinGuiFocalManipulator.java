@@ -95,8 +95,6 @@ public class MixinGuiFocalManipulator extends GuiContainer {
      */
     @Overwrite
     private void gatherInfo(boolean sync) {
-        System.out.println("FOO");
-
         this.buttonList.clear();
         this.buttonList.add(this.buttonConfirm);
         this.buttonConfirm.x = this.guiLeft + 242;
@@ -177,8 +175,6 @@ public class MixinGuiFocalManipulator extends GuiContainer {
             this.costCast = (float)this.totalComplexity / 5.0F;
             this.costVis = this.totalComplexity * 10 + this.maxComplexity / 5;
             this.costXp = (int)Math.max(1L, Math.round(Math.sqrt((double)this.totalComplexity)));
-
-            System.out.println(costXp);
 
             boolean validCrystals = false;
             if (crystals.getAspects().length > 0) {

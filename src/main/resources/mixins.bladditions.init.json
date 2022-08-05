@@ -7,9 +7,12 @@
   "refmap": "refmap.bladditions.json",
   "mixins": [
     "MapColorAccessor",
+    "MixinBlockPistonBase",
+    "MixinBlockRedstoneWire",
     "MixinLeashKnot",
     "MixinMapColors",
     "MixinPotionUtils",
+    "MixinWorld",
     "init.MixinLoader"
   ],
   "client": [

@@ -58,6 +58,7 @@ import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.monster.EntityGolem;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -67,7 +68,9 @@ import net.minecraft.nbt.*;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.translation.I18n;
+import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fluids.Fluid;
@@ -126,6 +129,7 @@ import thebetweenlands.common.recipe.misc.SmokingRackRecipe;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.world.storage.location.LocationStorage;
 import thebetweenlands.compat.jei.recipes.smoking_rack.SmokingRackRecipeCategory;
 import thecodex6824.thaumicaugmentation.api.TAItems;
 import thecodex6824.thaumicaugmentation.api.ThaumicAugmentationAPI;
@@ -452,11 +456,24 @@ public class CommonProxy {
 
 
     private void setupWellnessBlocks() {
+        // add more so there is at least 1 per type
         WELLNESS_BLOCKS.put(BlocksTC.crucible, Collections.singletonList(PotionThaumcraftResearch.RESEARCH_CATEGORY.ALCHEMY));
         WELLNESS_BLOCKS.put(BlocksTC.golemBuilder, Collections.singletonList(PotionThaumcraftResearch.RESEARCH_CATEGORY.GOLEMANCY));
-        WELLNESS_BLOCKS.put(BlocksTC.auraTotem, Collections.singletonList(PotionThaumcraftResearch.RESEARCH_CATEGORY.AUROMANCY));
+        WELLNESS_BLOCKS.put(BlocksTC.nitor.get(EnumDyeColor.YELLOW), Collections.singletonList(PotionThaumcraftResearch.RESEARCH_CATEGORY.AUROMANCY));
+        WELLNESS_BLOCKS.put(BlocksTC.jarBrain, Collections.singletonList(PotionThaumcraftResearch.RESEARCH_CATEGORY.ELDRITCH));
+        WELLNESS_BLOCKS.put(BlocksTC.jarNormal, Collections.singletonList(PotionThaumcraftResearch.RESEARCH_CATEGORY.ARCANE));
+        WELLNESS_BLOCKS.put(BlocksTC.mirror, Collections.singletonList(PotionThaumcraftResearch.RESEARCH_CATEGORY.ARTIFICE));
 
         WELLNESS_BLOCKS.put(Blocks.BOOKSHELF, Stream.of(
+                PotionThaumcraftResearch.RESEARCH_CATEGORY.ALCHEMY,
+                PotionThaumcraftResearch.RESEARCH_CATEGORY.ARCANE,
+                PotionThaumcraftResearch.RESEARCH_CATEGORY.ARTIFICE,
+                PotionThaumcraftResearch.RESEARCH_CATEGORY.AUROMANCY,
+                PotionThaumcraftResearch.RESEARCH_CATEGORY.GOLEMANCY,
+                PotionThaumcraftResearch.RESEARCH_CATEGORY.ELDRITCH
+        ).collect(Collectors.toList()));
+
+        WELLNESS_BLOCKS.put(BlocksTC.researchTable, Stream.of(
                 PotionThaumcraftResearch.RESEARCH_CATEGORY.ALCHEMY,
                 PotionThaumcraftResearch.RESEARCH_CATEGORY.ARCANE,
                 PotionThaumcraftResearch.RESEARCH_CATEGORY.ARTIFICE,
@@ -536,14 +553,17 @@ public class CommonProxy {
         ThaumcraftApi.getCraftingRecipes().remove(new ResourceLocation("thaumcraft:focus_3"));
         ThaumcraftApi.addInfusionCraftingRecipe(new ResourceLocation("thaumcraft:focus_3"), new InfusionRecipe("FOCUSGREATER@1", new ItemStack(ItemsTC.focus3), 5, (new AspectList()).add(Aspect.MAGIC, 25).add(Aspect.ORDER, 50).add(Aspect.VOID, 100), new ItemStack(ItemsTC.focus2), new Object[]{new ItemStack(ItemsTC.quicksilver), Ingredient.fromItem(ItemsTC.primordialPearl), new ItemStack(ItemsTC.quicksilver), new ItemStack(ItemRegistry.LIFE_CRYSTAL)}));
 
-        ThaumcraftApi.getCraftingRecipes().remove(new ResourceLocation("thaumcraft:magic_quiver"));
+        ThaumcraftApi.getCraftingRecipes().remove(new ResourceLocation("thaumicperiphery:magic_quiver"));
         ThaumcraftApi.addInfusionCraftingRecipe(new ResourceLocation("thaumicperiphery", "magic_quiver"), new InfusionRecipe("MAGICQUIVER", new ItemStack(ModContent.magic_quiver), 4, (new AspectList()).add(Aspect.VOID, 100).add(Aspect.ORDER, 25).add(Aspect.DESIRE, 25).add(Aspect.MAGIC, 15).add(Aspect.AURA, 15), new ItemStack(ItemsTC.baubles, 1, 2), new Object[]{new ItemStack(ItemsTC.visResonator), "leather", new ItemStack(ItemsTC.fabric), new ItemStack(ItemRegistry.ANGLER_TOOTH_ARROW), new ItemStack(ItemsTC.fabric), "leather"}));
 
-        ThaumcraftApi.getCraftingRecipes().remove(new ResourceLocation("thaumcraft:malignant_heart"));
+        ThaumcraftApi.getCraftingRecipes().remove(new ResourceLocation("thaumicperiphery:malignant_heart"));
         ThaumcraftApi.addInfusionCraftingRecipe(new ResourceLocation("thaumicperiphery", "malignant_heart"), new InfusionRecipe("MALIGNANTHEART", new ItemStack(ModContent.malignant_heart), 6, (new AspectList()).add(Aspect.AVERSION, 50).add(Aspect.DEATH, 50).add(Aspect.UNDEAD, 25).add(Aspect.FLUX, 15).add(Aspect.ENTROPY, 10), new ItemStack(ItemRegistry.ITEMS_MISC, 1, 25), new Object[]{new ItemStack(ItemsTC.brain), new ItemStack(ItemRegistry.ITEMS_MISC, 1, 44), new ItemStack(GrowthcraftBeesItems.beesWax.getItem(), 1, OreDictionary.WILDCARD_VALUE), new ItemStack(ItemRegistry.ITEMS_MISC, 1, 56), new ItemStack(GrowthcraftBeesItems.beesWax.getItem(), 1, OreDictionary.WILDCARD_VALUE), new ItemStack(ItemRegistry.WIGHT_HEART)}));
 
         ThaumcraftApi.getCraftingRecipes().remove(new ResourceLocation("thaumcraft:CausalityCollapser"));
         ThaumcraftApi.addInfusionCraftingRecipe(new ResourceLocation("thaumcraft:CausalityCollapser"), new InfusionRecipe("RIFTCLOSER", new ItemStack(ItemsTC.causalityCollapser), 8, (new AspectList()).add(Aspect.ELDRITCH, 50).add(Aspect.FLUX, 50), new ItemStack(ItemRegistry.ANGRY_PEBBLE), new Object[]{new ItemStack(ItemsTC.morphicResonator), "blockRedstone", new ItemStack(ItemsTC.alumentum), "nitor", new ItemStack(ItemsTC.visResonator), "blockRedstone", new ItemStack(ItemsTC.alumentum), "nitor"}));
+
+        ThaumcraftApi.getCraftingRecipes().remove(new ResourceLocation("thaumicperiphery:pauldron_repulsion"));
+        ThaumcraftApi.addInfusionCraftingRecipe(new ResourceLocation("thaumicperiphery", "pauldron_repulsion"), new InfusionRecipe("PAULDRONREPULSION", new ItemStack(ModContent.pauldron_repulsion), 1, (new AspectList()).add(Aspect.AIR, 50).add(Aspect.MOTION, 50).add(Aspect.PROTECT, 10), new ItemStack(ModContent.pauldron), new Object[]{new ItemStack(ItemRegistry.SHIMMER_STONE), ConfigItems.AIR_CRYSTAL}));
 
         ThaumcraftApi.getCraftingRecipes().remove(new ResourceLocation("thaumcraft:CrystalClusterAir"));
         ThaumcraftApi.getCraftingRecipes().remove(new ResourceLocation("thaumcraft:CrystalClusterFire"));
@@ -879,5 +899,10 @@ public class CommonProxy {
                         .build()
         );
 
+    }
+
+
+    public static boolean IsWithinLocation(World world, BlockPos pos) {
+        return LocationStorage.isLocationGuarded(world, null, pos);
     }
 }

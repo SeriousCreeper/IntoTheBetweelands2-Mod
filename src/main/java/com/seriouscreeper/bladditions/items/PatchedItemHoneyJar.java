@@ -11,7 +11,7 @@ import thebetweenlands.common.registries.BlockRegistry;
 public class PatchedItemHoneyJar extends GrowthcraftItemFoodBase {
     public PatchedItemHoneyJar(String unlocalizedName) {
         super(6, false);
-        this.setContainerItem(new ItemStack(BlockRegistry.MUD_FLOWER_POT).getItem());
+        this.setContainerItem(getItemFromBlock(BlockRegistry.MUD_FLOWER_POT));
         this.setMaxStackSize(1);
         this.setRegistryName(Reference.MODID, unlocalizedName);
         this.setTranslationKey(unlocalizedName);
@@ -19,7 +19,6 @@ public class PatchedItemHoneyJar extends GrowthcraftItemFoodBase {
 
     @Override
     protected void onFoodEaten(ItemStack stack, World worldIn, EntityPlayer player) {
-        if (stack.getCount() != 0)
-            player.inventory.addItemStackToInventory(getContainerItem(stack));
+        player.inventory.addItemStackToInventory(new ItemStack(BlockRegistry.MUD_FLOWER_POT));
     }
 }

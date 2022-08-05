@@ -65,6 +65,7 @@ import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.PotionEvent;
 import net.minecraftforge.event.entity.player.BonemealEvent;
+import net.minecraftforge.event.entity.player.ItemFishedEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.terraingen.ChunkGeneratorEvent;
 import net.minecraftforge.event.terraingen.InitMapGenEvent;
@@ -84,6 +85,9 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.items.ItemHandlerHelper;
+import net.tiffit.sanity.Sanity;
+import net.tiffit.sanity.SanityCapability;
+import net.tiffit.sanity.SanityModifier;
 import soot.item.ItemAlchemyGauntlet;
 import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.ThaumcraftApiHelper;
@@ -174,12 +178,11 @@ public class BLAdditionsEventHandler {
     }
 
 
+    /*
     @SubscribeEvent
     public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
         if(event.player instanceof EntityPlayerMP) {
             EntityPlayerMP player = (EntityPlayerMP) event.player;
-
-            // TODO: Skip the addons ones
 
             if(!player.getEntityData().hasKey("free_thaumcraft_research")) {
                 IPlayerKnowledge knowledge = ThaumcraftCapabilities.getKnowledge(player);
@@ -192,16 +195,18 @@ public class BLAdditionsEventHandler {
                     ResearchCategory tempCategory = entry.getValue();
 
                     int value = knowledge.getKnowledgeRaw(IPlayerKnowledge.EnumKnowledgeType.THEORY, tempCategory);
-                    knowledge.addKnowledge(IPlayerKnowledge.EnumKnowledgeType.THEORY, tempCategory, Math.max(0, 160 - value));
+                    knowledge.addKnowledge(IPlayerKnowledge.EnumKnowledgeType.THEORY, tempCategory, Math.max(0, 40 - value));
 
                     value = knowledge.getKnowledgeRaw(IPlayerKnowledge.EnumKnowledgeType.OBSERVATION, tempCategory);
-                    knowledge.addKnowledge(IPlayerKnowledge.EnumKnowledgeType.OBSERVATION, tempCategory, Math.max(0, 80 - value));
+                    knowledge.addKnowledge(IPlayerKnowledge.EnumKnowledgeType.OBSERVATION, tempCategory, Math.max(0, 20 - value));
                 }
 
                 player.getEntityData().setBoolean("free_thaumcraft_research", true);
             }
         }
     }
+
+     */
 
 
     @SubscribeEvent
@@ -644,7 +649,7 @@ public class BLAdditionsEventHandler {
                     IBlockState state = world.getBlockState(player.getPosition().add(x, y, z));
                     Block block = state.getBlock();
 
-                    for(Object wellnessBlock : CommonProxy.WELLNESS_BLOCKS.keySet()) {
+                    for(Block wellnessBlock : CommonProxy.WELLNESS_BLOCKS.keySet()) {
                         if(wellnessBlock == block) {
                             List<PotionThaumcraftResearch.RESEARCH_CATEGORY> researchBonuses = CommonProxy.WELLNESS_BLOCKS.get(block);
 

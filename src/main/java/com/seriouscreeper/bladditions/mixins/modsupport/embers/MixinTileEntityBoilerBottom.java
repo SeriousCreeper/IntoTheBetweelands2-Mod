@@ -27,7 +27,7 @@ import thebetweenlands.common.registries.FluidRegistry;
 import java.util.List;
 import java.util.Random;
 
-@Mixin(value = TileEntityBoilerBottom.class)
+@Mixin(value = TileEntityBoilerBottom.class, remap = false)
 public class MixinTileEntityBoilerBottom extends TileFluidHandler {
     @Shadow
     private List<IUpgradeProvider> upgrades;

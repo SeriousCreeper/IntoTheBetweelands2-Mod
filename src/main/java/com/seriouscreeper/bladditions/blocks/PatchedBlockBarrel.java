@@ -21,8 +21,6 @@ public class PatchedBlockBarrel extends BlockBarrel {
 
     @Override
     public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
-        System.out.println("TICKING");
-
         for(int y = 1; y < 16; y++) {
             if(worldIn.getBlockState(pos.up(y)).getBlock() == BlockRegistry.CAVE_MOSS) {
                 if (worldIn.provider.getDimension() == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId && worldIn.getTileEntity(pos) instanceof TileEntityBarrel) {

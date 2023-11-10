@@ -51,6 +51,10 @@ public class ConfigBLAdditions {
         public String[] FluxItems = new String[] { "thebetweenlands:syrmorite_ore:0,thebetweenlands:items_misc:11" };
         public int BarrelFillWithWaterChance = 300;
         public int BarrelFillWithWaterAmount = 10;
+        public int WaterFilterSpeed = 50;
+        public int WaterFilterAmount = 1;
+        public int WaterFilterLootChance = 50;
+        public int MothHouseProductionSpeed = 500;
         public String RedstoneOreBlock = "minecraft:redstone_ore";
     }
 

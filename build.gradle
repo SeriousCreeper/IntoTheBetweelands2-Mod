@@ -1,18 +1,22 @@
 buildscript {
     repositories {
         mavenCentral()
-        jcenter()
         maven { url = "http://files.minecraftforge.net/maven" }
         maven { url = "https://repo.spongepowered.org/maven" }
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
         classpath 'org.spongepowered:mixingradle:0.6-SNAPSHOT'
+        classpath "com.wynprice.cursemaven:CurseMaven:1.1.0"
     }
 }
 
 apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'org.spongepowered.mixin'
+apply plugin: 'com.wynprice.cursemaven'
 
 version = "1.0"
 group = "com.seriouscreeper.bladditions" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
@@ -72,7 +76,7 @@ dependencies {
 }
 
 mixin {
-   add sourceSets.main, "refmap.bladditions.json"
+    add sourceSets.main, "refmap.bladditions.json"
 }
 
 processResources {
@@ -93,11 +97,12 @@ processResources {
 
     rename '(.+at\\.cfg)', 'META-INF/$1'
 }
-
+/*
 task deobfJar(type: Jar) {
     from sourceSets.main.output
     classifier = "deobf"
 }
+*/
 
 jar {
     classifier "nolibs"
@@ -105,6 +110,7 @@ jar {
     manifest.attributes(
             "FMLCorePluginContainsFMLMod": "true",
             "TweakClass": "org.spongepowered.asm.launch.MixinTweaker",
+            "MixinConfigs": "refmap.bladditions.json",
             "FMLCorePlugin": "com.seriouscreeper.bladditions.core.BLAdditionsLoadingPlugin",
             "ForceLoadAsMod": "true",
             "FMLAT": "bladditions_at.cfg"
@@ -130,7 +136,7 @@ task sourcesJar(type: Jar, dependsOn: classes) {
 
 
 artifacts {
-    archives deobfJar
+    //archives deobfJar
     //archives jar
     //archives sourcesJar
 }

@@ -833,7 +833,7 @@ public class CommonProxy {
         RecipeRegistry.stampingRecipes.add(new CustomItemRenameStampingRecipe());
 
         RecipeRegistry.fluidReactionRecipes.clear();
-        RecipeRegistry.fluidReactionRecipes.add(new FluidReactionRecipe(new FluidStack(RegistryManager.fluid_steam, 5), new FluidStack(SDFluids.purifiedWater, 1), new Color(255,255,255)));
+        RecipeRegistry.fluidReactionRecipes.add(new FluidReactionRecipe(new FluidStack(RegistryManager.fluid_steam, 5), new FluidStack(FluidRegistry.CLEAN_WATER, 1), new Color(255,255,255)));
         RecipeRegistry.fluidReactionRecipes.add(new FluidReactionRecipe(new FluidStack(RegistryManager.fluid_gas, 1), new FluidStack(RegistryManager.fluid_steam, 5), new Color(128,192,255)));
     }
 

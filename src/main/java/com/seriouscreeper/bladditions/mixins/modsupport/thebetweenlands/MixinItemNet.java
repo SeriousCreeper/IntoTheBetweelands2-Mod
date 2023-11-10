@@ -36,6 +36,7 @@ public class MixinItemNet {
     /**
      * @author SC
      */
+    /*
     @Overwrite
     public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer player, EntityLivingBase target, EnumHand hand) {
         Collection<Pair<Supplier<? extends ItemMob>, BiPredicate<EntityPlayer, Entity>>> entries = ItemNet.CATCHABLE_ENTITIES.get(target.getClass());
@@ -82,4 +83,5 @@ public class MixinItemNet {
 
         return false;
     }
+     */
 }

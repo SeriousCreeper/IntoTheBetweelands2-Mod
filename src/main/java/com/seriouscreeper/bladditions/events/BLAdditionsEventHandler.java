@@ -1,6 +1,10 @@
 package com.seriouscreeper.bladditions.events;
 
 import baubles.api.BaublesApi;
+import com.charles445.simpledifficulty.api.SDItems;
+import com.charles445.simpledifficulty.api.thirst.ThirstEnum;
+import com.charles445.simpledifficulty.item.ItemCanteen;
+import com.codetaylor.mc.athenaeum.integration.gamestages.GameStages;
 import com.codetaylor.mc.athenaeum.interaction.spi.IInteraction;
 import com.codetaylor.mc.athenaeum.network.tile.spi.ITileDataFluidTank;
 import com.codetaylor.mc.athenaeum.util.BlockRegistrationHelper;
@@ -27,6 +31,7 @@ import epicsquid.roots.tileentity.TileEntityPyre;
 import growthcraft.core.shared.tileentity.GrowthcraftTileDeviceBase;
 import mcp.mobius.waila.api.event.WailaRenderEvent;
 import mcp.mobius.waila.api.event.WailaTooltipEvent;
+import net.darkhax.gamestages.event.GameStageEvent;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCrops;
 import net.minecraft.block.BlockLadder;
@@ -44,10 +49,8 @@ import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.InventoryHelper;
-import net.minecraft.item.EnumDyeColor;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemHoe;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.*;
+import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
@@ -59,12 +62,14 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.PotionEvent;
 import net.minecraftforge.event.entity.player.BonemealEvent;
+import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.ItemFishedEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.terraingen.ChunkGeneratorEvent;
@@ -101,15 +106,23 @@ import thaumcraft.api.items.ItemsTC;
 import thaumcraft.api.research.ResearchCategories;
 import thaumcraft.api.research.ResearchCategory;
 import thaumcraft.common.blocks.world.ore.BlockCrystal;
+import thaumcraft.common.config.ConfigItems;
+import thaumcraft.common.config.ModConfig;
 import thaumcraft.common.items.armor.ItemGoggles;
 import thaumcraft.common.items.casters.ItemCaster;
 import thaumcraft.common.items.casters.ItemFocus;
 import thaumcraft.common.items.casters.foci.FocusEffectFire;
+import thaumcraft.common.items.curios.ItemThaumonomicon;
+import thaumcraft.common.items.resources.ItemCrystalEssence;
 import thaumcraft.common.lib.utils.EntityUtils;
+import thaumcraft.common.lib.utils.InventoryUtils;
 import thaumcraft.common.lib.utils.RandomItemChooser;
 import thebetweenlands.api.environment.IEnvironmentEvent;
 import thebetweenlands.common.block.farming.BlockFungusCrop;
 import thebetweenlands.common.block.farming.BlockGenericDugSoil;
+import thebetweenlands.common.block.misc.BlockDampTorch;
+import thebetweenlands.common.block.misc.BlockSulfurTorch;
+import thebetweenlands.common.block.misc.BlockSulfurTorchExtinguished;
 import thebetweenlands.common.block.structure.BlockFenceBetweenlands;
 import thebetweenlands.common.block.terrain.BlockSwampWater;
 import thebetweenlands.common.entity.mobs.EntityAnadia;
@@ -119,6 +132,7 @@ import thebetweenlands.common.entity.projectiles.EntityBetweenstonePebble;
 import thebetweenlands.common.entity.projectiles.EntityFishingSpear;
 import thebetweenlands.common.entity.projectiles.EntityPyradFlame;
 import thebetweenlands.common.entity.projectiles.EntitySapSpit;
+import thebetweenlands.common.item.EnumBLDrinkableBrew;
 import thebetweenlands.common.item.armor.amphibious.AmphibiousArmorUpgrades;
 import thebetweenlands.common.item.armor.amphibious.ItemAmphibiousArmor;
 import thebetweenlands.common.item.misc.ItemMisc;
@@ -167,6 +181,41 @@ public class BLAdditionsEventHandler {
             }
         }
     }
+
+
+    private static void giveDreamJournal(EntityPlayer player) {
+        IPlayerKnowledge knowledge = ThaumcraftCapabilities.getKnowledge(player);
+        knowledge.addResearch("!gotdream");
+        knowledge.sync((EntityPlayerMP)player);
+        ItemStack book = ConfigItems.startBook.copy();
+        book.getTagCompound().setString("author", player.getName());
+        if (!player.inventory.addItemStackToInventory(book)) {
+            InventoryUtils.dropItemAtEntity(player.world, book, player);
+        }
+
+        try {
+            player.sendMessage(new TextComponentString(TextFormatting.DARK_PURPLE + I18n.translateToLocal("got.dream")));
+        } catch (Exception var4) {
+        }
+
+    }
+
+
+    @SubscribeEvent
+    public void onStageUnlocked(GameStageEvent.Added event) {
+        if(event.getStageName().equals("knowledge_of_decay")) {
+            EntityPlayer player = event.getEntityPlayer();
+            IPlayerKnowledge knowledge = ThaumcraftCapabilities.getKnowledge(event.getEntityPlayer());
+
+            knowledge.addResearch("!gotcrystals");
+            knowledge.sync((EntityPlayerMP)event.getEntityPlayer());
+
+            if (ModConfig.CONFIG_MISC.noSleep && !knowledge.isResearchKnown("!gotdream")) {
+                giveDreamJournal(event.getEntityPlayer());
+            }
+        }
+    }
+
 
     @SubscribeEvent
     public static void BonemealEvent(BonemealEvent event) {
@@ -227,20 +276,105 @@ public class BLAdditionsEventHandler {
     }
 
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onBottleUsed(PlayerInteractEvent.RightClickBlock event) throws NoSuchFieldException, IllegalAccessException {
         World world = event.getWorld();
 
         EntityPlayer player = event.getEntityPlayer();
         ItemStack stack = event.getItemStack();
 
-        TileEntity te = world.getTileEntity(event.getPos());
-
-        if(stack != ItemStack.EMPTY && FluidUtil.getFluidContained(stack) != null && FluidUtil.getFluidContained(stack).getFluid() == net.minecraftforge.fluids.FluidRegistry.WATER) {
-            event.setCanceled(true);
+        if(stack == ItemStack.EMPTY) {
+            return;
         }
 
-        if(te instanceof TileCampfire && stack != ItemStack.EMPTY && stack.getItem() == ItemRegistry.BL_BUCKET && FluidUtil.getFluidContained(stack) != null && FluidUtil.getFluidContained(stack).getFluid() == FluidRegistry.SWAMP_WATER) {
+        TileEntity te = world.getTileEntity(event.getPos());
+
+        // to prevent emptying bottles with water into containers
+        if(FluidUtil.getFluidContained(stack) != null && FluidUtil.getFluidContained(stack).getFluid() != null) {
+            if (FluidUtil.getFluidContained(stack).getFluid() == net.minecraftforge.fluids.FluidRegistry.WATER && !(te instanceof TileCampfire)) {
+                event.setCanceled(true);
+            }
+        }
+
+        if (stack.getItem() instanceof ItemGlassBottle) {
+            IFluidHandler fluidHandler = FluidUtil.getFluidHandler(world, event.getPos(), null);
+
+            if(fluidHandler == null) {
+                return;
+            }
+
+            FluidStack tankContents = fluidHandler.drain(250, false);
+
+            if (tankContents != null && (tankContents.getFluid() == FluidRegistry.CLEAN_WATER) && tankContents.amount >= 250) {
+                if (!world.isRemote) {
+                    IBlockState state = world.getBlockState(event.getPos());
+                    ItemStack filledBottle = new ItemStack(SDItems.purifiedWaterBottle);
+
+                    if (!player.capabilities.isCreativeMode) {
+                        stack.shrink(1);
+                    }
+
+                    if (!player.inventory.addItemStackToInventory(filledBottle)) {
+                        ForgeHooks.onPlayerTossEvent(player, filledBottle, false);
+                    }
+
+                    fluidHandler.drain(250, true);
+                    world.notifyBlockUpdate(event.getPos(), state, state, 3);
+                }
+
+                world.playSound((EntityPlayer)null, event.getPos(), SoundEvents.ITEM_BOTTLE_FILL, SoundCategory.BLOCKS, 0.75F, 2.0F);
+
+                return;
+            }
+        } else if(stack.getItem() instanceof ItemCanteen) {
+            IFluidHandler fluidHandler = FluidUtil.getFluidHandler(world, event.getPos(), null);
+
+            if(fluidHandler == null) {
+                return;
+            }
+
+            ItemCanteen canteen = ((ItemCanteen)stack.getItem());
+            int doses = canteen.getDoses(stack);
+            int maxDoses = canteen.getMaxDoses((stack));
+            int additionalDoses = 0;
+
+            if(canteen.getThirstEnum(stack) != ThirstEnum.PURIFIED && doses > 0 || doses == maxDoses) {
+                return;
+            }
+
+            boolean filled = false;
+
+            for(int i = 0; i < maxDoses - doses; i++) {
+                FluidStack tankContents = fluidHandler.drain(250 * (i + 1), false);
+
+                if (tankContents != null && (tankContents.getFluid() == FluidRegistry.CLEAN_WATER) && tankContents.amount >= 250 * (i + 1)) {
+                    filled = true;
+                    additionalDoses++;
+                }
+            }
+
+            if(filled) {
+                if (!world.isRemote) {
+                    IBlockState state = world.getBlockState(event.getPos());
+
+                    if (canteen.getThirstEnum(stack) != ThirstEnum.PURIFIED) {
+                        canteen.setCanteenEmpty(stack);
+                        stack.setTagInfo("CanteenType", new NBTTagInt(ThirstEnum.PURIFIED.ordinal()));
+                    }
+
+                    ((ItemCanteen)stack.getItem()).setDoses(stack, doses + additionalDoses);
+
+                    fluidHandler.drain(250 * additionalDoses, true);
+                    world.notifyBlockUpdate(event.getPos(), state, state, 3);
+                }
+
+                world.playSound((EntityPlayer)null, event.getPos(), SoundEvents.ITEM_BOTTLE_FILL, SoundCategory.BLOCKS, 0.75F, 2.0F);
+            }
+
+            return;
+        }
+
+        if(te instanceof TileCampfire && stack.getItem() == ItemRegistry.BL_BUCKET && FluidUtil.getFluidContained(stack) != null && FluidUtil.getFluidContained(stack).getFluid() == FluidRegistry.SWAMP_WATER) {
             TileCampfire campfire = (TileCampfire) te;
 
             if(campfire.workerIsActive()) {
@@ -839,8 +973,20 @@ public class BLAdditionsEventHandler {
         if(state.getBlock() == BlockRegistry.SULFUR_ORE) {
             ItemStack pick = event.getPlayer().getHeldItem(EnumHand.MAIN_HAND);
 
-            if(pick != ItemStack.EMPTY && pick.getItem() == ItemRegistry.OCTINE_PICKAXE && event.getWorld().rand.nextInt(ConfigBLAdditions.configGeneral.SulfurExplosionDamage) == 0) {
+            if(pick != ItemStack.EMPTY && pick.getItem() == ItemRegistry.OCTINE_PICKAXE && event.getWorld().rand.nextInt(ConfigBLAdditions.configGeneral.SulfurExplosionChance) == 0) {
                 event.getWorld().createExplosion(null, event.getPos().getX(), event.getPos().getY(), event.getPos().getZ(), ConfigBLAdditions.configGeneral.SulfurExplosionDamage, true);
+            }
+        }
+    }
+
+
+    @SubscribeEvent
+    public void placedTorch(BlockEvent.PlaceEvent event) {
+        if(event.getPlacedBlock().getBlock() instanceof BlockSulfurTorchExtinguished) {
+            System.out.println("Foo 1");
+            if(event.getPlayer().inventory.hasItemStack(new ItemStack(ItemRegistry.OCTINE_INGOT))) {
+                System.out.println("Foo 2");
+                event.getWorld().setBlockState(event.getPos(), BlockRegistry.SULFUR_TORCH.getDefaultState());
             }
         }
     }

@@ -3,7 +3,7 @@ package com.seriouscreeper.bladditions.mixins.modsupport.pyrotech;
 import com.codetaylor.mc.athenaeum.util.BlockHelper;
 import com.codetaylor.mc.pyrotech.modules.core.ModuleCore;
 import com.codetaylor.mc.pyrotech.modules.worldgen.ModuleWorldGenConfig;
-import com.codetaylor.mc.pyrotech.modules.worldgen.world.WorldGenDenseRedstoneOre;
+import com.codetaylor.mc.pyrotech.modules.worldgen.feature.WorldGenDenseRedstoneOre;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;

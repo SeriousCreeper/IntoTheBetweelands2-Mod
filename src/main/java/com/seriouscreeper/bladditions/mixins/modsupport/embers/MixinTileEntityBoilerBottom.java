@@ -6,6 +6,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
 import net.minecraftforge.fluids.capability.TileFluidHandler;
 import net.minecraftforge.items.ItemStackHandler;
@@ -28,7 +29,7 @@ import java.util.List;
 import java.util.Random;
 
 @Mixin(value = TileEntityBoilerBottom.class, remap = false)
-public class MixinTileEntityBoilerBottom extends TileFluidHandler {
+public class MixinTileEntityBoilerBottom extends TileFluidHandler implements ITickable {
     @Shadow
     private List<IUpgradeProvider> upgrades;
 
@@ -46,10 +47,7 @@ public class MixinTileEntityBoilerBottom extends TileFluidHandler {
         return 0;
     }
 
-    /**
-     * @author SC
-     */
-    @Overwrite
+    @Override
     public void update() { // func_73660_a
         this.upgrades = UpgradeUtil.getUpgrades(this.world, this.pos, EnumFacing.HORIZONTALS);
         UpgradeUtil.verifyUpgrades(this, this.upgrades);

@@ -24,7 +24,7 @@ public class MixinEyesConsequences {
             if(cap != null && cap.getSanityExact() < 0) {
                 float chance = cap.getSanityExact() / -200F;
 
-                if(player.rand.nextFloat() < chance) {
+                if(player.getRNG().nextFloat() < chance) {
                     EntityEyes eyes = new EntityEyes(player.world);
                     eyes.setPosition(pos.getX() + .5, pos.getY() + .5, pos.getZ() + .5);
                     player.world.spawnEntity(eyes);

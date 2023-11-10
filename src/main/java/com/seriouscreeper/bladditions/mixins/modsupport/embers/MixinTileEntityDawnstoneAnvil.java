@@ -1,6 +1,7 @@
 package com.seriouscreeper.bladditions.mixins.modsupport.embers;
 
 import com.codetaylor.mc.athenaeum.util.RandomHelper;
+import com.codetaylor.mc.pyrotech.modules.tech.basic.recipe.AnvilRecipe;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.tile.spi.TileAnvilBase;
 import com.codetaylor.mc.pyrotech.modules.tech.bloomery.ModuleTechBloomery;
 import com.codetaylor.mc.pyrotech.modules.tech.bloomery.ModuleTechBloomeryConfig;
@@ -42,6 +43,8 @@ import teamroots.embers.tileentity.TileEntityBin;
 import teamroots.embers.tileentity.TileEntityDawnstoneAnvil;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 @Mixin(value = TileEntityDawnstoneAnvil.class, remap = false)
@@ -162,30 +165,27 @@ public class MixinTileEntityDawnstoneAnvil extends TileEntity {
 
                 //BloomHelper.trySpawnFire(world, this.pos, RandomHelper.random(), ModuleTechBloomeryConfig.BLOOM.FIRE_SPAWN_CHANCE_ON_HIT_RAW);
 
-                String recipeID = bloom.getRecipeId(bloomStack);
+                AnvilRecipe recipe = AnvilRecipe.getRecipe(bloomStack, AnvilRecipe.EnumTier.IRONCLAD, AnvilRecipe.EnumType.HAMMER);
 
-                if(recipeID == null) {
+                if(recipe == null) {
                     ci.cancel();
                     return;
                 }
 
-                BloomeryRecipeBase<BloomeryRecipe> recipe = ModuleTechBloomery.Registries.BLOOMERY_RECIPE.getValue(new ResourceLocation(recipeID));
+                TileEntity bin = this.getWorld().getTileEntity(this.getPos().down());
 
-                if (recipe != null) {
-                    TileEntity bin = this.getWorld().getTileEntity(this.getPos().down());
-                    if (bin instanceof IBin) {
-                        ItemStack remainder = ((TileEntityBin) bin).getInventory().insertItem(0, recipe.getOutput(), false);
-                        if (!remainder.isEmpty() && !this.getWorld().isRemote) {
-                            EntityItem item = new EntityItem(this.getWorld(), (double) this.getPos().getX() + 0.5D, (double) ((float) this.getPos().getY() + 1.0625F), (double) this.getPos().getZ() + 0.5D, remainder);
-                            this.getWorld().spawnEntity(item);
-                        }
-
-                        bin.markDirty();
-                        this.markDirty();
-                    } else if (!this.world.isRemote) {
-                        EntityItem item = new EntityItem(this.getWorld(), (double) this.getPos().getX() + 0.5D, (double) ((float) this.getPos().getY() + 1.0625F), (double) this.getPos().getZ() + 0.5D, recipe.getOutput());
+                if (bin instanceof IBin) {
+                    ItemStack remainder = ((TileEntityBin) bin).getInventory().insertItem(0, recipe.getOutput(), false);
+                    if (!remainder.isEmpty() && !this.getWorld().isRemote) {
+                        EntityItem item = new EntityItem(this.getWorld(), (double) this.getPos().getX() + 0.5D, (double) ((float) this.getPos().getY() + 1.0625F), (double) this.getPos().getZ() + 0.5D, remainder);
                         this.getWorld().spawnEntity(item);
                     }
+
+                    bin.markDirty();
+                    this.markDirty();
+                } else if (!this.world.isRemote) {
+                    EntityItem item = new EntityItem(this.getWorld(), (double) this.getPos().getX() + 0.5D, (double) ((float) this.getPos().getY() + 1.0625F), (double) this.getPos().getZ() + 0.5D, recipe.getOutput());
+                    this.getWorld().spawnEntity(item);
                 }
 
                 int integrity = bloom.getIntegrity(bloomStack);

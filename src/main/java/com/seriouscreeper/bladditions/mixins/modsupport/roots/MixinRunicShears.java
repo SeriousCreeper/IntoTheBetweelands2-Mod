@@ -64,6 +64,7 @@ public class MixinRunicShears extends ItemShearsBase {
     public boolean itemInteractionForEntity(ItemStack itemstack, EntityPlayer player, EntityLivingBase entity, EnumHand hand) {
         World world = player.world;
         Random rand = itemRand;
+
         if (entity.isChild()) {
             return true;
         } else {
@@ -71,6 +72,7 @@ public class MixinRunicShears extends ItemShearsBase {
                 RunicShearEntityRecipe recipe = ModRecipes.getRunicShearRecipe(entity);
                 if (recipe != null) {
                     player.swingArm(hand);
+
                     if (!world.isRemote) {
                         RunicShearsCapability cap = (RunicShearsCapability)entity.getCapability(RunicShearsCapabilityProvider.RUNIC_SHEARS_CAPABILITY, (EnumFacing)null);
                         if (cap != null) {
@@ -84,7 +86,7 @@ public class MixinRunicShears extends ItemShearsBase {
                                     Advancement adv = manager.getAdvancementList().getAdvancement(id);
                                     if (adv != null) {
                                         if(((EntityPlayerMP)player).getAdvancements().getProgress(adv).isDone()) {
-                                            cooldown *= 4;
+                                            cooldown /= 4;
                                         }
                                     }
                                 }
@@ -107,40 +109,6 @@ public class MixinRunicShears extends ItemShearsBase {
                             player.sendStatusMessage((new TextComponentTranslation("roots.runic_shears.cooldown", new Object[0])).setStyle((new Style()).setColor(TextFormatting.DARK_PURPLE)), true);
                         }
                     }
-                }
-            } else {
-                LifeEssenceCapability cap = (LifeEssenceCapability)entity.getCapability(LifeEssenceCapabilityProvider.LIFE_ESSENCE_CAPABILITY, (EnumFacing)null);
-                if (cap != null) {
-                    if (cap.canHarvest()) {
-                        player.swingArm(hand);
-                        if (!world.isRemote) {
-                            cap.setCooldown(7200L);
-                            ItemStack stack = new ItemStack(ModItems.life_essence);
-                            NBTTagCompound tag = stack.getTagCompound();
-                            if (tag == null) {
-                                tag = new NBTTagCompound();
-                                stack.setTagCompound(tag);
-                            }
-
-                            tag.setString("id", EntityList.getKey(entity).toString());
-                            EntityItem ent = entity.entityDropItem(stack, 1.0F);
-                            ent.motionY += (double)(rand.nextFloat() * 0.05F);
-                            ent.motionX += (double)((rand.nextFloat() - rand.nextFloat()) * 0.1F);
-                            ent.motionZ += (double)((rand.nextFloat() - rand.nextFloat()) * 0.1F);
-                            if (!player.capabilities.isCreativeMode) {
-                                itemstack.damageItem(1, entity);
-                            }
-
-                            world.playSound((EntityPlayer)null, entity.getPosition(), SoundEvents.ENTITY_SHEEP_SHEAR, SoundCategory.BLOCKS, 1.0F, 1.0F);
-                            IMessage packet = new MessageRunicShearsFX(entity);
-                            PacketHandler.sendToAllTracking(packet, entity);
-                            return true;
-                        }
-                    } else {
-                        player.sendStatusMessage((new TextComponentTranslation("roots.life_essence.cooldown", new Object[0])).setStyle((new Style()).setColor(TextFormatting.DARK_PURPLE)), true);
-                    }
-                } else {
-                    player.sendStatusMessage((new TextComponentTranslation("roots.life_essence.invalid", new Object[0])).setStyle((new Style()).setColor(TextFormatting.DARK_PURPLE)), true);
                 }
             }
 

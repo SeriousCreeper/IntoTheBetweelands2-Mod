@@ -70,6 +70,7 @@
     "thebetweenlands.MixinBlockPlant",
     "thebetweenlands.MixinEntityGiantToad",
     "thebetweenlands.MixinEntityLurker",
+    "thebetweenlands.MixinEntityRockSnot",
     "thebetweenlands.MixinItemBarkAmulet",
     "thebetweenlands.MixinItemMummyBait",
     "thebetweenlands.MixinItemNet",

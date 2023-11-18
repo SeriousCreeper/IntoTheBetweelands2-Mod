@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import thebetweenlands.common.entity.mobs.EntityRockSnot;
 
-@Mixin(value = EntityRockSnot.class)
+@Mixin(value = EntityRockSnot.class, remap = false)
 public class MixinEntityRockSnot {
     @Inject(method = "canTarget(Lnet/minecraft/entity/EntityLivingBase;)Z", at = @At("HEAD"), cancellable = true)
     private void inject(EntityLivingBase entity, CallbackInfoReturnable<Boolean> cir) {

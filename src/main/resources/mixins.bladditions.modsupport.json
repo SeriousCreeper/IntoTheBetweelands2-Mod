@@ -64,6 +64,7 @@
     "thaumcraft.MixinThaumcraftWorldGenerator",
     "thaumcraft.MixinTileBarrierStone",
     "thaumcraft.MixinUtils",
+    "thaumicjei.MixinThaumcraftJEIPlugin",
     "thebetweenlands.MixinBetweenlandsSpawnerLogic",
     "thebetweenlands.MixinBLFurnace",
     "thebetweenlands.MixinBlockBarrel",

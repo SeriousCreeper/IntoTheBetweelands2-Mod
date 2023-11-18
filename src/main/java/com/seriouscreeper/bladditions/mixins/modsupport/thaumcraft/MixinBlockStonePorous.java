@@ -17,7 +17,9 @@ import thaumcraft.api.items.ItemGenericEssentiaContainer;
 import thaumcraft.api.items.ItemsTC;
 import thaumcraft.common.blocks.basic.BlockStonePorous;
 import thaumcraft.common.config.ModConfig;
+import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.ItemRegistry;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -39,7 +41,7 @@ public class MixinBlockStonePorous {
     public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
         List<ItemStack> ret = new ArrayList();
         int rr = r.nextInt(15) + fortune;
-        if (rr > 13) {
+        if (rr > 11) {
             if (pdrops == null || pdrops.size() <= 0) {
                 this.createDrops();
             }
@@ -47,7 +49,7 @@ public class MixinBlockStonePorous {
             ItemStack s = ((WeightedRandomLoot) WeightedRandom.getRandomItem(r, pdrops)).item.copy();
             ret.add(s);
         } else {
-            ret.add(new ItemStack(BlockRegistry.SILT));
+            ret.add(ItemStack.EMPTY);
         }
 
         return ret;
@@ -62,6 +64,12 @@ public class MixinBlockStonePorous {
         pdrops = new ArrayList();
         Iterator var1 = Aspect.getCompoundAspects().iterator();
 
+        pdrops.add(new WeightedRandomLoot(new ItemStack(BlockRegistry.SILT), 40));
+        pdrops.add(new WeightedRandomLoot(ItemMisc.EnumItemMisc.BETWEENSTONE_PEBBLE.create(1), 30));
+        pdrops.add(new WeightedRandomLoot(ItemMisc.EnumItemMisc.WEEDWOOD_STICK.create(1), 30));
+        pdrops.add(new WeightedRandomLoot(new ItemStack(ItemRegistry.DENTROTHYST_SHARD_GREEN), 20));
+        pdrops.add(new WeightedRandomLoot(new ItemStack(ItemRegistry.DENTROTHYST_SHARD_ORANGE), 15));
+
         while(var1.hasNext()) {
             Aspect aspect = (Aspect)var1.next();
             ItemStack is = new ItemStack(ItemsTC.crystalEssence);
@@ -71,8 +79,7 @@ public class MixinBlockStonePorous {
 
         pdrops.add(new WeightedRandomLoot(new ItemStack(ItemsTC.amber), 20));
         pdrops.add(new WeightedRandomLoot(new ItemStack(ItemsTC.clusters, 1, 0), 20));
-        pdrops.add(new WeightedRandomLoot(new ItemStack(ItemsTC.clusters, 1, 1), 10));
-        pdrops.add(new WeightedRandomLoot(new ItemStack(ItemsTC.clusters, 1, 6), 10));
+
         if (ModConfig.foundCopperIngot) {
             pdrops.add(new WeightedRandomLoot(new ItemStack(ItemsTC.clusters, 1, 2), 10));
         }
@@ -87,6 +94,7 @@ public class MixinBlockStonePorous {
 
         if (ModConfig.foundLeadIngot) {
             pdrops.add(new WeightedRandomLoot(new ItemStack(ItemsTC.clusters, 1, 5), 10));
+            pdrops.add(new WeightedRandomLoot(new ItemStack(ItemsTC.clusters, 1, 6), 10));
         }
 
         /*

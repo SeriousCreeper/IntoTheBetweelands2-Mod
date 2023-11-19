@@ -21,7 +21,7 @@ import com.codetaylor.mc.pyrotech.modules.tech.basic.block.BlockCampfire;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.block.BlockKilnPit;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.potion.PotionFocused;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.tile.TileCampfire;
-import com.mrbysco.anotherliquidmilkmod.init.MilkRegistry;
+import com.seriouscreeper.bladditions.BLAdditions;
 import com.seriouscreeper.bladditions.config.ConfigBLAdditions;
 import com.seriouscreeper.bladditions.potion.PotionThaumcraftResearch;
 import com.seriouscreeper.bladditions.proxy.CommonProxy;
@@ -32,6 +32,7 @@ import epicsquid.roots.init.ModItems;
 import epicsquid.roots.item.living.ItemLivingPickaxe;
 import epicsquid.roots.tileentity.TileEntityPyre;
 import growthcraft.core.shared.tileentity.GrowthcraftTileDeviceBase;
+import hunternif.mc.atlas.api.AtlasAPI;
 import mcp.mobius.waila.api.event.WailaRenderEvent;
 import mcp.mobius.waila.api.event.WailaTooltipEvent;
 import net.darkhax.gamestages.event.GameStageEvent;
@@ -158,26 +159,25 @@ import java.util.*;
 
 @Mod.EventBusSubscriber
 public class BLAdditionsEventHandler {
-
     @SubscribeEvent
     public static void entityHurt(LivingHurtEvent event) {
         IPlayerKnowledge knowledge;
 
-        if (event.getSource().getImmediateSource() != null && event.getEntity() instanceof EntityPlayer && ThaumcraftCapabilities.knowsResearchStrict((EntityPlayer)event.getEntity(), new String[]{"FOCUSPROJECTILE@2"})) {
+        if (event.getSource().getImmediateSource() != null && event.getEntity() instanceof EntityPlayer && ThaumcraftCapabilities.knowsResearchStrict((EntityPlayer)event.getEntity(), "FOCUSPROJECTILE@2")) {
             knowledge = ThaumcraftCapabilities.getKnowledge((EntityPlayer)event.getEntity());
-            if (!ThaumcraftCapabilities.knowsResearch((EntityPlayer)event.getEntity(), new String[]{"f_arrow"}) && event.getSource().getImmediateSource() instanceof EntityBetweenstonePebble) {
+            if (!ThaumcraftCapabilities.knowsResearch((EntityPlayer)event.getEntity(), "f_arrow") && event.getSource().getImmediateSource() instanceof EntityBetweenstonePebble) {
                 knowledge.addResearch("f_arrow");
                 knowledge.sync((EntityPlayerMP)event.getEntity());
                 ((EntityPlayer)event.getEntity()).sendStatusMessage(new TextComponentString(TextFormatting.DARK_PURPLE + I18n.translateToLocal("got.projectile")), true);
             }
 
-            if (!ThaumcraftCapabilities.knowsResearch((EntityPlayer)event.getEntity(), new String[]{"f_fireball"}) && event.getSource().getImmediateSource() instanceof EntityPyradFlame) {
+            if (!ThaumcraftCapabilities.knowsResearch((EntityPlayer)event.getEntity(), "f_fireball") && event.getSource().getImmediateSource() instanceof EntityPyradFlame) {
                 knowledge.addResearch("f_fireball");
                 knowledge.sync((EntityPlayerMP)event.getEntity());
                 ((EntityPlayer)event.getEntity()).sendStatusMessage(new TextComponentString(TextFormatting.DARK_PURPLE + I18n.translateToLocal("got.projectile")), true);
             }
 
-            if (!ThaumcraftCapabilities.knowsResearch((EntityPlayer)event.getEntity(), new String[]{"f_spit"}) && event.getSource().getImmediateSource() instanceof EntitySapSpit) {
+            if (!ThaumcraftCapabilities.knowsResearch((EntityPlayer)event.getEntity(), "f_spit") && event.getSource().getImmediateSource() instanceof EntitySapSpit) {
                 knowledge.addResearch("f_spit");
                 knowledge.sync((EntityPlayerMP)event.getEntity());
                 ((EntityPlayer)event.getEntity()).sendStatusMessage(new TextComponentString(TextFormatting.DARK_PURPLE + I18n.translateToLocal("got.projectile")), true);
@@ -275,6 +275,10 @@ public class BLAdditionsEventHandler {
             event.getWorld().setBlockState(event.getPos(), BlockRegistry.BLACK_ICE.getDefaultState());
         } else if(block == Blocks.SNOW_LAYER) {
             event.getWorld().setBlockState(event.getPos(), BlockRegistry.SNOW.getDefaultState());
+        } else if(block == BlockRegistry.WAYSTONE) {
+            if(!event.getWorld().isRemote) {
+                AtlasAPI.getMarkerAPI().putGlobalMarker(event.getWorld(), false, CommonProxy.MARKER_MENHIR.toString(), "Menhir", event.getPos().getX(), event.getPos().getZ());
+            }
         }
     }
 
@@ -325,7 +329,7 @@ public class BLAdditionsEventHandler {
                     world.notifyBlockUpdate(event.getPos(), state, state, 3);
                 }
 
-                world.playSound((EntityPlayer)null, event.getPos(), SoundEvents.ITEM_BOTTLE_FILL, SoundCategory.BLOCKS, 0.75F, 2.0F);
+                world.playSound(null, event.getPos(), SoundEvents.ITEM_BOTTLE_FILL, SoundCategory.BLOCKS, 0.75F, 2.0F);
 
                 return;
             }
@@ -371,7 +375,7 @@ public class BLAdditionsEventHandler {
                     world.notifyBlockUpdate(event.getPos(), state, state, 3);
                 }
 
-                world.playSound((EntityPlayer)null, event.getPos(), SoundEvents.ITEM_BOTTLE_FILL, SoundCategory.BLOCKS, 0.75F, 2.0F);
+                world.playSound(null, event.getPos(), SoundEvents.ITEM_BOTTLE_FILL, SoundCategory.BLOCKS, 0.75F, 2.0F);
             }
 
             return;
@@ -650,7 +654,7 @@ public class BLAdditionsEventHandler {
             if (ladder instanceof BlockLadder) {
                 BlockPos attachPos = pos.offset(facing, -1);
                 if (canAttachTo == null) {
-                    canAttachTo = ObfuscationReflectionHelper.findMethod(BlockLadder.class, "func_193392_c", Boolean.TYPE, new Class[]{World.class, BlockPos.class, EnumFacing.class});
+                    canAttachTo = ObfuscationReflectionHelper.findMethod(BlockLadder.class, "func_193392_c", Boolean.TYPE, World.class, BlockPos.class, EnumFacing.class);
                 }
 
                 try {
@@ -690,11 +694,11 @@ public class BLAdditionsEventHandler {
                 if (stateDown.getBlock() != block) {
                     if (stateDown.getBlock().isAir(stateDown, world, posDown)) {
                         IBlockState copyState = world.getBlockState(pos);
-                        EnumFacing facing = (EnumFacing)copyState.getValue(BlockLadder.FACING);
+                        EnumFacing facing = copyState.getValue(BlockLadder.FACING);
 
                         if (canAttachTo(block, world, posDown, facing)) {
                             world.setBlockState(posDown, copyState);
-                            world.playSound((EntityPlayer)null, (double)posDown.getX(), (double)posDown.getY(), (double)posDown.getZ(), SoundEvents.BLOCK_LADDER_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                            world.playSound(null, posDown.getX(), posDown.getY(), posDown.getZ(), SoundEvents.BLOCK_LADDER_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F);
 
                             if (world.isRemote) {
                                 player.swingArm(hand);
@@ -766,7 +770,7 @@ public class BLAdditionsEventHandler {
         }
 
         // Find greebling nearby
-        List<Entity> l = EntityUtils.getEntitiesInRange(world, player.getPosition(), (Entity)null, Entity.class, 10.0D);
+        List<Entity> l = EntityUtils.getEntitiesInRange(world, player.getPosition(), null, Entity.class, 10.0D);
 
         if (!l.isEmpty()) {
             for (Entity e : l) {
@@ -1006,9 +1010,7 @@ public class BLAdditionsEventHandler {
     @SubscribeEvent
     public void placedTorch(BlockEvent.PlaceEvent event) {
         if(event.getPlacedBlock().getBlock() instanceof BlockSulfurTorchExtinguished) {
-            System.out.println("Foo 1");
             if(event.getPlayer().inventory.hasItemStack(new ItemStack(ItemRegistry.OCTINE_INGOT))) {
-                System.out.println("Foo 2");
                 event.getWorld().setBlockState(event.getPos(), BlockRegistry.SULFUR_TORCH.getDefaultState());
             }
         }
@@ -1066,7 +1068,7 @@ public class BLAdditionsEventHandler {
 
                     if(torches != ItemStack.EMPTY && torches.getItem() == Item.getItemFromBlock(BlockRegistry.SULFUR_TORCH)) {
                         event.player.setHeldItem(hand, new ItemStack(BlockRegistry.SULFUR_TORCH_EXTINGUISHED, torches.getCount()));
-                        event.player.world.playSound((EntityPlayer)null, event.player.getPosition(), SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.AMBIENT, 1.0F, 1.0F);
+                        event.player.world.playSound(null, event.player.getPosition(), SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.AMBIENT, 1.0F, 1.0F);
                     }
                 }
             }
@@ -1111,7 +1113,7 @@ public class BLAdditionsEventHandler {
         if (!world.isRemote && world.getBlockState(hitPos).getValue(BlockKilnPit.VARIANT) == BlockKilnPit.EnumType.EMPTY) {
             itemHeld.setCount(itemHeld.getCount() - 1);
             world.setBlockState(hitPos, ModuleTechBasic.Blocks.KILN_PIT.getDefaultState().withProperty(BlockKilnPit.VARIANT, BlockKilnPit.EnumType.THATCH));
-            world.playSound((EntityPlayer)null, hitPos, SoundEvents.BLOCK_GRASS_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F);
+            world.playSound(null, hitPos, SoundEvents.BLOCK_GRASS_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F);
             event.setCanceled(true);
         }
     }

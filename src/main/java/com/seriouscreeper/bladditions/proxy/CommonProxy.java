@@ -49,6 +49,8 @@ import growthcraft.core.shared.utils.TickUtils;
 import growthcraft.milk.common.Init;
 import growthcraft.milk.shared.fluids.MilkFluidTags;
 import growthcraft.milk.shared.init.GrowthcraftMilkFluids;
+import hunternif.mc.atlas.api.AtlasAPI;
+import hunternif.mc.atlas.registry.MarkerType;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCrops;
 import net.minecraft.block.BlockPistonBase;
@@ -165,6 +167,19 @@ public class CommonProxy {
 
     public static Block seed_syrmorite;
     public static Block seed_octine;
+
+    public static ResourceLocation MARKER_CRAGROCK_TOWER = new ResourceLocation(BLAdditions.MODID, "tile_cragrock_tower");
+    public static ResourceLocation MARKER_SPIRIT_TREE = new ResourceLocation(BLAdditions.MODID, "tile_spirit_tree");
+    public static ResourceLocation MARKER_SLUDGEON = new ResourceLocation(BLAdditions.MODID, "tile_sludgeon");
+    public static ResourceLocation MARKER_WIGHT_FORTRESS = new ResourceLocation(BLAdditions.MODID, "tile_wight_fortress");
+    public static ResourceLocation MARKER_GIANT_TREE = new ResourceLocation(BLAdditions.MODID, "tile_giant_tree");
+    public static ResourceLocation MARKER_MENHIR = new ResourceLocation(BLAdditions.MODID, "tile_menhir");
+    public static ResourceLocation MARKER_IDOL_HEAD = new ResourceLocation(BLAdditions.MODID, "tile_idol_head");
+
+
+    public void registerAntiqueAtlasTextures() {
+    }
+
 
 
     @SubscribeEvent

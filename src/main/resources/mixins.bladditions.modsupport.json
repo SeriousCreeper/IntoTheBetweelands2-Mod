@@ -83,6 +83,12 @@
     "thebetweenlands.MixinItemRingOfDisperion",
     "thebetweenlands.MixinTileEntityMothHouse",
     "thebetweenlands.MixinTileEntityWaterFilter",
+    "thebetweenlands.structures.MixinWorldGenCragrockTower",
+    "thebetweenlands.structures.MixinWorldGenGiantTree",
+    "thebetweenlands.structures.MixinWorldGenIdolHeads",
+    "thebetweenlands.structures.MixinWorldGenSludgeWormDungeon",
+    "thebetweenlands.structures.MixinWorldGenSpiritTree",
+    "thebetweenlands.structures.WorldGenWightFortress",
     "waterstrainer.MixinAPIUtils"
   ],
   "client": [

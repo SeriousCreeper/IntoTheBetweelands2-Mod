@@ -1,8 +1,11 @@
 package com.seriouscreeper.bladditions.events;
 
 import baubles.api.BaublesApi;
+import com.charles445.simpledifficulty.api.SDCapabilities;
 import com.charles445.simpledifficulty.api.SDItems;
+import com.charles445.simpledifficulty.api.thirst.IThirstCapability;
 import com.charles445.simpledifficulty.api.thirst.ThirstEnum;
+import com.charles445.simpledifficulty.api.thirst.ThirstUtil;
 import com.charles445.simpledifficulty.item.ItemCanteen;
 import com.codetaylor.mc.athenaeum.integration.gamestages.GameStages;
 import com.codetaylor.mc.athenaeum.interaction.spi.IInteraction;
@@ -906,6 +909,26 @@ public class BLAdditionsEventHandler {
         // remove wellness nbt from player when potion runs out
 
         if(!world.isRemote && player.ticksExisted % 20 == 0) {
+            // When facing up in the rain, player slowly recovers thirst.
+            final float angle = player.getPitchYaw().x;
+
+            if (angle <= -80) {
+                IThirstCapability capability = SDCapabilities.getThirstData(player);
+                BetweenlandsWorldStorage storage = BetweenlandsWorldStorage.forWorld(world);
+
+                if (storage != null && capability.getThirstLevel() < 20) {
+                    List<IEnvironmentEvent> activeEvents = storage.getEnvironmentEventRegistry().getActiveEvents();
+
+                    for(IEnvironmentEvent activeEvent : activeEvents) {
+                        String eventName = activeEvent.getEventName().getPath();
+
+                        if(eventName.equals("heavy_rain")) {
+                            ThirstUtil.takeDrink(player, 1, 1, 0);
+                        }
+                    }
+                }
+            }
+
             Collection<PotionEffect> effects = player.getActivePotionEffects();
 
             for(PotionEffect effect : effects) {

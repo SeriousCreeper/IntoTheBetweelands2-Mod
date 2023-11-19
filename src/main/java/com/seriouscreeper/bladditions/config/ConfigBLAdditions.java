@@ -28,6 +28,7 @@ import java.util.Map;
 public class ConfigBLAdditions {
     public static final ConfigGeneral configGeneral = new ConfigGeneral();
     public static final ConfigTea configTea = new ConfigTea();
+    public static final ConfigAutoMapping configAutoMapping = new ConfigAutoMapping();
 
     @Config.Ignore
     private static Map<String, Float> blEventBonuses = null;
@@ -56,6 +57,16 @@ public class ConfigBLAdditions {
         public int WaterFilterLootChance = 50;
         public int MothHouseProductionSpeed = 500;
         public String RedstoneOreBlock = "minecraft:redstone_ore";
+    }
+
+
+    public static class ConfigAutoMapping {
+        public boolean AutoMapCragrockTower = true;
+        public boolean AutoMapGiantWeedwoodTree = true;
+        public boolean AutoMapIdolHeads = true;
+        public boolean AutoMapSludgeon = true;
+        public boolean AutoMapSpiritTree = true;
+        public boolean AutoMapWightFortress = true;
     }
 
 
@@ -91,11 +102,9 @@ public class ConfigBLAdditions {
             }
 
             String[] itemInfo = items[0].split(":");
-            System.out.println(itemInfo[0]);
             ItemStack input = new ItemStack(Item.getByNameOrId(itemInfo[0] + ":" + itemInfo[1]), 1, Integer.parseInt(itemInfo[itemInfo.length - 1]));
 
             itemInfo = items[1].split(":");
-            System.out.println(itemInfo[0]);
             ItemStack output = new ItemStack(Item.getByNameOrId(itemInfo[0] + ":" + itemInfo[1]), 1, Integer.parseInt(itemInfo[itemInfo.length - 1]));
 
             CommonProxy.FLUXABLE_ITEMS.put(input, output);

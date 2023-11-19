@@ -27,12 +27,9 @@ public class MixinEntityEyes extends EntityMob {
             List<IEnvironmentEvent> activeEvents = storage.getEnvironmentEventRegistry().getActiveEvents();
 
             if(activeEvents.contains(storage.getEnvironmentEventRegistry().bloodSky)) {
-                System.out.println("SPAWN THEM EYES");
                 return defaultCondition;
             }
         }
-
-        System.out.println("DONT SPAWN THEM EYES");
 
         return false;
     }

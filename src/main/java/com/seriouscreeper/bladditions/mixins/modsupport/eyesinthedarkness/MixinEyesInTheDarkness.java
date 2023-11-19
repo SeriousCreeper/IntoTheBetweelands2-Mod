@@ -50,7 +50,6 @@ public class MixinEyesInTheDarkness {
                 {
                     Set<String> whitelist = Sets.newHashSet(ConfigData.BiomeWhitelist);
                     biomes = biomes.stream().filter(b -> {
-                        System.out.println("BIOME: " + b.getBiomeName());
                         return whitelist.contains(b.getRegistryName().toString());
                     }).collect(Collectors.toList());
                 }

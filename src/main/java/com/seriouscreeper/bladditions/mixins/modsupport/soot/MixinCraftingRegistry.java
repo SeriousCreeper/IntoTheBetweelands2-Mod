@@ -39,6 +39,9 @@ import teamroots.embers.recipe.FluidMixingRecipe;
 import teamroots.embers.recipe.ItemMeltingRecipe;
 import teamroots.embers.recipe.RecipeRegistry;
 import mezz.jei.util.Translator;
+import thaumcraft.api.items.ItemsTC;
+import thebetweenlands.common.item.misc.ItemMisc;
+import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
 import java.text.DecimalFormat;
@@ -321,8 +324,8 @@ public class MixinCraftingRegistry {
         stillRecipes.add((new RecipeStill(getRL("brew_snowpoff"), new FluidStack(vodka, 1), Ingredient.fromItem(Items.SNOWBALL), 1, new FluidStack(snowpoff, 1))).setEssence(Lists.newArrayList(new EssenceStack[]{new EssenceStack(EssenceType.ICE, 5)})));
         stillRecipes.add((new RecipeStill(getRL("brew_absinthe"), new FluidStack(boiling_verdigris, 1), Ingredient.fromItem(ItemRegistry.SAP_SPIT), 0, new FluidStack(absinthe, 1))).setEssence(Lists.newArrayList(new EssenceStack[]{new EssenceStack(EssenceType.POISON, 5), new EssenceStack(EssenceType.EXPERIENCE, 1)})));
         stillRecipes.add((new RecipeStill(getRL("brew_methanol"), (FluidStack)null, new OreIngredient("logWood"), 1, new FluidStack(methanol, 1))).setEssence(Lists.newArrayList(new EssenceStack[]{new EssenceStack(EssenceType.FIRE, 3), new EssenceStack(EssenceType.POISON, 1)})));
-        stillRecipes.add((new RecipeStill(getRL("extract_lava"), new FluidStack(FluidRegistry.LAVA, 3), Ingredient.EMPTY, 1, new FluidStack(FluidRegistry.LAVA, 1))).setEssence(Lists.newArrayList(new EssenceStack[]{new EssenceStack(EssenceType.FIRE, 10)})));
-        stillRecipes.add((new RecipeStill(getRL("extract_iron"), new FluidStack(RegistryManager.fluid_molten_iron, 3), Ingredient.EMPTY, 1, new FluidStack(RegistryManager.fluid_molten_iron, 2))).setEssence(Lists.newArrayList(new EssenceStack[]{new EssenceStack(EssenceType.EXTRACT, 15)})));
+        stillRecipes.add((new RecipeStill(getRL("extract_lava"), new FluidStack(FluidRegistry.getFluid("octine"), 3), Ingredient.EMPTY, 1, new FluidStack(FluidRegistry.getFluid("octine"), 1))).setEssence(Lists.newArrayList(new EssenceStack[]{new EssenceStack(EssenceType.FIRE, 10)})));
+        stillRecipes.add((new RecipeStill(getRL("extract_iron"), new FluidStack(FluidRegistry.getFluid("syrmorite"), 3), Ingredient.EMPTY, 1, new FluidStack(FluidRegistry.getFluid("syrmorite"), 2))).setEssence(Lists.newArrayList(new EssenceStack[]{new EssenceStack(EssenceType.EXTRACT, 15)})));
         ArrayList<Fluid> allSoups = new ArrayList();
         allSoups.add(boiling_beetroot_soup);
         ArrayList<Fluid> allAlcohols = new ArrayList();
@@ -351,11 +354,11 @@ public class MixinCraftingRegistry {
         }).addEffect(new EffectAdd("concentration", 10.0F, 120.0F, false)).addEffect(new EffectMultiply("concentration", 1.8F, 0.0F, 120.0F, false)).addEffect(new EffectMultiply("volume", 1.1F, false)).addEffect(new EffectLoss(3, 2)));
         stillRecipes.add((new RecipeStillModifier(getRL("modify_lifedrinker"), allAlcohols, Ingredient.fromItem(Items.GHAST_TEAR), 1)).addEffect(new EffectInfo("lifedrinker")).addEffect(new EffectAdd("lifedrinker", 600.0F, 18000.0F, true)).addEffect(new EffectMultiply("lifedrinker", 1.6F, -1.0F, 18000.0F, true)).addEffect(new EffectAdd("toxicity", 10.0F, false)));
         stillRecipes.add((new RecipeStillModifier(getRL("modify_steadfast"), allAlcohols, Ingredient.fromItem(Items.RABBIT_FOOT), 1)).addEffect(new EffectInfo("steadfast")).addEffect(new EffectAdd("steadfast", 600.0F, 18000.0F, true)).addEffect(new EffectMultiply("steadfast", 1.6F, -1.0F, 18000.0F, true)));
-        stillRecipes.add((new RecipeStillModifier(getRL("modify_experience_boost"), allDrinks, Ingredient.fromItem(Items.EGG), 1)).addEffect(new EffectInfo("experience_boost")).addEffect(new EffectAdd("experience_boost", 600.0F, 18000.0F, true)).addEffect(new EffectMultiply("experience_boost", 1.6F, -1.0F, 18000.0F, true)).addEffect(new EffectAdd("toxicity", 10.0F, 50.0F, false)));
+        stillRecipes.add((new RecipeStillModifier(getRL("modify_experience_boost"), allDrinks, Ingredient.fromItem(ItemRegistry.ROCK_SNOT_PEARL), 1)).addEffect(new EffectInfo("experience_boost")).addEffect(new EffectAdd("experience_boost", 600.0F, 18000.0F, true)).addEffect(new EffectMultiply("experience_boost", 1.6F, -1.0F, 18000.0F, true)).addEffect(new EffectAdd("toxicity", 10.0F, 50.0F, false)));
         stillRecipes.add((new RecipeStillModifier(getRL("modify_duration_bonus"), allAlcohols, new OreIngredient("dustRedstone"), 1)).addEffect(new EffectAdd("duration", 0.5F, 2.5F, false)).addEffect(new EffectAdd("toxicity", 5.0F, false)));
-        stillRecipes.add((new RecipeStillModifier(getRL("modify_sweetness_bonus"), allDrinks, new OreIngredient("dustSugar"), 1)).addEffect(new EffectAdd("sweetness", 15.0F, 80.0F, false)));
-        stillRecipes.add((new RecipeStillModifier(getRL("modify_purify"), allDrinks, new OreIngredient("dustPrismarine"), 1)).addEffect(new EffectMultiply("toxicity", 0.8F, 0.0F, 1.0F, false)).addEffect(new EffectAdd("toxicity", -20.0F, 0.0F, false)));
-        stillRecipes.add(new RecipeStillModifier(getRL("modify_taint"), allDrinks, Ingredient.fromItem(Items.FERMENTED_SPIDER_EYE), 1) {
+        stillRecipes.add((new RecipeStillModifier(getRL("modify_sweetness_bonus"), allDrinks, new OreIngredient("materialHoneycomb"), 1)).addEffect(new EffectAdd("sweetness", 15.0F, 80.0F, false)));
+        stillRecipes.add((new RecipeStillModifier(getRL("modify_purify"), allDrinks, Ingredient.fromItem(ItemsTC.bathSalts), 1)).addEffect(new EffectMultiply("toxicity", 0.8F, 0.0F, 1.0F, false)).addEffect(new EffectAdd("toxicity", -20.0F, 0.0F, false)));
+        stillRecipes.add(new RecipeStillModifier(getRL("modify_taint"), allDrinks, Ingredient.fromStacks(ItemMisc.EnumItemMisc.POISON_GLAND.create(1)), 1) {
             public void modifyOutput(TileEntityStillBase tile, FluidStack output) {
                 NBTTagCompound compound = FluidUtil.createModifiers(output);
                 Iterator var4 = FluidUtil.SORTED_MODIFIER_KEYS.iterator();
@@ -388,8 +391,8 @@ public class MixinCraftingRegistry {
                 this.addModifier(tooltip, "erase_positive", false);
             }
         });
-        stillRecipes.add((new RecipeStillModifier(getRL("modify_heal"), allDrinks, new OreIngredient("cropNetherWart"), 1)).addEffect(new EffectAdd("health", 4.0F, false)).addEffect(new EffectAdd("hunger", -3.0F, false)));
-        stillRecipes.add((new RecipeStillModifier(getRL("modify_cool"), allDrinks, Ingredient.fromStacks(new ItemStack[]{new ItemStack(Blocks.ICE)}), 1)).addEffect(new EffectMultiply("heat", 0.5F, 200.0F, 1.0F, false)));
+        stillRecipes.add((new RecipeStillModifier(getRL("modify_heal"), allDrinks, Ingredient.fromItem(ItemRegistry.WIGHT_HEART), 1)).addEffect(new EffectAdd("health", 4.0F, false)).addEffect(new EffectAdd("hunger", -3.0F, false)));
+        stillRecipes.add((new RecipeStillModifier(getRL("modify_cool"), allDrinks, Ingredient.fromStacks(new ItemStack[]{new ItemStack(BlockRegistry.BLACK_ICE)}), 1)).addEffect(new EffectMultiply("heat", 0.5F, 200.0F, 1.0F, false)));
         stillRecipes.add(new RecipeStillModifierFood(getRL("soup_potato"), allSoups, new OreIngredient("cropPotato"), 1, 2, 0.3F));
         stillRecipes.add(new RecipeStillModifierFood(getRL("soup_carrot"), allSoups, new OreIngredient("cropCarrot"), 1, 1, 0.2F));
         stillRecipes.add((new RecipeStillModifierFood(getRL("soup_wheat"), allSoups, new OreIngredient("cropWheat"), 1, 4, 0.6F)).addEffect(new EffectInfo("thick_soup", TextFormatting.BLUE)).addEffect(new EffectAdd("viscosity", 1000.0F, true)));

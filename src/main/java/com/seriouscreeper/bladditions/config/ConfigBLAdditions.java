@@ -67,6 +67,7 @@ public class ConfigBLAdditions {
         public boolean AutoMapSludgeon = true;
         public boolean AutoMapSpiritTree = true;
         public boolean AutoMapWightFortress = true;
+        public boolean AutoMapMenhir = true;
     }
 
 

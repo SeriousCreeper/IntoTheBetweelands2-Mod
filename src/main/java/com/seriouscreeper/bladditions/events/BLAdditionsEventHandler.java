@@ -128,6 +128,7 @@ import thebetweenlands.common.block.misc.BlockDampTorch;
 import thebetweenlands.common.block.misc.BlockSulfurTorch;
 import thebetweenlands.common.block.misc.BlockSulfurTorchExtinguished;
 import thebetweenlands.common.block.structure.BlockFenceBetweenlands;
+import thebetweenlands.common.block.structure.BlockWaystone;
 import thebetweenlands.common.block.terrain.BlockSwampWater;
 import thebetweenlands.common.entity.mobs.EntityAnadia;
 import thebetweenlands.common.entity.mobs.EntityGreebling;
@@ -275,7 +276,7 @@ public class BLAdditionsEventHandler {
             event.getWorld().setBlockState(event.getPos(), BlockRegistry.BLACK_ICE.getDefaultState());
         } else if(block == Blocks.SNOW_LAYER) {
             event.getWorld().setBlockState(event.getPos(), BlockRegistry.SNOW.getDefaultState());
-        } else if(block == BlockRegistry.WAYSTONE) {
+        } else if(block == BlockRegistry.WAYSTONE && ConfigBLAdditions.configAutoMapping.AutoMapMenhir && event.getState() == event.getState().withProperty(BlockWaystone.PART, BlockWaystone.Part.BOTTOM)) {
             if(!event.getWorld().isRemote) {
                 AtlasAPI.getMarkerAPI().putGlobalMarker(event.getWorld(), false, CommonProxy.MARKER_MENHIR.toString(), "Menhir", event.getPos().getX(), event.getPos().getZ());
             }

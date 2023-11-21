@@ -1,5 +1,6 @@
 package com.seriouscreeper.bladditions.mixins.modsupport.thebetweenlands;
 
+import com.seriouscreeper.bladditions.proxy.CommonProxy;
 import epicsquid.roots.advancements.Advancements;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.client.Minecraft;
@@ -30,25 +31,13 @@ public class MixinEntityChiromawTame extends EntityTameableBL {
     @Inject(method = "shouldAttackEntity", at = @At("HEAD"), cancellable = true)
     private void injectShouldAttackEntity(EntityLivingBase entityTarget, EntityLivingBase entityTarget2, CallbackInfoReturnable<Boolean> cir) {
         if(entityTarget instanceof EntityAnimalBL) {
-            ResourceLocation id = Advancements.PACIFIST_ID;
-            NetHandlerPlayClient conn = Minecraft.getMinecraft().getConnection();
-
-            if (conn != null) {
-                ClientAdvancementManager manager = conn.getAdvancementManager();
-                Advancement adv = manager.getAdvancementList().getAdvancement(id);
-
-                if (adv != null) {
-                    if (!((EntityPlayerMP) getOwner()).getAdvancements().getProgress(adv).isDone()) {
-                        cir.setReturnValue(false);
-                    }
-                }
+            if(CommonProxy.IsPacifist((EntityPlayerMP)getOwner())) {
+                cir.setReturnValue(false);
             }
         }
     }
 
     @Shadow
-    @Nullable
-    @Override
     public EntityAgeable createChild(EntityAgeable entityAgeable) {
         return null;
     }

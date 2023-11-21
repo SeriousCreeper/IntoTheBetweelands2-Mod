@@ -1,5 +1,6 @@
 package com.seriouscreeper.bladditions.mixins.modsupport.roots;
 
+import com.seriouscreeper.bladditions.proxy.CommonProxy;
 import epicsquid.mysticallib.item.ItemShearsBase;
 import epicsquid.mysticallib.network.PacketHandler;
 import epicsquid.mysticallib.util.Util;
@@ -79,16 +80,10 @@ public class MixinRunicShears extends ItemShearsBase {
                             if (cap.canHarvest()) {
                                 long cooldown = (long)recipe.getCooldown();
 
-                                ResourceLocation id = Advancements.PACIFIST_ID;
-                                NetHandlerPlayClient conn = Minecraft.getMinecraft().getConnection();
-                                if (conn != null) {
-                                    ClientAdvancementManager manager = conn.getAdvancementManager();
-                                    Advancement adv = manager.getAdvancementList().getAdvancement(id);
-                                    if (adv != null) {
-                                        if(((EntityPlayerMP)player).getAdvancements().getProgress(adv).isDone()) {
-                                            cooldown /= 4;
-                                        }
-                                    }
+                                boolean isPacifist = CommonProxy.IsPacifist((EntityPlayerMP) player);
+
+                                if(!isPacifist) {
+                                    cooldown /= 4;
                                 }
 
                                 cap.setCooldown(cooldown);

@@ -913,11 +913,11 @@ public class BLAdditionsEventHandler {
         // if we do, only check it if check interval passed + we triggered the next chance
         // remove wellness nbt from player when potion runs out
 
-        if(!world.isRemote && player.ticksExisted % 20 == 0) {
+        if(!world.isRemote && player.ticksExisted % 40 == 0) {
             // When facing up in the rain, player slowly recovers thirst.
-            final float angle = player.getPitchYaw().x;
+            final double angle = player.getLookVec().y;
 
-            if (angle <= -80) {
+            if (angle >= 0.8) {
                 IThirstCapability capability = SDCapabilities.getThirstData(player);
                 BetweenlandsWorldStorage storage = BetweenlandsWorldStorage.forWorld(world);
 

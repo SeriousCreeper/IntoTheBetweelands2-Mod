@@ -2,6 +2,8 @@ package com.seriouscreeper.bladditions.mixins.modsupport.thaumcraft;
 
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -25,37 +27,32 @@ public class MixinFocusEffectBreak extends FocusEffect {
     }
 
     @Shadow
-    @Override
     public boolean execute(RayTraceResult rayTraceResult, @Nullable Trajectory trajectory, float v, int i) {
         return false;
     }
 
     @Shadow
-    @Override
+    @SideOnly(Side.CLIENT)
     public void renderParticleFX(World world, double v, double v1, double v2, double v3, double v4, double v5) {
 
     }
 
     @Shadow
-    @Override
     public int getComplexity() {
         return 0;
     }
 
     @Shadow
-    @Override
     public Aspect getAspect() {
         return null;
     }
 
     @Shadow
-    @Override
     public String getKey() {
         return null;
     }
 
     @Shadow
-    @Override
     public String getResearch() {
         return null;
     }

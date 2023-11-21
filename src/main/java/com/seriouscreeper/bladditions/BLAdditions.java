@@ -3,7 +3,6 @@ package com.seriouscreeper.bladditions;
 import com.seriouscreeper.bladditions.commands.BLAdditionsCommands;
 import com.seriouscreeper.bladditions.config.ConfigBLAdditions;
 import com.seriouscreeper.bladditions.events.BLAdditionsEventHandler;
-import com.seriouscreeper.bladditions.items.FairyLightsRecipes;
 import com.seriouscreeper.bladditions.proxy.CommonProxy;
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.block.state.IBlockState;
@@ -44,14 +43,13 @@ import thebetweenlands.common.item.tools.bow.EnumArrowType;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.tile.TileEntityDugSoil;
-import thebetweenlands.common.tile.TileEntityMothHouse;
 
 @Mod(modid = BLAdditions.MODID, name = BLAdditions.NAME, version = BLAdditions.VERSION, dependencies = "required-after:antiqueatlas;required-after:gamestages;required-after:growthcraft;required-after:mysticalmechanics;required-after:embers;required-after:fairylights;required-after:pyrotech;required-after:pizzacraft;required-after:crafttweaker;required-after:deliverymerchants;required-after:thebetweenlands;required-after:roots;required-after:thaumcraft;required-after:thaumicperiphery")
 public class BLAdditions
 {
     public static final String MODID = "bladditions";
     public static final String NAME = "BL Additions";
-    public static final String VERSION = "1.0";
+    public static final String VERSION = "1.2";
 
     @SidedProxy(clientSide = Reference.CLIENT_PROXY_CLASS, serverSide = Reference.SERVER_PROXY_CLASS)
     public static CommonProxy proxy;

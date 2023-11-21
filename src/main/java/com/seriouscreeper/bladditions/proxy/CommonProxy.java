@@ -1,6 +1,5 @@
 package com.seriouscreeper.bladditions.proxy;
 
-import com.charles445.simpledifficulty.api.SDFluids;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.mrbysco.anotherliquidmilkmod.init.MilkRegistry;
@@ -29,11 +28,10 @@ import com.tiviacz.pizzacraft.crafting.bakeware.BaseShapelessOreRecipe;
 import com.tiviacz.pizzacraft.crafting.bakeware.IBakewareRecipe;
 import com.tiviacz.pizzacraft.crafting.bakeware.PizzaCraftingManager;
 import com.tiviacz.pizzacraft.init.ModBlocks;
-import crafttweaker.api.item.IItemStack;
-import crafttweaker.api.minecraft.CraftTweakerMC;
 import epicsquid.mysticallib.LibRegistry;
 import epicsquid.mysticallib.event.RegisterContentEvent;
 import epicsquid.roots.Roots;
+import epicsquid.roots.advancements.Advancements;
 import epicsquid.roots.api.CreateToolEvent;
 import epicsquid.roots.init.ModItems;
 import epicsquid.roots.integration.jei.soil.SoilRecipe;
@@ -49,15 +47,17 @@ import growthcraft.core.shared.utils.TickUtils;
 import growthcraft.milk.common.Init;
 import growthcraft.milk.shared.fluids.MilkFluidTags;
 import growthcraft.milk.shared.init.GrowthcraftMilkFluids;
-import hunternif.mc.atlas.api.AtlasAPI;
-import hunternif.mc.atlas.registry.MarkerType;
+import net.minecraft.advancements.Advancement;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCrops;
 import net.minecraft.block.BlockPistonBase;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientAdvancementManager;
+import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EnumCreatureType;
-import net.minecraft.entity.monster.EntityGolem;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
@@ -77,7 +77,6 @@ import net.minecraft.world.biome.Biome;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -91,13 +90,10 @@ import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.OreIngredient;
-import roito.teastory.block.BlockRegister;
 import soot.Registry;
-import soot.recipe.ItemLiverStampingRecipe;
 import soot.recipe.ItemRenameStampingRecipe;
 import teamroots.embers.RegistryManager;
 import teamroots.embers.block.BlockSeedNew;
-import teamroots.embers.compat.crafttweaker.Stamper;
 import teamroots.embers.entity.EntityAncientGolem;
 import teamroots.embers.recipe.FluidReactionRecipe;
 import teamroots.embers.recipe.ItemStampingRecipe;
@@ -118,7 +114,6 @@ import thaumcraft.api.research.*;
 import thaumcraft.common.config.ConfigBlocks;
 import thaumcraft.common.config.ConfigItems;
 import thaumcraft.common.golems.seals.SealHandler;
-import thaumcraft.common.golems.seals.SealHarvest;
 import thaumcraft.common.lib.crafting.DustTriggerMultiblock;
 import thaumcraft.common.lib.crafting.InfusionEnchantmentRecipe;
 import thaumcraft.common.lib.enchantment.EnumInfusionEnchantment;
@@ -132,7 +127,6 @@ import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.world.storage.location.LocationStorage;
-import thebetweenlands.compat.jei.recipes.smoking_rack.SmokingRackRecipeCategory;
 import thecodex6824.thaumicaugmentation.api.TAItems;
 import thecodex6824.thaumicaugmentation.api.ThaumicAugmentationAPI;
 import thecodex6824.thaumicaugmentation.api.item.CapabilityMorphicTool;
@@ -180,6 +174,24 @@ public class CommonProxy {
     public void registerAntiqueAtlasTextures() {
     }
 
+
+    public static boolean IsPacifist(EntityPlayerMP player) {
+        ResourceLocation id = Advancements.PACIFIST_ID;
+        NetHandlerPlayClient conn = Minecraft.getMinecraft().getConnection();
+
+        if (conn != null) {
+            ClientAdvancementManager manager = conn.getAdvancementManager();
+            Advancement adv = manager.getAdvancementList().getAdvancement(id);
+
+            if (adv != null) {
+                if (!player.getAdvancements().getProgress(adv).isDone()) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
 
 
     @SubscribeEvent

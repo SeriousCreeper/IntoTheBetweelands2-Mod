@@ -38,6 +38,7 @@
     "roots.MixinBlockGroveStone",
     "roots.MixinBlockInfernalBulbCrop",
     "roots.MixinBlockStalicripeCrop",
+    "roots.MixinEntityRitualAnimalHarvest",
     "roots.MixinEntityRitualDivineProtection",
     "roots.MixinEntityRitualFrostLands",
     "roots.MixinEntityRitualHeavyStorms",

@@ -1083,19 +1083,11 @@ public class BLAdditionsEventHandler {
             return;
         }
 
-        /*
-        if(event.getSource().getImmediateSource() != null)
-            System.out.println(event.getSource().getImmediateSource().getName());
-
-        if(event.getSource().getTrueSource() != null)
-            System.out.println(event.getSource().getTrueSource().getName());
-        */
-
         Entity trueSource = event.getSource().getTrueSource();
         Entity damageSource = event.getSource().getImmediateSource();
 
         if(trueSource instanceof EntityPlayer && !(damageSource instanceof EntityFishingSpear)) {
-            ((EntityPlayer)trueSource).sendStatusMessage(new TextComponentString("This fish is too slippery to hit!"), true);
+            ((EntityPlayer)trueSource).sendStatusMessage(new TextComponentString("This fish is too slippery to hit without throwing a fishing spear!"), true);
             event.setCanceled(true);
         }
     }

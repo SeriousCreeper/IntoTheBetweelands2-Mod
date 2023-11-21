@@ -724,12 +724,12 @@ public class CommonProxy {
 
         Part GP1 = new Part(Blocks.IRON_BARS, new ItemStack(BlocksTC.placeholderBars));
         Part GP2 = new Part(BlocksTC.crucible, new ItemStack(BlocksTC.placeholderCauldron));
-        Part GP3 = new Part(Blocks.PISTON.getDefaultState().withProperty(BlockPistonBase.FACING, EnumFacing.UP), BlocksTC.golemBuilder);
-        Part GP4 = new Part(Blocks.ANVIL, new ItemStack(BlocksTC.placeholderAnvil));
+        Part GP3 = new Part(com.joshiegemfinder.betweenlandsredstone.ModBlocks.SCABYST_PISTON.getDefaultState().withProperty(BlockPistonBase.FACING, EnumFacing.UP), BlocksTC.golemBuilder);
+        Part GP4 = new Part(BlockRegistry.SYRMORITE_BLOCK, new ItemStack(BlocksTC.placeholderAnvil));
         Part GP5 = new Part(BlocksTC.tableStone, new ItemStack(BlocksTC.placeholderTable));
         Part[][][] golempressBlueprint = new Part[][][]{{{null, null}, {GP1, null}}, {{GP2, GP4}, {GP3, GP5}}};
         IDustTrigger.registerDustTrigger(new DustTriggerMultiblock("MINDCLOCKWORK", golempressBlueprint));
-        ThaumcraftApi.addMultiblockRecipeToCatalog(new ResourceLocation("thaumcraft:GolemPress"), new ThaumcraftApi.BluePrint("MINDCLOCKWORK", new ItemStack(BlocksTC.golemBuilder), golempressBlueprint, new ItemStack[]{new ItemStack(Blocks.IRON_BARS), new ItemStack(BlocksTC.crucible), new ItemStack(Blocks.PISTON), new ItemStack(Blocks.ANVIL), new ItemStack(BlocksTC.tableStone)}));
+        ThaumcraftApi.addMultiblockRecipeToCatalog(new ResourceLocation("thaumcraft:GolemPress"), new ThaumcraftApi.BluePrint("MINDCLOCKWORK", new ItemStack(BlocksTC.golemBuilder), golempressBlueprint, new ItemStack[]{new ItemStack(Blocks.IRON_BARS), new ItemStack(BlocksTC.crucible), new ItemStack(com.joshiegemfinder.betweenlandsredstone.ModBlocks.SCABYST_PISTON), new ItemStack(BlockRegistry.SYRMORITE_BLOCK), new ItemStack(BlocksTC.tableStone)}));
     }
 
 

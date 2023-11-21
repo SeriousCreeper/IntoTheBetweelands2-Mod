@@ -45,7 +45,7 @@ public class MixinEntityRitualAnimalHarvest extends EntityRitualBase {
 
             List<EntityAnadia> anadias = world.getEntitiesWithinAABB(EntityAnadia.class, aabb, (a) -> a.getDistanceSq((double)((float)getPosition().getX() + 0.5F), (double)((float)getPosition().getY() + 0.5F), (double)((float)getPosition().getZ() + 0.5F)) <= (double)((float)this.ritual.radius_x * (float)this.ritual.radius_x));
 
-            if(anadias.size() >= 3) {
+            if(anadias.size() >= this.ritual.fish_count) {
                 return false;
             }
 

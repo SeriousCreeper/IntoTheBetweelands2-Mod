@@ -74,6 +74,7 @@
     "thebetweenlands.MixinBLFurnace",
     "thebetweenlands.MixinBlockBarrel",
     "thebetweenlands.MixinBlockPlant",
+    "thebetweenlands.MixinEntityChiromawTame",
     "thebetweenlands.MixinEntityGiantToad",
     "thebetweenlands.MixinEntityLurker",
     "thebetweenlands.MixinEntityRockSnot",

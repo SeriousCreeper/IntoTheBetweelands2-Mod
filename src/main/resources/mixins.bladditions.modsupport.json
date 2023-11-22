@@ -29,6 +29,7 @@
     "pyrotech.MixinBlockKilnPit",
     "pyrotech.MixinItemAxe",
     "pyrotech.MixinTileMechanicalMulchSpreader",
+    "pyrotech.MixinTileWitherForge",
     "pyrotech.MixinWorldGenDenseRedstoneOre",
     "quark.MixinEntityLeashKnot",
     "redstonepaste.MixinBlockRedstonePaste",

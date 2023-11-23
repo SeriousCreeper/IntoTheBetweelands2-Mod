@@ -92,6 +92,7 @@
     "thebetweenlands.MixinItemNet",
     "thebetweenlands.MixinItemRegistry",
     "thebetweenlands.MixinItemRingOfDisperion",
+    "thebetweenlands.MixinTeleporterBetweenlands",
     "thebetweenlands.MixinTileEntityMothHouse",
     "thebetweenlands.MixinTileEntityWaterFilter",
     "thebetweenlands.structures.MixinWorldGenCragrockTower",

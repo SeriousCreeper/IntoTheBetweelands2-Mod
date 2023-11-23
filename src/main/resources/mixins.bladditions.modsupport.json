@@ -14,6 +14,7 @@
     "MixinPizzaOven",
     "basketcase.MixinBlockTileEntryBasket",
     "charsetimmersion.MixinCharsetImmersion",
+    "corpse.MixinEntityCorpse",
     "embers.MixinBlockSteamEngine",
     "embers.MixinMysticalMechanicsIntegration",
     "embers.MixinTileEntityBoilerBottom",

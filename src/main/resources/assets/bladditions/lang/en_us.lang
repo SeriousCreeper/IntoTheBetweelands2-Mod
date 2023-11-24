@@ -11,6 +11,6 @@ bladditions.potion.tc_arcane=Focus: Arcane
 entity.greeblingmerchant.name=Greebling Merchant
 
 book.custom.start.title=Strange Visions
-book.custom.start.1="I had the strangest vision.\n\nIn this vision, I took three of those strange crystals I found and combined them with a handful of bluedust and other ingredients."
-book.custom.start.2="The crystals had to be of different types, but if I did it properly then the result was a strange, glowing dust.\n\nIn the vision, I took the dust and sprinkled it on a bookcase, but the vision ended before I saw what happened."
+book.custom.start.1="I had the strangest vision.\n\nIn this vision, I took three of those strange crystals I found and combined them with a handful of bluedust and radiant dust in a fey crafter."
+book.custom.start.2="If I did it properly then the result was a strange, glowing dust.\n\nIn the vision, I took the dust and sprinkled it on a bookcase, but the vision ended before I saw what happened."
 book.custom.start.3="I wonder, should I do what the vision showed?\n\nI have the impression the dust was going to reveal something wondrous, but dangerous."

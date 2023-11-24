@@ -201,7 +201,6 @@ public class BLAdditionsEventHandler {
             player.sendMessage(new TextComponentString(TextFormatting.DARK_PURPLE + I18n.translateToLocal("got.dream")));
         } catch (Exception var4) {
         }
-
     }
 
 

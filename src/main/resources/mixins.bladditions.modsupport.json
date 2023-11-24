@@ -55,6 +55,7 @@
     "sanity.MixinLightSeekerConsequence",
     "simpledifficulty.MixinThirstUtilInternal",
     "soot.MixinCraftingRegistry",
+    "starterkit.MixinClaimTracker",
     "teastory.MixinKettle",
     "teastory.MixinTeaDrink",
     "teastory.MixinTeaPlant",

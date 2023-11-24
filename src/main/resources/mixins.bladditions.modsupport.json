@@ -18,6 +18,7 @@
     "embers.MixinBlockSteamEngine",
     "embers.MixinMysticalMechanicsIntegration",
     "embers.MixinTileEntityBoilerBottom",
+    "embers.MixinTileEntityBreaker",
     "embers.MixinTileEntityDawnstoneAnvil",
     "eyesinthedarkness.MixinEntityEyes",
     "fairylights.MixinFairyLightsRecipes",

@@ -91,6 +91,7 @@
     "thebetweenlands.MixinEntityGiantToad",
     "thebetweenlands.MixinEntityLurker",
     "thebetweenlands.MixinEntityRockSnot",
+    "thebetweenlands.MixinEntityWight",
     "thebetweenlands.MixinItemBarkAmulet",
     "thebetweenlands.MixinItemMobAnadia",
     "thebetweenlands.MixinItemMummyBait",

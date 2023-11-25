@@ -31,7 +31,7 @@ public class MixinEyesConsequences {
         if (pos != null) {
             SanityCapability cap = player.getCapability(SanityCapability.INSTANCE, null);
 
-            if(cap != null && cap.getSanityExact() <= -20) {
+            if(cap != null && cap.getSanityExact() < 0) {
                 float chance = cap.getSanityExact() / -200F;
 
                 if(player.getRNG().nextFloat() < chance) {

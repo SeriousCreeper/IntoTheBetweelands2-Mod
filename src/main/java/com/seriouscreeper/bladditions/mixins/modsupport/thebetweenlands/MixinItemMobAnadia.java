@@ -17,7 +17,7 @@ import thebetweenlands.common.item.misc.ItemMobAnadia;
 import java.util.Iterator;
 import java.util.List;
 
-@Mixin(value = ItemMobAnadia.class)
+@Mixin(value = ItemMobAnadia.class, remap = false)
 public class MixinItemMobAnadia {
     @Inject(method = "onCapturedByPlayer", at = @At("HEAD"))
     private void injectOnCapturedByPlayer(EntityPlayer player, EnumHand hand, ItemStack stack, EntityLivingBase entity, CallbackInfo ci) {

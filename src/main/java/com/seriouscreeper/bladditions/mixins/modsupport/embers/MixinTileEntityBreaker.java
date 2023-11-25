@@ -16,9 +16,10 @@ import thebetweenlands.common.world.storage.location.LocationStorage;
 import java.lang.ref.WeakReference;
 import java.util.List;
 
-@Mixin(value = TileEntityBreaker.class, remap = false)
+@Mixin(value = TileEntityBreaker.class)
 public class MixinTileEntityBreaker extends TileEntity {
-    @Shadow private WeakReference<FakePlayer> fakePlayer;
+    @Shadow
+    WeakReference<FakePlayer> fakePlayer;
     @Shadow
     int ticksExisted = 0;
 

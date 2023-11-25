@@ -26,6 +26,7 @@
     "growthcraft.MixinCheese",
     "growthcraft.MixinDeviceBeeBox",
     "growthcraft.MixinInitBees",
+    "grue.MixinGrueEventHandler",
     "ignitehud.MixinGuiWidget",
     "immersiveengineering.MixinTileEntityLightningrod",
     "pyrotech.MixinBlockKilnPit",

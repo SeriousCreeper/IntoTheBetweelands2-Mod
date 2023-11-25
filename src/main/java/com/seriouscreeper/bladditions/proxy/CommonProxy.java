@@ -48,6 +48,8 @@ import growthcraft.milk.common.Init;
 import growthcraft.milk.shared.fluids.MilkFluidTags;
 import growthcraft.milk.shared.init.GrowthcraftMilkFluids;
 import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.AdvancementManager;
+import net.minecraft.advancements.PlayerAdvancements;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCrops;
 import net.minecraft.block.BlockPistonBase;
@@ -67,6 +69,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.*;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
@@ -177,11 +180,11 @@ public class CommonProxy {
 
     public static boolean IsPacifist(EntityPlayerMP player) {
         ResourceLocation id = Advancements.PACIFIST_ID;
-        NetHandlerPlayClient conn = Minecraft.getMinecraft().getConnection();
+        MinecraftServer server = player.getServer();
 
-        if (conn != null) {
-            ClientAdvancementManager manager = conn.getAdvancementManager();
-            Advancement adv = manager.getAdvancementList().getAdvancement(id);
+        if (server != null) {
+            AdvancementManager manager = server.getAdvancementManager();
+            Advancement adv = manager.getAdvancement(id);
 
             if (adv != null) {
                 if (!player.getAdvancements().getProgress(adv).isDone()) {

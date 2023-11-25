@@ -90,6 +90,7 @@
     "thebetweenlands.MixinEntityLurker",
     "thebetweenlands.MixinEntityRockSnot",
     "thebetweenlands.MixinItemBarkAmulet",
+    "thebetweenlands.MixinItemMobAnadia",
     "thebetweenlands.MixinItemMummyBait",
     "thebetweenlands.MixinItemNet",
     "thebetweenlands.MixinItemRegistry",

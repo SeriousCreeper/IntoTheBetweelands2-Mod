@@ -76,6 +76,7 @@
     "thaumcraft.MixinGolemHead",
     "thaumcraft.MixinGolemLeg",
     "thaumcraft.MixinGolemMaterial",
+    "thaumcraft.MixinItemSanityChecker",
     "thaumcraft.MixinModConfig",
     "thaumcraft.MixinPacketFXScanSource",
     "thaumcraft.MixinPlayerEvents",

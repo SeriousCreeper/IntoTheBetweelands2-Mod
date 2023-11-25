@@ -920,6 +920,44 @@ public class BLAdditionsEventHandler {
     }
 
 
+    private void checkSanityForEvents(EntityPlayer player, World world) {
+        List<SanityModifier> mods = Sanity.getModifierValues("bl_events");
+
+        if(mods.isEmpty()) {
+            return;
+        }
+
+        SanityCapability cap = player.getCapability(SanityCapability.INSTANCE, (EnumFacing)null);
+
+        if(cap == null) {
+            return;
+        }
+
+        BetweenlandsWorldStorage storage = BetweenlandsWorldStorage.forWorld(world);
+        List<IEnvironmentEvent> activeEvents = storage.getEnvironmentEventRegistry().getActiveEvents();
+
+        for(IEnvironmentEvent activeEvent : activeEvents) {
+            String eventName = activeEvent.getEventName().getPath();
+
+            for (SanityModifier mod : mods) {
+                if (eventName.equals(mod.value)) {
+                    switch(eventName) {
+                        case "auroras":
+                        case "rift":
+                            if(!world.canSeeSky(player.getPosition())) {
+                                System.out.println("can't see sky!");
+                                continue;
+                            }
+                            break;
+                    }
+
+                    cap.increaseSanity(mod.amount);
+                }
+            }
+        }
+    }
+
+
     @SubscribeEvent
     public void onPlayerTick(TickEvent.PlayerTickEvent event) {
         if(event.phase == TickEvent.Phase.END) {
@@ -935,6 +973,8 @@ public class BLAdditionsEventHandler {
         // remove wellness nbt from player when potion runs out
 
         if(!world.isRemote && player.ticksExisted % 40 == 0) {
+            checkSanityForEvents(player, world);
+
             // When facing up in the rain, player slowly recovers thirst.
             final double angle = player.getLookVec().y;
 

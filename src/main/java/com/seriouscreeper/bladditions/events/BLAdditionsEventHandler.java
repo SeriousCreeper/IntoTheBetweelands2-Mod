@@ -7,31 +7,16 @@ import com.charles445.simpledifficulty.api.thirst.IThirstCapability;
 import com.charles445.simpledifficulty.api.thirst.ThirstEnum;
 import com.charles445.simpledifficulty.api.thirst.ThirstUtil;
 import com.charles445.simpledifficulty.item.ItemCanteen;
-import com.codetaylor.mc.athenaeum.integration.gamestages.GameStages;
-import com.codetaylor.mc.athenaeum.interaction.spi.IInteraction;
-import com.codetaylor.mc.athenaeum.network.tile.spi.ITileDataFluidTank;
-import com.codetaylor.mc.athenaeum.util.BlockRegistrationHelper;
 import com.codetaylor.mc.athenaeum.util.SoundHelper;
 import com.codetaylor.mc.pyrotech.library.spi.block.IBlockIgnitableWithIgniterItem;
-import com.codetaylor.mc.pyrotech.library.spi.tile.TileCombustionWorkerBase;
-import com.codetaylor.mc.pyrotech.library.spi.tile.TileEntityDataWorkerBase;
-import com.codetaylor.mc.pyrotech.modules.ignition.ModuleIgnition;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.ModuleTechBasic;
-import com.codetaylor.mc.pyrotech.modules.tech.basic.block.BlockCampfire;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.block.BlockKilnPit;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.potion.PotionFocused;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.tile.TileCampfire;
-import com.seriouscreeper.bladditions.BLAdditions;
 import com.seriouscreeper.bladditions.config.ConfigBLAdditions;
 import com.seriouscreeper.bladditions.potion.PotionThaumcraftResearch;
 import com.seriouscreeper.bladditions.proxy.CommonProxy;
-import crafttweaker.api.event.BlockBreakEvent;
-import crafttweaker.api.event.BlockPlaceEvent;
-import epicsquid.roots.block.BlockPyre;
 import epicsquid.roots.init.ModItems;
-import epicsquid.roots.item.living.ItemLivingPickaxe;
-import epicsquid.roots.tileentity.TileEntityPyre;
-import growthcraft.core.shared.tileentity.GrowthcraftTileDeviceBase;
 import hunternif.mc.atlas.api.AtlasAPI;
 import mcp.mobius.waila.api.event.WailaRenderEvent;
 import mcp.mobius.waila.api.event.WailaTooltipEvent;
@@ -39,7 +24,6 @@ import net.darkhax.gamestages.event.GameStageEvent;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCrops;
 import net.minecraft.block.BlockLadder;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -65,39 +49,25 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.event.ForgeEventFactory;
-import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.PotionEvent;
 import net.minecraftforge.event.entity.player.BonemealEvent;
-import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.ItemFishedEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.event.terraingen.ChunkGeneratorEvent;
-import net.minecraftforge.event.terraingen.InitMapGenEvent;
 import net.minecraftforge.event.world.BlockEvent;
-import net.minecraftforge.event.world.ChunkEvent;
-import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fluids.*;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidHandlerItem;
-import net.minecraftforge.fluids.capability.TileFluidHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
-import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.items.ItemHandlerHelper;
 import net.tiffit.sanity.Sanity;
 import net.tiffit.sanity.SanityCapability;
 import net.tiffit.sanity.SanityModifier;
-import soot.item.ItemAlchemyGauntlet;
 import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.ThaumcraftApiHelper;
 import thaumcraft.api.aura.AuraHelper;
@@ -108,7 +78,6 @@ import thaumcraft.api.casters.FocusEffect;
 import thaumcraft.api.casters.FocusPackage;
 import thaumcraft.api.items.ItemsTC;
 import thaumcraft.api.research.ResearchCategories;
-import thaumcraft.api.research.ResearchCategory;
 import thaumcraft.common.blocks.world.ore.BlockCrystal;
 import thaumcraft.common.config.ConfigItems;
 import thaumcraft.common.config.ModConfig;
@@ -116,35 +85,23 @@ import thaumcraft.common.items.armor.ItemGoggles;
 import thaumcraft.common.items.casters.ItemCaster;
 import thaumcraft.common.items.casters.ItemFocus;
 import thaumcraft.common.items.casters.foci.FocusEffectFire;
-import thaumcraft.common.items.curios.ItemThaumonomicon;
-import thaumcraft.common.items.resources.ItemCrystalEssence;
 import thaumcraft.common.lib.utils.EntityUtils;
 import thaumcraft.common.lib.utils.InventoryUtils;
-import thaumcraft.common.lib.utils.RandomItemChooser;
 import thebetweenlands.api.environment.IEnvironmentEvent;
 import thebetweenlands.common.block.farming.BlockFungusCrop;
 import thebetweenlands.common.block.farming.BlockGenericDugSoil;
-import thebetweenlands.common.block.misc.BlockDampTorch;
-import thebetweenlands.common.block.misc.BlockSulfurTorch;
 import thebetweenlands.common.block.misc.BlockSulfurTorchExtinguished;
 import thebetweenlands.common.block.structure.BlockFenceBetweenlands;
 import thebetweenlands.common.block.structure.BlockWaystone;
-import thebetweenlands.common.block.terrain.BlockSwampWater;
 import thebetweenlands.common.entity.mobs.EntityAnadia;
 import thebetweenlands.common.entity.mobs.EntityGreebling;
-import thebetweenlands.common.entity.mobs.EntityLurker;
 import thebetweenlands.common.entity.projectiles.EntityBetweenstonePebble;
 import thebetweenlands.common.entity.projectiles.EntityFishingSpear;
 import thebetweenlands.common.entity.projectiles.EntityPyradFlame;
 import thebetweenlands.common.entity.projectiles.EntitySapSpit;
-import thebetweenlands.common.item.EnumBLDrinkableBrew;
-import thebetweenlands.common.item.armor.amphibious.AmphibiousArmorUpgrades;
-import thebetweenlands.common.item.armor.amphibious.ItemAmphibiousArmor;
-import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
-import thebetweenlands.common.tile.TileEntityBarrel;
 import thebetweenlands.common.tile.TileEntityDugSoil;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thecodex6824.thaumicaugmentation.common.item.ItemTieredCasterGauntlet;
@@ -153,6 +110,7 @@ import vazkii.quark.decoration.feature.IronLadders;
 import vazkii.quark.tweaks.base.BlockStack;
 import vazkii.quark.tweaks.feature.HoeSickle;
 
+import java.awt.event.ItemEvent;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -669,6 +627,14 @@ public class BLAdditionsEventHandler {
 
 
     @SubscribeEvent
+    public void onItemUse(PlayerInteractEvent.RightClickItem event) {
+        if(!event.getWorld().isRemote) {
+            addSanityForItemUse(event.getEntityPlayer(), event.getWorld(), event.getItemStack());
+        }
+    }
+
+
+    @SubscribeEvent
     public void onInteract(PlayerInteractEvent.RightClickBlock event) {
         EntityPlayer player = event.getEntityPlayer();
         EnumHand hand = event.getHand();
@@ -902,7 +868,25 @@ public class BLAdditionsEventHandler {
     }
 
 
-    private void checkPotionEffects(EntityPlayer player, World world, PotionEffect potion) {
+    private void addSanityForItemUse(EntityPlayer player, World world, ItemStack stack) {
+        SanityCapability cap = player.getCapability(SanityCapability.INSTANCE, (EnumFacing)null);
+
+        if(cap == null) {
+            return;
+        }
+
+        List<SanityModifier> mods = Sanity.getModifierValues("items");
+
+        for (SanityModifier mod : mods) {
+            if (stack.getItem().getRegistryName().toString().equals(mod.value)) {
+                cap.increaseSanity(mod.amount);
+                return;
+            }
+        }
+    }
+
+
+    private void addSanityForPotions(EntityPlayer player, World world, PotionEffect potion) {
         SanityCapability cap = player.getCapability(SanityCapability.INSTANCE, (EnumFacing)null);
 
         if(cap == null) {
@@ -920,7 +904,7 @@ public class BLAdditionsEventHandler {
     }
 
 
-    private void checkSanityForEvents(EntityPlayer player, World world) {
+    private void addSanityForEvents(EntityPlayer player, World world) {
         List<SanityModifier> mods = Sanity.getModifierValues("bl_events");
 
         if(mods.isEmpty()) {
@@ -945,7 +929,6 @@ public class BLAdditionsEventHandler {
                         case "auroras":
                         case "rift":
                             if(!world.canSeeSky(player.getPosition())) {
-                                System.out.println("can't see sky!");
                                 continue;
                             }
                             break;
@@ -953,6 +936,58 @@ public class BLAdditionsEventHandler {
 
                     cap.increaseSanity(mod.amount);
                 }
+            }
+        }
+    }
+
+
+    private void addSanityForCaves(EntityPlayer player, World world) {
+        float y = player.getPosition().getY();
+        float multiplier = 1f - Math.max(0, Math.min(1.1f, y / (float)80));
+
+        List<SanityModifier> mods = Sanity.getModifierValues("misc");
+
+        if(mods.isEmpty()) {
+            return;
+        }
+
+        SanityCapability cap = player.getCapability(SanityCapability.INSTANCE, (EnumFacing)null);
+
+        if(cap == null) {
+            return;
+        }
+
+        for (SanityModifier mod : mods) {
+            if (mod.value.equals("depth")) {
+                float newVal = mod.amount * multiplier;
+
+                if(newVal > 0 && (newVal + cap.getSanityExact() > 0 || !world.canSeeSky(player.getPosition()))) {
+                    continue;
+                }
+
+                cap.increaseSanity(newVal);
+            }
+        }
+    }
+
+
+    private void addSanityForWellness(EntityPlayer player, float wellness) {
+        List<SanityModifier> mods = Sanity.getModifierValues("misc");
+
+        if(mods.isEmpty()) {
+            return;
+        }
+
+        SanityCapability cap = player.getCapability(SanityCapability.INSTANCE, (EnumFacing)null);
+
+        if(cap == null) {
+            return;
+        }
+
+        for (SanityModifier mod : mods) {
+            if (mod.value.equals("wellness")) {
+                System.out.println(wellness);
+                cap.increaseSanity(mod.amount * (1f - wellness));
             }
         }
     }
@@ -973,7 +1008,8 @@ public class BLAdditionsEventHandler {
         // remove wellness nbt from player when potion runs out
 
         if(!world.isRemote && player.ticksExisted % 40 == 0) {
-            checkSanityForEvents(player, world);
+            addSanityForEvents(player, world);
+            addSanityForCaves(player, world);
 
             // When facing up in the rain, player slowly recovers thirst.
             final double angle = player.getLookVec().y;
@@ -997,20 +1033,28 @@ public class BLAdditionsEventHandler {
 
             Collection<PotionEffect> effects = player.getActivePotionEffects();
 
+            float totalWellnessBonus = 0;
+            float activeWellnessBonuses = 0;
+
             for(PotionEffect effect : effects) {
-                checkPotionEffects(player, world, effect);
+                addSanityForPotions(player, world, effect);
 
                 if(effect.getPotion() instanceof PotionThaumcraftResearch) {
                     PotionThaumcraftResearch researchPotion = (PotionThaumcraftResearch) effect.getPotion();
 
                     int wellnessInterval = ConfigBLAdditions.configTea.TCPotionChance;
 
+                    float wellness = checkPlayerWellness(world, player, effects, researchPotion.Category);
+
                     if(!player.getEntityData().hasKey("wellnessBonus")) {
-                        wellnessInterval = Math.round(wellnessInterval * checkPlayerWellness(world, player, effects, researchPotion.Category));
+                        wellnessInterval = Math.round(wellnessInterval * wellness);
                     }
 
+                    totalWellnessBonus += wellness;
+                    activeWellnessBonuses++;
+
                     if(world.rand.nextInt(wellnessInterval) != 0) {
-                        return;
+                        continue;
                     }
 
                     if(!ConfigBLAdditions.configTea.RequiresBookAndQuill || player.inventory.hasItemStack(new ItemStack(ItemsTC.thaumonomicon)) && hasScribingTools(player)) {
@@ -1049,6 +1093,11 @@ public class BLAdditionsEventHandler {
 
                     break;
                 }
+            }
+
+            if(activeWellnessBonuses > 0) {
+                totalWellnessBonus /= activeWellnessBonuses;
+                addSanityForWellness(player, Math.min(1, totalWellnessBonus));
             }
         }
     }

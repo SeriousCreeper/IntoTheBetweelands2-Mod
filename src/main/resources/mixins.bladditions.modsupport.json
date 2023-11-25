@@ -93,6 +93,7 @@
     "thebetweenlands.MixinEntityLurker",
     "thebetweenlands.MixinEntityRockSnot",
     "thebetweenlands.MixinEntityWight",
+    "thebetweenlands.MixinFoodSicknessHandler",
     "thebetweenlands.MixinItemBarkAmulet",
     "thebetweenlands.MixinItemMobAnadia",
     "thebetweenlands.MixinItemMummyBait",

@@ -902,8 +902,30 @@ public class BLAdditionsEventHandler {
     }
 
 
+    private void checkPotionEffects(EntityPlayer player, World world, PotionEffect potion) {
+        SanityCapability cap = player.getCapability(SanityCapability.INSTANCE, (EnumFacing)null);
+
+        if(cap == null) {
+            return;
+        }
+
+        List<SanityModifier> mods = Sanity.getModifierValues("potions");
+
+        for (SanityModifier mod : mods) {
+            if (potion.getPotion().getRegistryName().toString().equals(mod.value)) {
+                cap.increaseSanity(mod.amount);
+                return;
+            }
+        }
+    }
+
+
     @SubscribeEvent
     public void onPlayerTick(TickEvent.PlayerTickEvent event) {
+        if(event.phase == TickEvent.Phase.END) {
+            return;
+        }
+
         EntityPlayer player = event.player;
         World world = player.world;
 
@@ -936,6 +958,8 @@ public class BLAdditionsEventHandler {
             Collection<PotionEffect> effects = player.getActivePotionEffects();
 
             for(PotionEffect effect : effects) {
+                checkPotionEffects(player, world, effect);
+
                 if(effect.getPotion() instanceof PotionThaumcraftResearch) {
                     PotionThaumcraftResearch researchPotion = (PotionThaumcraftResearch) effect.getPotion();
 

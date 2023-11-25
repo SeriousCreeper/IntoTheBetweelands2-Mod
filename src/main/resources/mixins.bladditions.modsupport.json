@@ -55,6 +55,7 @@
     "sanity.MixinIConsequences",
     "sanity.MixinLightSeekerConsequence",
     "simpledifficulty.MixinTemperatureCapability",
+    "simpledifficulty.MixinTemperatureRegistry",
     "simpledifficulty.MixinThirstUtilInternal",
     "soot.MixinCraftingRegistry",
     "starterkit.MixinClaimTracker",

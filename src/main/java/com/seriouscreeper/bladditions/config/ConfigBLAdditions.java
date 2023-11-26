@@ -19,6 +19,7 @@ import net.minecraftforge.registries.GameData;
 import scala.Int;
 import thebetweenlands.common.registries.ItemRegistry;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -29,6 +30,8 @@ public class ConfigBLAdditions {
     public static final ConfigGeneral configGeneral = new ConfigGeneral();
     public static final ConfigTea configTea = new ConfigTea();
     public static final ConfigAutoMapping configAutoMapping = new ConfigAutoMapping();
+
+    public static final ConfigSanity configSanity = new ConfigSanity();
 
     @Config.Ignore
     private static Map<String, Float> blEventBonuses = null;
@@ -68,6 +71,12 @@ public class ConfigBLAdditions {
         public boolean AutoMapSpiritTree = true;
         public boolean AutoMapWightFortress = true;
         public boolean AutoMapMenhir = true;
+    }
+
+    public static class ConfigSanity {
+        public float[] sanity_chance_sounds = new float[] { 0, 0, 0, 0, 0 };
+        public int sanity_cooldown_sounds = 10;
+        public String[] sanity_sounds_list = new String[] { "thebetweenlands:wight_hurt", "thebetweenlands:wight_moan" };
     }
 
 

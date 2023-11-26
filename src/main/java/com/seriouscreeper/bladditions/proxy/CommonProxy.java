@@ -19,6 +19,7 @@ import com.seriouscreeper.bladditions.potion.PotionRegistery;
 import com.seriouscreeper.bladditions.potion.PotionThaumcraftResearch;
 import com.seriouscreeper.bladditions.recipes.CustomItemLiverStampingRecipe;
 import com.seriouscreeper.bladditions.recipes.CustomItemRenameStampingRecipe;
+import com.seriouscreeper.bladditions.sanity_consequences.ConsequenceSounds;
 import com.seriouscreeper.bladditions.tiles.PatchedTilePotionSprayer;
 import com.seriouscreeper.bladditions.tiles.PatchedTileSpa;
 import com.seriouscreeper.bladditions.tiles.TileCrucibleSwamp;
@@ -93,6 +94,7 @@ import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.OreIngredient;
+import net.tiffit.sanity.consequences.ConsequenceManager;
 import soot.Registry;
 import soot.recipe.ItemRenameStampingRecipe;
 import teamroots.embers.RegistryManager;
@@ -337,6 +339,8 @@ public class CommonProxy {
     public void init(FMLInitializationEvent e) {
         // Generate betweenlands bee hives
         GameRegistry.registerWorldGenerator(new BLBeeHiveWorldGen(), 0);
+
+        ConsequenceManager.CONSEQUENCES.add(new ConsequenceSounds());
 
         /*
         BoreOutput tcCrystalOutput = new BoreOutput(Sets.newHashSet(20), Sets.newHashSet(new ResourceLocation("thebetweenlands", "sludge_plains"), new ResourceLocation("thebetweenlands", "sludge_plains_clearing")), Lists.newArrayList(

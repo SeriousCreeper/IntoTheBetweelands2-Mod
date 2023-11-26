@@ -934,6 +934,10 @@ public class BLAdditionsEventHandler {
                             break;
                     }
 
+                    if(mod.amount > 0 && cap.getSanityExact() + mod.amount > 10) {
+                        continue;
+                    }
+
                     cap.increaseSanity(mod.amount);
                 }
             }

@@ -65,6 +65,7 @@ public class MixinGrueEventHandler {
                 if(sanityCapability.getSanityExact() > -20) {
                     if (event.getEntityLiving().ticksExisted % 20 == 0) {
                         int light = Grue.dynLightPausesTimer ? DarknessLibAPI.getInstance().getLight(player, true) : DarknessLibAPI.getInstance().getLightWithAdditions(player, true);
+
                         if (light <= data.getMaxLight() && light >= data.getMinLight()) {
                             List<SanityModifier> mods = Sanity.getModifierValues("misc");
 

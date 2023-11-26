@@ -24,12 +24,15 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.tiffit.sanity.Sanity;
 import net.tiffit.sanity.SanityCapability;
+import net.tiffit.sanity.SanityModifier;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 
 import java.util.Arrays;
+import java.util.List;
 
 @Mixin(value = GrueEventHandler.class, remap = false)
 public class MixinGrueEventHandler {
@@ -53,7 +56,27 @@ public class MixinGrueEventHandler {
 
                 SanityCapability sanityCapability = event.getEntityLiving().getCapability(SanityCapability.INSTANCE, (EnumFacing)null);
 
-                if(sanityCapability == null || sanityCapability.getSanityExact() > -20) {
+                if(sanityCapability == null) {
+                    return;
+                }
+
+                DimensionData data = Grue.getDimensionConfig(player.dimension);
+
+                if(sanityCapability.getSanityExact() > -20) {
+                    if (event.getEntityLiving().ticksExisted % 20 == 0) {
+                        int light = Grue.dynLightPausesTimer ? DarknessLibAPI.getInstance().getLight(player, true) : DarknessLibAPI.getInstance().getLightWithAdditions(player, true);
+                        if (light <= data.getMaxLight() && light >= data.getMinLight()) {
+                            List<SanityModifier> mods = Sanity.getModifierValues("misc");
+
+                            for (SanityModifier mod : mods) {
+                                if (mod.value.equals("darkness")) {
+                                    sanityCapability.increaseSanity(mod.amount);
+                                    return;
+                                }
+                            }
+                        }
+                    }
+
                     return;
                 }
 
@@ -62,7 +85,7 @@ public class MixinGrueEventHandler {
                 }
 
                 IGrueTimerCapability cap = (IGrueTimerCapability)player.getCapability(GrueCapabilityProvider.GRUE_TIMER, (EnumFacing)null);
-                DimensionData data = Grue.getDimensionConfig(player.dimension);
+
                 if (data.shouldUseGracePeriod() && cap.getGracePeriodTimer() > 0) {
                     cap.decrementGracePeriodTimer();
                 } else if (this.isWhitelisted(player.dimension)) {

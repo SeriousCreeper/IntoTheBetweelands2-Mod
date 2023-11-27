@@ -87,6 +87,7 @@ import thaumcraft.common.items.casters.ItemFocus;
 import thaumcraft.common.items.casters.foci.FocusEffectFire;
 import thaumcraft.common.lib.utils.EntityUtils;
 import thaumcraft.common.lib.utils.InventoryUtils;
+import thebetweenlands.api.capability.IRotSmellCapability;
 import thebetweenlands.api.environment.IEnvironmentEvent;
 import thebetweenlands.common.block.farming.BlockFungusCrop;
 import thebetweenlands.common.block.farming.BlockGenericDugSoil;
@@ -100,6 +101,7 @@ import thebetweenlands.common.entity.projectiles.EntityFishingSpear;
 import thebetweenlands.common.entity.projectiles.EntityPyradFlame;
 import thebetweenlands.common.entity.projectiles.EntitySapSpit;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntityDugSoil;
@@ -990,8 +992,34 @@ public class BLAdditionsEventHandler {
 
         for (SanityModifier mod : mods) {
             if (mod.value.equals("wellness")) {
-                System.out.println(wellness);
                 cap.increaseSanity(mod.amount * (1f - wellness));
+            }
+        }
+    }
+
+
+    private void addSanityForBeingSmelly(EntityPlayer player) {
+        IRotSmellCapability smellyCap = (IRotSmellCapability)player.getCapability(CapabilityRegistry.CAPABILITY_ROT_SMELL, (EnumFacing)null);
+
+        if(smellyCap == null || !smellyCap.isSmellingBad()) {
+            return;
+        }
+
+        List<SanityModifier> mods = Sanity.getModifierValues("misc");
+
+        if(mods.isEmpty()) {
+            return;
+        }
+
+        SanityCapability cap = player.getCapability(SanityCapability.INSTANCE, (EnumFacing)null);
+
+        if(cap == null) {
+            return;
+        }
+
+        for (SanityModifier mod : mods) {
+            if (mod.value.equals("smelly")) {
+                cap.increaseSanity(mod.amount);
             }
         }
     }
@@ -1014,6 +1042,7 @@ public class BLAdditionsEventHandler {
         if(!world.isRemote && player.ticksExisted % 40 == 0) {
             addSanityForEvents(player, world);
             addSanityForCaves(player, world);
+            addSanityForBeingSmelly(player);
 
             // When facing up in the rain, player slowly recovers thirst.
             final double angle = player.getLookVec().y;

@@ -68,6 +68,7 @@
     "thaumcraft.MixinBlockGolemBuilder",
     "thaumcraft.MixinBlockResearchTable",
     "thaumcraft.MixinBlockStonePorous",
+    "thaumcraft.MixinConfigResearch",
     "thaumcraft.MixinFocusEffectBreak",
     "thaumcraft.MixinFocusEffectFire",
     "thaumcraft.MixinFocusEffectFrost",

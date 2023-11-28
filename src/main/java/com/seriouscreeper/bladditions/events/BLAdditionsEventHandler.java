@@ -1026,6 +1026,27 @@ public class BLAdditionsEventHandler {
 
 
     @SubscribeEvent
+    public static void adjustFoodExhaustingForSanity(TickEvent.PlayerTickEvent event) {
+        if (event.phase == TickEvent.Phase.END && !event.player.getEntityWorld().isRemote) {
+            EntityPlayer player = event.player;
+
+            SanityCapability cap = player.getCapability(SanityCapability.INSTANCE, (EnumFacing)null);
+
+            if(cap == null) {
+                return;
+            }
+
+            float foodReduction = cap.getSanityExact() / 10000f;
+            foodReduction = MathHelper.clamp(foodReduction, -0.005f, 0.005f);
+
+            if (player.getFoodStats().foodExhaustionLevel > -20 && player.getFoodStats().foodExhaustionLevel < 20) {
+                player.getFoodStats().addExhaustion(-foodReduction);
+            }
+        }
+    }
+
+
+    @SubscribeEvent
     public void onPlayerTick(TickEvent.PlayerTickEvent event) {
         if(event.phase == TickEvent.Phase.END) {
             return;

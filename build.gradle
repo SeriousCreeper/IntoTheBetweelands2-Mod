@@ -95,7 +95,7 @@ processResources {
         exclude 'mcmod.info'
     }
 
-    rename '(.+at\\.cfg)', 'META-INF/$1'
+    rename '(.+_at.cfg)', 'META-INF/$1'
 }
 /*
 task deobfJar(type: Jar) {

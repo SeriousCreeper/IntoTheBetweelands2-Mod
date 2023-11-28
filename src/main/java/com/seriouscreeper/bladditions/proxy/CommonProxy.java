@@ -912,7 +912,6 @@ public class CommonProxy {
                 {
                     Set<String> whitelist = Sets.newHashSet(ConfigData.BiomeWhitelist);
                     biomes = biomes.stream().filter(b -> {
-                        System.out.println("BIOME: " + b.getRegistryName().toString() + " | " + whitelist.contains(b.getRegistryName().toString()));
                         return whitelist.contains(b.getRegistryName().toString());
                     }).collect(Collectors.toList());
                 }

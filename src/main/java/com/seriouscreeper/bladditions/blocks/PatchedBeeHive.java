@@ -18,8 +18,6 @@ public class PatchedBeeHive extends BlockBeeHive {
     public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
         worldIn.playSound(null, pos.getX(), pos.getY(), pos.getZ(), CommonProxy.BEE_SWARM, SoundCategory.BLOCKS, 1,1);
 
-        System.out.println("BEE HIVE NOISES");
-
         super.updateTick(worldIn, pos, state, rand);
     }
 

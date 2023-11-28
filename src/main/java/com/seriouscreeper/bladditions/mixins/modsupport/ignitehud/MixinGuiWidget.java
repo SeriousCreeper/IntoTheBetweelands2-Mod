@@ -445,8 +445,6 @@ public class MixinGuiWidget {
             //Background
             RenderUtil.drawTexturedModalRect(x, y, texturepos_X + bgXOffset, texturepos_Y, textureWidth, textureHeight);
 
-            System.out.println("FOO");
-
             //Foreground
             if (halfIcon < thirst) //Full
                 RenderUtil.drawTexturedModalRect(x, y, texturepos_X + xOffset + (textureWidth * 4), texturepos_Y, textureWidth, textureHeight);

@@ -24,7 +24,6 @@ public class PatchedBlockPotionSprayer extends BlockTCDevice implements IBlockFa
         if (world.isRemote) {
             return true;
         } else {
-            System.out.println("TRYING TO OPEN GUI");
             player.openGui(BLAdditions.instance, 1, world, pos.getX(), pos.getY(), pos.getZ());
             return true;
         }

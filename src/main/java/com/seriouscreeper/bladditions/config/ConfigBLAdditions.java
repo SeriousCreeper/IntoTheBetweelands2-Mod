@@ -119,8 +119,6 @@ public class ConfigBLAdditions {
 
             CommonProxy.FLUXABLE_ITEMS.put(input, output);
         }
-
-        System.out.println(CommonProxy.FLUXABLE_ITEMS.size());
     }
 
 

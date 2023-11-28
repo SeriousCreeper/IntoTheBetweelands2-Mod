@@ -18,7 +18,6 @@ import net.minecraftforge.fml.common.network.IGuiHandler;
 public class GUIProxy implements IGuiHandler {
     @Override
     public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-        System.out.println("CLIENT GUI CALL " + ID);
         if (world instanceof WorldClient) {
             switch (ID) {
                 case 1:
@@ -35,7 +34,6 @@ public class GUIProxy implements IGuiHandler {
 
     @Override
     public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-        System.out.println("SERVER GUI CALL " + ID);
         switch (ID) {
             case 1:
                 return new PatchedContainerPotionSprayer(player.inventory, (PatchedTilePotionSprayer)world.getTileEntity(new BlockPos(x, y, z)));

@@ -37,10 +37,6 @@ public class MixinButtonOpenInGuide {
             return;
         }
 
-        for(Map.Entry<ResourceLocation, Book> book : BookRegistry.INSTANCE.books.entrySet()) {
-            System.out.println(book.getKey());
-        }
-
         ResourceLocation bookPath = new ResourceLocation(split[0], split[1]);
         ResourceLocation entryPath = new ResourceLocation(split[0], split[2]);
 

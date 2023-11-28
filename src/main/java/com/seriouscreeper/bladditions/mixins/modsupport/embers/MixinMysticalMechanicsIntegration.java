@@ -38,8 +38,6 @@ public class MixinMysticalMechanicsIntegration {
 
         RegistryManager.items.add(gear_dawnstone = new ItemBase("gear_dawnstone",true));
 
-        System.out.println("register patched");
-
         GameRegistry.registerTileEntity(PatchedTileEntitySteamEngine.class, Embers.MODID+":tile_entity_steam_engine");
         GameRegistry.registerTileEntity(TileEntityMechActuator.class, Embers.MODID+":tile_entity_mech_actuator");
         GameRegistry.registerTileEntity(TileEntityMechActuatorSingle.class, Embers.MODID+":tile_entity_mech_actuator_single");

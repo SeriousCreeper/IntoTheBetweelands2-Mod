@@ -52,6 +52,7 @@
     "roots.MixinRunicShears",
     "roots.MixinRunicShearsEntityCategory",
     "roots.spells.MixinSpellShatter",
+    "sanity.MixinConsequenceManager",
     "sanity.MixinEyesConsequences",
     "sanity.MixinIConsequences",
     "sanity.MixinLightSeekerConsequence",

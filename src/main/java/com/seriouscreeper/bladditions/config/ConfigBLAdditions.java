@@ -74,7 +74,7 @@ public class ConfigBLAdditions {
     }
 
     public static class ConfigSanity {
-        public float[] sanity_chance_sounds = new float[] { 0, 0, 0, 0, 0 };
+        public double[] sanity_chance_sounds = new double[] { 0, 0, 0, 0, 0 };
         public int sanity_cooldown_sounds = 10;
         public String[] sanity_sounds_list = new String[] { "thebetweenlands:wight_hurt", "thebetweenlands:wight_moan" };
     }

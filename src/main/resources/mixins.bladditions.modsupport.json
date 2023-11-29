@@ -65,7 +65,6 @@
     "teastory.MixinTeaDrink",
     "teastory.MixinTeaPlant",
     "thaumcraft.MixinBlockBarrier",
-    "thaumcraft.MixinBlockCrystal",
     "thaumcraft.MixinBlockGolemBuilder",
     "thaumcraft.MixinBlockResearchTable",
     "thaumcraft.MixinBlockStonePorous",

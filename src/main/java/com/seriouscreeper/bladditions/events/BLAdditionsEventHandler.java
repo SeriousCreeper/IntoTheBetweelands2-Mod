@@ -1178,7 +1178,7 @@ public class BLAdditionsEventHandler {
     public void placedTorch(BlockEvent.PlaceEvent event) {
         if(event.getPlacedBlock().getBlock() instanceof BlockSulfurTorchExtinguished) {
             if(event.getPlayer().inventory.hasItemStack(new ItemStack(ItemRegistry.OCTINE_INGOT))) {
-                event.getWorld().setBlockState(event.getPos(), BlockRegistry.SULFUR_TORCH.getDefaultState());
+                event.getWorld().setBlockState(event.getPos(), BlockRegistry.SULFUR_TORCH.getStateFromMeta(event.getPlacedBlock().getBlock().getMetaFromState(event.getPlacedBlock())));
             }
         }
     }

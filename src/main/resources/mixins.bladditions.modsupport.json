@@ -15,6 +15,7 @@
     "basketcase.MixinBlockTileEntryBasket",
     "charsetimmersion.MixinCharsetImmersion",
     "corpse.MixinEntityCorpse",
+    "embers.MixinAnvilRepairRecipe",
     "embers.MixinBlockSteamEngine",
     "embers.MixinMysticalMechanicsIntegration",
     "embers.MixinTileEntityBoilerBottom",

@@ -23,6 +23,8 @@
     "embers.MixinTileEntityDawnstoneAnvil",
     "eyesinthedarkness.MixinEntityEyes",
     "fairylights.MixinFairyLightsRecipes",
+    "fishundeadrising.MixinEntityMimic",
+    "fishundeadrising.MixinEntityParasite",
     "ftbquests.MixinButtonOpenInGuide",
     "growthcraft.MixinCheese",
     "growthcraft.MixinDeviceBeeBox",

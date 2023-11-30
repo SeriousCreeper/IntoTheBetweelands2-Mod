@@ -1,6 +1,15 @@
 package com.seriouscreeper.bladditions.events;
 
 import baubles.api.BaublesApi;
+import com.Fishmod.mod_LavaCow.client.Modconfig;
+import com.Fishmod.mod_LavaCow.entities.EntityParasite;
+import com.Fishmod.mod_LavaCow.entities.flying.EntityVespa;
+import com.Fishmod.mod_LavaCow.entities.tameable.EntityMimic;
+import com.Fishmod.mod_LavaCow.init.ModMobEffects;
+import com.Fishmod.mod_LavaCow.item.ItemFamineArmor;
+import com.Fishmod.mod_LavaCow.message.PacketParticle;
+import com.Fishmod.mod_LavaCow.mod_LavaCow;
+import com.Fishmod.mod_LavaCow.util.LootTableHandler;
 import com.charles445.simpledifficulty.api.SDCapabilities;
 import com.charles445.simpledifficulty.api.SDItems;
 import com.charles445.simpledifficulty.api.thirst.IThirstCapability;
@@ -27,6 +36,7 @@ import net.minecraft.block.BlockLadder;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -49,9 +59,11 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
+import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.event.ForgeEventFactory;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.PotionEvent;
 import net.minecraftforge.event.entity.player.BonemealEvent;
@@ -1179,6 +1191,42 @@ public class BLAdditionsEventHandler {
         if(event.getPlacedBlock().getBlock() instanceof BlockSulfurTorchExtinguished) {
             if(event.getPlayer().inventory.hasItemStack(new ItemStack(ItemRegistry.OCTINE_INGOT))) {
                 event.getWorld().setBlockState(event.getPos(), BlockRegistry.SULFUR_TORCH.getStateFromMeta(event.getPlacedBlock().getBlock().getMetaFromState(event.getPlacedBlock())));
+            }
+        }
+    }
+
+
+    @SubscribeEvent
+    public void onEDeath(LivingDeathEvent event) {
+        Entity entity = event.getEntity();
+        World world = event.getEntity().getEntityWorld();
+
+        int ItemPos;
+        int i;
+        if (!world.isRemote && (LootTableHandler.PARASITE_HOSTLIST.contains(EntityList.getKey(entity)) && ((new Random()).nextInt(100) < Modconfig.pSpawnRate_Parasite || EntityParasite.gotParasite(entity.getPassengers()) != null) || event.getEntityLiving().isPotionActive(ModMobEffects.INFESTED))) {
+            ItemPos = 3 + (new Random()).nextInt(3);
+            i = 0;
+            EntityParasite passenger = EntityParasite.gotParasite(entity.getPassengers());
+            if (event.getEntityLiving().isPotionActive(ModMobEffects.INFESTED)) {
+                i = event.getEntityLiving().getActivePotionEffect(ModMobEffects.INFESTED).getAmplifier();
+            }
+
+            for(int var3 = 0; var3 < ItemPos + (i - 1) * (1 + (new Random()).nextInt(3)); ++var3) {
+                float var4 = ((float)(var3 % 2) - 0.5F) / 4.0F;
+                float var5 = ((float)(var3 / 2) - 0.5F) / 4.0F;
+                EntityParasite entityparasite = new EntityParasite(world);
+                if (passenger != null) {
+                    entityparasite.setSkin(passenger.getSkin());
+                } else if (BiomeDictionary.hasType(world.getBiome(entity.getPosition()), BiomeDictionary.Type.DRY)) {
+                    entityparasite.setSkin(1);
+                } else if (!BiomeDictionary.hasType(world.getBiome(entity.getPosition()), BiomeDictionary.Type.JUNGLE) && !(event.getSource().getTrueSource() instanceof EntityVespa)) {
+                    entityparasite.setSkin(0);
+                } else {
+                    entityparasite.setSkin(2);
+                }
+
+                entityparasite.setLocationAndAngles(entity.posX + (double)var4, entity.posY + 1.0, entity.posZ + (double)var5, entity.rotationYaw, entity.rotationPitch);
+                world.spawnEntity(entityparasite);
             }
         }
     }

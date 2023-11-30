@@ -36,6 +36,7 @@
     "pyrotech.MixinTileWitherForge",
     "pyrotech.MixinWorldGenDenseRedstoneOre",
     "quark.MixinEntityLeashKnot",
+    "reccomplex.MixinTransformerNatural",
     "redstonepaste.MixinBlockRedstonePaste",
     "roots.MixinBlockCloudBerryCrop",
     "roots.MixinBlockCropBase",

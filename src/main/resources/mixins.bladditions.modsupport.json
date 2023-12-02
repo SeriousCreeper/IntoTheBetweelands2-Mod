@@ -55,6 +55,7 @@
     "roots.MixinRitualSummonCreatures",
     "roots.MixinRunicShears",
     "roots.MixinRunicShearsEntityCategory",
+    "roots.MixinSpellLibraryData",
     "roots.spells.MixinSpellShatter",
     "sanity.MixinConsequenceManager",
     "sanity.MixinEyesConsequences",

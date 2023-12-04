@@ -703,21 +703,15 @@ public class BLAdditionsEventHandler {
     public void onPotionApplied(PotionEvent.PotionAddedEvent event) {
         EntityLivingBase entity = event.getEntityLiving();
 
-        if(entity == null)
+        if(entity == null || !(event.getPotionEffect().getPotion() instanceof PotionThaumcraftResearch))
             return;
 
         Collection<PotionEffect> effects = entity.getActivePotionEffects();
 
-        boolean hasResearchPotion = false;
-
         for(PotionEffect effect : effects) {
-            if(effect.getPotion() instanceof PotionThaumcraftResearch && effect != event.getPotionEffect()) {
-                if(hasResearchPotion) {
-                    entity.removePotionEffect(effect.getPotion());
-                    continue;
-                }
-
-                hasResearchPotion = true;
+            if(effect.getPotion() instanceof PotionThaumcraftResearch && effect.getPotion().getRegistryName() != event.getPotionEffect().getPotion().getRegistryName()) {
+                entity.removePotionEffect(effect.getPotion());
+                return;
             }
         }
     }

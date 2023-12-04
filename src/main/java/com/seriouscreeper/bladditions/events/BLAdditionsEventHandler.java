@@ -1113,7 +1113,9 @@ public class BLAdditionsEventHandler {
                     totalWellnessBonus += wellness;
                     activeWellnessBonuses++;
 
-                    if(world.rand.nextInt(wellnessInterval) != 0) {
+                    int wellnessChanceRequired = effect.getAmplifier() * Math.round((float)ConfigBLAdditions.configTea.TCPotionChance * 0.03f);
+
+                    if(world.rand.nextInt(wellnessInterval) <= wellnessChanceRequired) {
                         continue;
                     }
 
@@ -1121,7 +1123,7 @@ public class BLAdditionsEventHandler {
                         int oProg = IPlayerKnowledge.EnumKnowledgeType.OBSERVATION.getProgression();
                         int tProg = IPlayerKnowledge.EnumKnowledgeType.THEORY.getProgression();
 
-                        if(world.rand.nextInt(100) <= 17) {
+                        if(world.rand.nextInt(100) <= 25) {
                             ThaumcraftApi.internalMethods.addKnowledge(player, IPlayerKnowledge.EnumKnowledgeType.OBSERVATION, ResearchCategories.getResearchCategory("BASICS"), MathHelper.getInt(player.getRNG(), oProg / 2, oProg));
                             ThaumcraftApi.internalMethods.addKnowledge(player, IPlayerKnowledge.EnumKnowledgeType.THEORY, ResearchCategories.getResearchCategory("BASICS"), MathHelper.getInt(player.getRNG(), tProg / 3, tProg / 2));
                         }

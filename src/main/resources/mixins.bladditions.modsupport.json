@@ -116,6 +116,7 @@
     "thebetweenlands.MixinItemRingOfDisperion",
     "thebetweenlands.MixinTeleporterBetweenlands",
     "thebetweenlands.MixinTileEntityMothHouse",
+    "thebetweenlands.MixinTileEntityOfferingTable",
     "thebetweenlands.MixinTileEntityWaterFilter",
     "thebetweenlands.MixinWorldGenWightFortress",
     "thebetweenlands.structures.MixinWorldGenCragrockTower",

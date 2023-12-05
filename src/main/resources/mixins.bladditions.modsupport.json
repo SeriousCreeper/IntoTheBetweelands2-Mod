@@ -117,6 +117,7 @@
     "thebetweenlands.MixinTeleporterBetweenlands",
     "thebetweenlands.MixinTileEntityMothHouse",
     "thebetweenlands.MixinTileEntityWaterFilter",
+    "thebetweenlands.MixinWorldGenWightFortress",
     "thebetweenlands.structures.MixinWorldGenCragrockTower",
     "thebetweenlands.structures.MixinWorldGenGiantTree",
     "thebetweenlands.structures.MixinWorldGenIdolHeads",

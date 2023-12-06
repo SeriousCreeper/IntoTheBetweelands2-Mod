@@ -33,6 +33,7 @@
     "grue.MixinGrueEventHandler",
     "ignitehud.MixinGuiWidget",
     "immersiveengineering.MixinTileEntityLightningrod",
+    "livingchest.MixinChesterEntity",
     "pizzacraft.MixinBlockPizza",
     "pyrotech.MixinBlockKilnPit",
     "pyrotech.MixinItemAxe",

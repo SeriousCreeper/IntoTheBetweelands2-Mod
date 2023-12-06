@@ -25,6 +25,7 @@ import com.seriouscreeper.bladditions.tiles.PatchedTileSpa;
 import com.seriouscreeper.bladditions.tiles.TileCrucibleSwamp;
 import com.seriouscreeper.bladditions.tiles.TileWaterJugSwamp;
 import com.seriouscreeper.bladditions.world.BLBeeHiveWorldGen;
+import com.shinoow.darknesslib.api.DarknessLibAPI;
 import com.tiviacz.pizzacraft.crafting.bakeware.BaseShapelessOreRecipe;
 import com.tiviacz.pizzacraft.crafting.bakeware.IBakewareRecipe;
 import com.tiviacz.pizzacraft.crafting.bakeware.PizzaCraftingManager;
@@ -125,10 +126,12 @@ import thaumcraft.common.lib.enchantment.EnumInfusionEnchantment;
 import thaumcraft.common.lib.utils.CropUtils;
 import thaumicperiphery.ModContent;
 import thebetweenlands.api.recipes.ISmokingRackRecipe;
+import thebetweenlands.common.entity.draeton.EntityDraeton;
 import thebetweenlands.common.entity.mobs.*;
 import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.recipe.misc.SmokingRackRecipe;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.world.storage.location.LocationStorage;
@@ -283,6 +286,8 @@ public class CommonProxy {
 
     public void preInit(FMLPreInitializationEvent e) {
         PotionRegistery.RegisterPotions();
+
+        DarknessLibAPI.getInstance().addVehicle(EntityDraeton.class);
 
         SoilRecipe.recipes = Arrays.asList(SoilRecipe.EARTH, SoilRecipe.AIR, SoilRecipe.WATER);
 

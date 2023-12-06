@@ -25,7 +25,7 @@
     "fairylights.MixinFairyLightsRecipes",
     "fishundeadrising.MixinEntityMimic",
     "fishundeadrising.MixinEntityParasite",
-    "fishundeadrising.MixinEntityRaven",
+    "fishundeadrising.MixinEntityFishTameable",
     "fishundeadrising.MixinModEventHandler",
     "ftbquests.MixinButtonOpenInGuide",
     "growthcraft.MixinCheese",

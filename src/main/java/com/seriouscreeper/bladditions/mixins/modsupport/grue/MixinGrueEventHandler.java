@@ -107,8 +107,6 @@ public class MixinGrueEventHandler {
                                     cap.setSpawnPosition(player.posX, player.posY, player.posZ);
                                 }
 
-                                player.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 200, 10));
-                                player.addPotionEffect(new PotionEffect(MobEffects.NIGHT_VISION, 200, 10));
                                 if (cap.getTimer() % 4 == 0) {
                                     player.world.playSound((EntityPlayer)null, player.getPosition(), Grue.grue_spawn, SoundCategory.HOSTILE, 2.0F, 1.0F);
                                 }

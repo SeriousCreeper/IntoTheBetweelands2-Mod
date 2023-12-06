@@ -37,6 +37,7 @@
     "pizzacraft.MixinBlockPizza",
     "pyrotech.MixinBlockKilnPit",
     "pyrotech.MixinItemAxe",
+    "pyrotech.MixinTileKilnBase",
     "pyrotech.MixinTileMechanicalMulchSpreader",
     "pyrotech.MixinTileWitherForge",
     "pyrotech.MixinWorldGenDenseRedstoneOre",

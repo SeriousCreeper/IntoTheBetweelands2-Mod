@@ -76,6 +76,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.tiffit.sanity.Sanity;
 import net.tiffit.sanity.SanityCapability;
@@ -873,6 +874,22 @@ public class BLAdditionsEventHandler {
         }
 
         return false;
+    }
+
+
+    @SubscribeEvent
+    public void onPlayerDeath(PlayerEvent.PlayerRespawnEvent event) {
+        if(event.player == null) {
+            return;
+        }
+
+        SanityCapability cap = event.player.getCapability(SanityCapability.INSTANCE, null);
+
+        if(cap == null) {
+            return;
+        }
+
+        cap.increaseSanity(-20);
     }
 
 

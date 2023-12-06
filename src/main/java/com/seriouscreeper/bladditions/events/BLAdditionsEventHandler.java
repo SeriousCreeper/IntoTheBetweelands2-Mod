@@ -973,7 +973,7 @@ public class BLAdditionsEventHandler {
             if (mod.value.equals("depth")) {
                 float newVal = mod.amount * multiplier;
 
-                if(newVal > 0 && (newVal + cap.getSanityExact() > 0 || !world.canSeeSky(player.getPosition()))) {
+                if(newVal > 0 && newVal + cap.getSanityExact() >= 0) {
                     continue;
                 }
 

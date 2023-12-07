@@ -4,11 +4,7 @@ import baubles.api.BaublesApi;
 import com.Fishmod.mod_LavaCow.client.Modconfig;
 import com.Fishmod.mod_LavaCow.entities.EntityParasite;
 import com.Fishmod.mod_LavaCow.entities.flying.EntityVespa;
-import com.Fishmod.mod_LavaCow.entities.tameable.EntityMimic;
 import com.Fishmod.mod_LavaCow.init.ModMobEffects;
-import com.Fishmod.mod_LavaCow.item.ItemFamineArmor;
-import com.Fishmod.mod_LavaCow.message.PacketParticle;
-import com.Fishmod.mod_LavaCow.mod_LavaCow;
 import com.Fishmod.mod_LavaCow.util.LootTableHandler;
 import com.charles445.simpledifficulty.api.SDCapabilities;
 import com.charles445.simpledifficulty.api.SDItems;
@@ -67,7 +63,6 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.PotionEvent;
 import net.minecraftforge.event.entity.player.BonemealEvent;
-import net.minecraftforge.event.entity.player.ItemFishedEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fluids.*;
@@ -125,7 +120,6 @@ import vazkii.quark.decoration.feature.IronLadders;
 import vazkii.quark.tweaks.base.BlockStack;
 import vazkii.quark.tweaks.feature.HoeSickle;
 
-import java.awt.event.ItemEvent;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -133,6 +127,26 @@ import java.util.*;
 
 @Mod.EventBusSubscriber
 public class BLAdditionsEventHandler {
+    @SubscribeEvent
+    public void onPlayerRespawnBegin(net.minecraftforge.event.entity.player.PlayerEvent.Clone e) {
+        if (e.isWasDeath() && !e.getEntityPlayer().world.isRemote) {
+            restoreThirst(e.getEntityPlayer(), e.getOriginal());
+        }
+    }
+
+
+    private static void restoreThirst(EntityPlayer player, EntityPlayer oldPlayer) {
+        FoodStats oldFood = oldPlayer.getFoodStats();
+        FoodStats newFood = player.getFoodStats();
+
+        IThirstCapability oldThirstCap = SDCapabilities.getThirstData(oldPlayer);
+        IThirstCapability newThirstCap = SDCapabilities.getThirstData(player);
+
+        newThirstCap.setThirstLevel(Math.max(6, oldThirstCap.getThirstLevel()));
+        newThirstCap.setThirstSaturation(Math.max(6, oldThirstCap.getThirstSaturation()));
+    }
+
+
     @SubscribeEvent
     public static void entityHurt(LivingHurtEvent event) {
         IPlayerKnowledge knowledge;

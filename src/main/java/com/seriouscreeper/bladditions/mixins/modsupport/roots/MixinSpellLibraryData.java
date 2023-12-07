@@ -26,15 +26,9 @@ public class MixinSpellLibraryData {
 
     @Inject(method = "asList", at = @At("HEAD"), cancellable = true)
     private void injectAsList(CallbackInfoReturnable<List<LibrarySpellInfo>> cir) {
-        if (this.list == null) {
-            this.list = this.spells.values().stream().filter((o) -> {
-                return o.getSpell() != null;
-            }).filter(LibrarySpellInfo::isObtained).sorted(Comparator.comparing(a -> a.getSpell() == null ? "" : a.getSpell().getRegistryName().getPath())).collect(Collectors.toList());
+        if (list == null) {
+            list = spells.values().stream().filter(o -> o.getSpell() != null).filter(LibrarySpellInfo::isObtained).sorted(Comparator.comparing(a -> a.getSpell() == null ? "" : a.getSpell().getRegistryName().getPath())).collect(Collectors.toList());
         }
-
-        this.list.sort(Comparator.comparing((a) -> {
-            return a.getSpell() == null ? "" : a.getSpell().getRegistryName().getPath();
-        }));
 
         cir.setReturnValue(this.list);
     }

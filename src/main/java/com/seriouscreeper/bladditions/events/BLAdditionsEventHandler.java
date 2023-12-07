@@ -136,9 +136,6 @@ public class BLAdditionsEventHandler {
 
 
     private static void restoreThirst(EntityPlayer player, EntityPlayer oldPlayer) {
-        FoodStats oldFood = oldPlayer.getFoodStats();
-        FoodStats newFood = player.getFoodStats();
-
         IThirstCapability oldThirstCap = SDCapabilities.getThirstData(oldPlayer);
         IThirstCapability newThirstCap = SDCapabilities.getThirstData(player);
 

@@ -18,7 +18,7 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'org.spongepowered.mixin'
 apply plugin: 'com.wynprice.cursemaven'
 
-version = "1.5.1"
+version = "1.5.2"
 group = "com.seriouscreeper.bladditions" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "bladditions"
 
@@ -140,6 +140,8 @@ artifacts {
     //archives jar
     //archives sourcesJar
 }
+
+sourceSets { main { output.resourcesDir = output.classesDir } }
 
 
 // These are broken

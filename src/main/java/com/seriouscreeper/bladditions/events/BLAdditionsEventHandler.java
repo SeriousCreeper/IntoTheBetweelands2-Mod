@@ -191,7 +191,6 @@ public class BLAdditionsEventHandler {
     @SubscribeEvent
     public void onStageUnlocked(GameStageEvent.Added event) {
         if(event.getStageName().equals("knowledge_of_decay")) {
-            EntityPlayer player = event.getEntityPlayer();
             IPlayerKnowledge knowledge = ThaumcraftCapabilities.getKnowledge(event.getEntityPlayer());
 
             knowledge.addResearch("!gotcrystals");
@@ -200,6 +199,11 @@ public class BLAdditionsEventHandler {
             if (ModConfig.CONFIG_MISC.noSleep && !knowledge.isResearchKnown("!gotdream")) {
                 giveDreamJournal(event.getEntityPlayer());
             }
+        } else if(event.getStageName().equals("knowledge_of_technology")) {
+            IPlayerKnowledge knowledge = ThaumcraftCapabilities.getKnowledge(event.getEntityPlayer());
+
+            knowledge.addResearch("!unlockedta");
+            knowledge.sync((EntityPlayerMP)event.getEntityPlayer());
         }
     }
 

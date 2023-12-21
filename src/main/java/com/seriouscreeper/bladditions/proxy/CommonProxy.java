@@ -698,7 +698,7 @@ public class CommonProxy {
         ThaumcraftApi.addInfusionCraftingRecipe(new ResourceLocation("thaumicperiphery", "caster_ember"), new InfusionRecipe(
             "CASTEREMBER", new ItemStack(ModContent.caster_ember), 6, (new AspectList()).add(Aspect.FIRE, 50).add(Aspect.MAGIC, 15).add(Aspect.EXCHANGE, 25).add(Aspect.MECHANISM, 25).add(Aspect.ENERGY, 50),
             new ItemStack(RegistryManager.wildfire_core),
-            new Object[]{new ItemStack(RegistryManager.shard_ember), "ingotDawnstone", "plateIron", new ItemStack(ItemsTC.mechanismComplex), "ingotOctine", new ItemStack(ItemsTC.morphicResonator), "plateIron", "ingotDawnstone"
+            new Object[]{new ItemStack(RegistryManager.shard_ember), "ingotDawnstone", "plateSyrmorite", new ItemStack(ItemsTC.mechanismComplex), "ingotOctine", new ItemStack(ItemsTC.morphicResonator), "plateSyrmorite", "ingotDawnstone"
         }
         ));
 

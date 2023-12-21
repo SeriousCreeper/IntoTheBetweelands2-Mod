@@ -118,6 +118,7 @@
     "thebetweenlands.MixinBlockPlant",
     "thebetweenlands.MixinDruidAltarRecipeMaker",
     "thebetweenlands.MixinEntityChiromawTame",
+    "thebetweenlands.MixinEntityDarkDruid",
     "thebetweenlands.MixinEntityGiantToad",
     "thebetweenlands.MixinEntityLurker",
     "thebetweenlands.MixinEntityRockSnot",

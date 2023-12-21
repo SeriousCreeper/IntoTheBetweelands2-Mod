@@ -1142,12 +1142,10 @@ public class BLAdditionsEventHandler {
                         wellnessInterval = Math.round(wellnessInterval * wellness);
                     }
 
-                    totalWellnessBonus += wellness;
-                    activeWellnessBonuses++;
+                    int wellnessChanceRequired = (effect.getAmplifier() + 1) * Math.round((float)ConfigBLAdditions.configTea.TCPotionChance * 0.03f);
+                    int nextCheck = world.rand.nextInt(wellnessInterval);
 
-                    int wellnessChanceRequired = effect.getAmplifier() * Math.round((float)ConfigBLAdditions.configTea.TCPotionChance * 0.03f);
-
-                    if(world.rand.nextInt(wellnessInterval) <= wellnessChanceRequired) {
+                    if(nextCheck > wellnessChanceRequired) {
                         continue;
                     }
 

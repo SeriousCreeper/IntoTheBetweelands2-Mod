@@ -19,6 +19,7 @@ import com.codetaylor.mc.pyrotech.modules.tech.basic.block.BlockKilnPit;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.potion.PotionFocused;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.tile.TileCampfire;
 import com.seriouscreeper.bladditions.config.ConfigBLAdditions;
+import com.seriouscreeper.bladditions.interfaces.ISanityExtraInfo;
 import com.seriouscreeper.bladditions.potion.PotionThaumcraftResearch;
 import com.seriouscreeper.bladditions.proxy.CommonProxy;
 import epicsquid.roots.init.ModItems;

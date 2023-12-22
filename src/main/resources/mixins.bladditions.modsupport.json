@@ -76,6 +76,8 @@
     "sanity.MixinEyesConsequences",
     "sanity.MixinIConsequences",
     "sanity.MixinLightSeekerConsequence",
+    "sanity.MixinSanityCapability",
+    "sanity.MixinSanityCapabilityStorage",
     "simpledifficulty.MixinTemperatureCapability",
     "simpledifficulty.MixinTemperatureRegistry",
     "simpledifficulty.MixinThirstUtilInternal",

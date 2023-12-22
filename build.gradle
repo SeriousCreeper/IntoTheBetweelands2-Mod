@@ -141,8 +141,6 @@ artifacts {
     //archives sourcesJar
 }
 
-sourceSets { main { output.resourcesDir = output.classesDir } }
-
 
 // These are broken
 //runClient.group "other"

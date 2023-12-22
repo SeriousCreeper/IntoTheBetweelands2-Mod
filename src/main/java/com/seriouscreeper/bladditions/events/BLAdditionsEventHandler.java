@@ -98,6 +98,7 @@ import thaumcraft.common.lib.utils.EntityUtils;
 import thaumcraft.common.lib.utils.InventoryUtils;
 import thebetweenlands.api.capability.IRotSmellCapability;
 import thebetweenlands.api.environment.IEnvironmentEvent;
+import thebetweenlands.common.block.container.BlockRepeller;
 import thebetweenlands.common.block.farming.BlockFungusCrop;
 import thebetweenlands.common.block.farming.BlockGenericDugSoil;
 import thebetweenlands.common.block.misc.BlockSulfurTorchExtinguished;
@@ -114,6 +115,7 @@ import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntityDugSoil;
+import thebetweenlands.common.tile.TileEntityRepeller;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thecodex6824.thaumicaugmentation.common.item.ItemTieredCasterGauntlet;
 import vazkii.quark.decoration.entity.EntityLeashKnot2TheKnotting;
@@ -1064,6 +1066,41 @@ public class BLAdditionsEventHandler {
     }
 
 
+    private void sanityCheckForRepellers(EntityPlayer player, SanityCapability cap) {
+        int radius = 28;
+
+        ISanityExtraInfo extraInfo = (ISanityExtraInfo)cap;
+        extraInfo.setCanDecrease(true);
+
+        for(int y = -radius; y <= radius; ++y) {
+            for(int x = -radius; x <= radius; ++x) {
+                for(int z = -radius; z <= radius; ++z) {
+                    BlockPos pos = player.getPosition().add(x, y, z);
+                    IBlockState state = player.world.getBlockState(pos);
+                    Block block = state.getBlock();
+
+                    if(block instanceof BlockRepeller) {
+                        TileEntityRepeller repeller = (TileEntityRepeller)player.world.getTileEntity(pos);
+
+                        if(repeller == null) {
+                            continue;
+                        }
+
+                        if(repeller.isRunning()) {
+                            float repellerRadius = repeller.getRadius(0);
+
+                            if(player.getPositionVector().squareDistanceTo(pos.getX(), pos.getY(), pos.getZ()) <= (double)(repellerRadius * repellerRadius)) {
+                                extraInfo.setCanDecrease(false);
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
     @SubscribeEvent
     public static void adjustFoodExhaustingForSanity(TickEvent.PlayerTickEvent event) {
         if (event.phase == TickEvent.Phase.END && !event.player.getEntityWorld().isRemote) {
@@ -1100,9 +1137,14 @@ public class BLAdditionsEventHandler {
         // remove wellness nbt from player when potion runs out
 
         if(!world.isRemote && player.ticksExisted % 40 == 0) {
-            addSanityForEvents(player, world);
-            addSanityForCaves(player, world);
-            addSanityForBeingSmelly(player);
+            SanityCapability sanityCapability = player.getCapability(SanityCapability.INSTANCE, (EnumFacing)null);
+
+            if(sanityCapability != null) {
+                addSanityForEvents(player, world);
+                addSanityForCaves(player, world);
+                addSanityForBeingSmelly(player);
+                sanityCheckForRepellers(player, sanityCapability);
+            }
 
             // When facing up in the rain, player slowly recovers thirst.
             final double angle = player.getLookVec().y;

@@ -103,6 +103,7 @@ import thebetweenlands.common.block.farming.BlockFungusCrop;
 import thebetweenlands.common.block.farming.BlockGenericDugSoil;
 import thebetweenlands.common.block.misc.BlockSulfurTorchExtinguished;
 import thebetweenlands.common.block.structure.BlockFenceBetweenlands;
+import thebetweenlands.common.block.structure.BlockSimulacrum;
 import thebetweenlands.common.block.structure.BlockWaystone;
 import thebetweenlands.common.entity.mobs.EntityAnadia;
 import thebetweenlands.common.entity.mobs.EntityGreebling;
@@ -116,6 +117,7 @@ import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntityDugSoil;
 import thebetweenlands.common.tile.TileEntityRepeller;
+import thebetweenlands.common.tile.TileEntitySimulacrum;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thecodex6824.thaumicaugmentation.common.item.ItemTieredCasterGauntlet;
 import vazkii.quark.decoration.entity.EntityLeashKnot2TheKnotting;
@@ -1078,21 +1080,28 @@ public class BLAdditionsEventHandler {
                     BlockPos pos = player.getPosition().add(x, y, z);
                     IBlockState state = player.world.getBlockState(pos);
                     Block block = state.getBlock();
+                    TileEntityRepeller repeller = null;
 
                     if(block instanceof BlockRepeller) {
-                        TileEntityRepeller repeller = (TileEntityRepeller)player.world.getTileEntity(pos);
+                        repeller = (TileEntityRepeller)player.world.getTileEntity(pos);
+                    } else if(block instanceof BlockSimulacrum) {
+                        TileEntitySimulacrum tileEntitySimulacrum = (TileEntitySimulacrum)player.world.getTileEntity(pos);
 
-                        if(repeller == null) {
-                            continue;
+                        if(tileEntitySimulacrum != null && tileEntitySimulacrum.getEffect() == TileEntitySimulacrum.Effect.SANCTUARY) {
+                            repeller = (TileEntityRepeller) tileEntitySimulacrum;
                         }
+                    }
 
-                        if(repeller.isRunning()) {
-                            float repellerRadius = repeller.getRadius(0);
+                    if(repeller == null) {
+                        continue;
+                    }
 
-                            if(player.getPositionVector().squareDistanceTo(pos.getX(), pos.getY(), pos.getZ()) <= (double)(repellerRadius * repellerRadius)) {
-                                extraInfo.setCanDecrease(false);
-                                return;
-                            }
+                    if(repeller.isRunning()) {
+                        float repellerRadius = repeller.getRadius(0);
+
+                        if(player.getPositionVector().squareDistanceTo(pos.getX(), pos.getY(), pos.getZ()) <= (double)(repellerRadius * repellerRadius)) {
+                            extraInfo.setCanDecrease(false);
+                            return;
                         }
                     }
                 }

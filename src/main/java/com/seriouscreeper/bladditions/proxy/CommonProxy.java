@@ -1,5 +1,11 @@
 package com.seriouscreeper.bladditions.proxy;
 
+import com.aranaira.arcanearchives.data.ClientNetwork;
+import com.aranaira.arcanearchives.data.DataHelper;
+import com.aranaira.arcanearchives.data.HiveSaveData;
+import com.aranaira.arcanearchives.init.RecipeLibrary;
+import com.aranaira.arcanearchives.recipe.IngredientStack;
+import com.aranaira.arcanearchives.recipe.gct.GCTRecipeList;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.mrbysco.anotherliquidmilkmod.init.MilkRegistry;
@@ -119,6 +125,7 @@ import thaumcraft.api.items.ItemsTC;
 import thaumcraft.api.research.*;
 import thaumcraft.common.config.ConfigBlocks;
 import thaumcraft.common.config.ConfigItems;
+import thaumcraft.common.config.ConfigRecipes;
 import thaumcraft.common.golems.seals.SealHandler;
 import thaumcraft.common.lib.crafting.DustTriggerMultiblock;
 import thaumcraft.common.lib.crafting.InfusionEnchantmentRecipe;
@@ -128,6 +135,7 @@ import thaumicperiphery.ModContent;
 import thebetweenlands.api.recipes.ISmokingRackRecipe;
 import thebetweenlands.common.entity.draeton.EntityDraeton;
 import thebetweenlands.common.entity.mobs.*;
+import thebetweenlands.common.item.herblore.ItemCrushed;
 import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.recipe.misc.SmokingRackRecipe;
 import thebetweenlands.common.registries.BlockRegistry;
@@ -429,6 +437,37 @@ public class CommonProxy {
         EmberGenUtil.registerMetalCoefficient("blockOctine",1.0f);
         EmberGenUtil.registerMetalCoefficient("blockSyrmorite",0.75f);
 
+        // Arcane Archives
+        RecipeLibrary.LETTER_OF_INVITATION_RECIPE = GCTRecipeList.instance.makeAndAddRecipeWithCreatorAndCondition("letter_invitation", new ItemStack(com.aranaira.arcanearchives.init.ItemRegistry.LETTER_OF_INVITATION, 1), new Object[]{ItemMisc.EnumItemMisc.PARCHMENT.create(3), new ItemStack(com.aranaira.arcanearchives.init.ItemRegistry.COMPONENT_RADIANTDUST, 1), ItemCrushed.EnumItemCrushed.GROUND_AQUA_MIDDLE_GEM.create(1)}).addCondition((player, tile) -> {
+            if (!player.world.isRemote) {
+                HiveSaveData saveData = DataHelper.getHiveData();
+                HiveSaveData.Hive hive = saveData.getHiveByMember(player.getUniqueID());
+                return hive == null || hive.owner.equals(player.getUniqueID());
+            } else {
+                ClientNetwork network = DataHelper.getClientNetwork();
+                return network.ownsHive() || !network.inHive();
+            }
+        });
+        RecipeLibrary.LETTER_OF_RESIGNATION_RECIPE = GCTRecipeList.instance.makeAndAddRecipeWithCreatorAndCondition("letter_resignation", new ItemStack(com.aranaira.arcanearchives.init.ItemRegistry.LETTER_OF_RESIGNATION, 1), new Object[]{ItemMisc.EnumItemMisc.PARCHMENT.create(3), new ItemStack(com.aranaira.arcanearchives.init.ItemRegistry.COMPONENT_RADIANTDUST, 1), ItemCrushed.EnumItemCrushed.GROUND_GREEN_MIDDLE_GEM.create(1)}).addCondition((player, tile) -> {
+            if (!player.world.isRemote) {
+                HiveSaveData saveData = DataHelper.getHiveData();
+                HiveSaveData.Hive hive = saveData.getHiveByMember(player.getUniqueID());
+                return hive != null;
+            } else {
+                ClientNetwork network = DataHelper.getClientNetwork();
+                return network.inHive();
+            }
+        });
+        RecipeLibrary.WRIT_OF_EXPULSION_RECIPE = GCTRecipeList.instance.makeAndAddRecipeWithCreatorAndCondition("writ_expulsion", new ItemStack(com.aranaira.arcanearchives.init.ItemRegistry.WRIT_OF_EXPULSION, 1), new Object[]{ItemMisc.EnumItemMisc.PARCHMENT.create(3), new ItemStack(com.aranaira.arcanearchives.init.ItemRegistry.COMPONENT_RADIANTDUST, 1), ItemCrushed.EnumItemCrushed.GROUND_CRIMSON_MIDDLE_GEM.create(1)}).addCondition((player, tile) -> {
+            if (!player.world.isRemote) {
+                HiveSaveData saveData = DataHelper.getHiveData();
+                HiveSaveData.Hive hive = saveData.getHiveByMember(player.getUniqueID());
+                return hive != null && hive.owner.equals(player.getUniqueID());
+            } else {
+                ClientNetwork network = DataHelper.getClientNetwork();
+                return network.inHive() && network.ownsHive();
+            }
+        });
     }
 
 

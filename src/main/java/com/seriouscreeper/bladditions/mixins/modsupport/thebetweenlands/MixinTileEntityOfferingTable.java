@@ -41,17 +41,22 @@ public class MixinTileEntityOfferingTable extends TileEntityGroundItem {
             Set<EntityPlayer> teleportingPlayers = null;
 
             Iterator it;
+
             EntityPlayer player;
+
             for(it = this.world.getEntitiesWithinAABB(EntityPlayer.class, aabb, (p) -> {
                 return p.isSneaking() && p.getDistanceSq((double)((float)this.pos.getX() + 0.5F), (double)((float)this.pos.getY() + 0.5F), (double)((float)this.pos.getZ() + 0.5F)) <= radius * radius;
             }).iterator(); it.hasNext(); this.setStack(stack)) {
                 player = (EntityPlayer)it.next();
+
                 if (teleportingPlayers == null) {
                     teleportingPlayers = new HashSet();
                 }
 
                 teleportingPlayers.add(player);
+
                 int ticks = (Integer)this.teleportTicks.getOrDefault(player, 0);
+
                 if (ticks >= 0 && !this.into_the_betweenlands_mod$updateDimensionTeleport(player, ticks, stack)) {
                     this.teleportTicks.put(player, -100);
                 } else {
@@ -66,6 +71,7 @@ public class MixinTileEntityOfferingTable extends TileEntityGroundItem {
 
                 while(it.hasNext()) {
                     player = (EntityPlayer)it.next();
+
                     if (!teleportingPlayers.contains(player)) {
                         it.remove();
                     }
@@ -95,21 +101,30 @@ public class MixinTileEntityOfferingTable extends TileEntityGroundItem {
     private boolean into_the_betweenlands_mod$updateDimensionTeleport(EntityPlayer entity, int ticks, ItemStack stack) {
         if (ticks >= 100) {
             if (!entity.world.isRemote && stack.getItemDamage() < stack.getMaxDamage()) {
-                if(entity.isRiding())
-                    entity.dismountRidingEntity();
+                double radius = 2.5;
+                AxisAlignedBB aabb = (new AxisAlignedBB(this.getPos())).grow(radius);
+
+                List<EntityPlayer> it = this.world.getEntitiesWithinAABB(EntityPlayer.class, aabb, (p) -> {
+                    return p.getDistanceSq((double)((float)this.pos.getX() + 0.5F), (double)((float)this.pos.getY() + 0.5F), (double)((float)this.pos.getZ() + 0.5F)) <= radius * radius;
+                });
 
                 this.playThunderSounds(entity.world, entity.posX, entity.posY, entity.posZ);
-
                 MinecraftServer server = entity.world.getMinecraftServer();
-                ICommandSender sender = new AdminExecute((EntityPlayer)entity, entity.getPosition());
 
-                String command = "tpj " + into_the_betweenlands_mod$getDimension(stack);
+                for(EntityPlayer entityPlayer : it) {
+                    if(entityPlayer.isRiding())
+                        entityPlayer.dismountRidingEntity();
 
-                FunctionObject func = FunctionObject.create(server.getFunctionManager(), Arrays.asList(command));
+                    ICommandSender sender = new AdminExecute(entityPlayer, entityPlayer.getPosition());
 
-                server.getFunctionManager().execute(func, sender);
+                    String command = "tpj " + into_the_betweenlands_mod$getDimension(stack);
 
-                this.playThunderSounds(entity.world, entity.posX, entity.posY, entity.posZ);
+                    FunctionObject func = FunctionObject.create(server.getFunctionManager(), Arrays.asList(command));
+
+                    server.getFunctionManager().execute(func, sender);
+
+                    this.playThunderSounds(entity.world, entity.posX, entity.posY, entity.posZ);
+                }
 
                 stack.shrink(1);
             }

@@ -171,6 +171,11 @@ public class MixinGuiWidget {
         RenderHelper.addDurabilityDisplay(offhand, pos);
     }
 
+    /**
+     * @author SC
+     * @reason
+     */
+    @Overwrite
     private void getEffects(EntityPlayerSP player, ScaledResolution scaled) {
         int screenWidth = scaled.getScaledWidth();
         int screenHeight = scaled.getScaledHeight();
@@ -189,132 +194,132 @@ public class MixinGuiWidget {
                     String duration = Potion.getPotionDurationString(potioneffect, 1.0F);
 
                     int icon = -1;
-                    if (potion.getName() == "effect.moveSpeed") {
+                    if (potion.getName().equals("effect.moveSpeed")) {
                         icon = 0;
                     }
 
-                    if (potion.getName() == "effect.moveSlowdown") {
+                    if (potion.getName().equals("effect.moveSlowdown")) {
                         icon = 1;
                     }
 
-                    if (potion.getName() == "effect.digSpeed") {
+                    if (potion.getName().equals("effect.digSpeed")) {
                         icon = 2;
                     }
 
-                    if (potion.getName() == "effect.digSlowDown") {
+                    if (potion.getName().equals("effect.digSlowDown")) {
                         icon = 3;
                     }
 
-                    if (potion.getName() == "effect.damageBoost") {
+                    if (potion.getName().equals("effect.damageBoost")) {
                         icon = 4;
                     }
 
-                    if (potion.getName() == "effect.weakness") {
+                    if (potion.getName().equals("effect.weakness")) {
                         icon = 5;
                     }
 
-                    if (potion.getName() == "effect.poison") {
+                    if (potion.getName().equals("effect.poison")) {
                         icon = 6;
                     }
 
-                    if (potion.getName() == "effect.regeneration") {
+                    if (potion.getName().equals("effect.regeneration")) {
                         icon = 7;
                     }
 
-                    if (potion.getName() == "effect.invisibility") {
+                    if (potion.getName().equals("effect.invisibility")) {
                         icon = 8;
                     }
 
-                    if (potion.getName() == "effect.hunger") {
+                    if (potion.getName().equals("effect.hunger")) {
                         icon = 9;
                     }
 
-                    if (potion.getName() == "effect.jump") {
+                    if (potion.getName().equals("effect.jump")) {
                         icon = 10;
                     }
 
-                    if (potion.getName() == "effect.confusion") {
+                    if (potion.getName().equals("effect.confusion")) {
                         icon = 11;
                     }
 
-                    if (potion.getName() == "effect.nightVision") {
+                    if (potion.getName().equals("effect.nightVision")) {
                         icon = 12;
                     }
 
-                    if (potion.getName() == "effect.blindness") {
+                    if (potion.getName().equals("effect.blindness")) {
                         icon = 13;
                     }
 
-                    if (potion.getName() == "effect.resistance") {
+                    if (potion.getName().equals("effect.resistance")) {
                         icon = 14;
                     }
 
-                    if (potion.getName() == "effect.fireResistance") {
+                    if (potion.getName().equals("effect.fireResistance")) {
                         icon = 15;
                     }
 
-                    if (potion.getName() == "effect.waterBreathing") {
+                    if (potion.getName().equals("effect.waterBreathing")) {
                         icon = 16;
                     }
 
-                    if (potion.getName() == "effect.wither") {
+                    if (potion.getName().equals("effect.wither")) {
                         icon = 17;
                     }
 
-                    if (potion.getName() == "effect.absorption") {
+                    if (potion.getName().equals("effect.absorption")) {
                         icon = 18;
                     }
 
-                    if (potion.getName() == "effect.levitation") {
+                    if (potion.getName().equals("effect.levitation")) {
                         icon = 19;
                     }
 
-                    if (potion.getName() == "effect.glowing") {
+                    if (potion.getName().equals("effect.glowing")) {
                         icon = 20;
                     }
 
-                    if (potion.getName() == "effect.luck") {
+                    if (potion.getName().equals("effect.luck")) {
                         icon = 21;
                     }
 
-                    if (potion.getName() == "effect.unluck") {
+                    if (potion.getName().equals("effect.unluck")) {
                         icon = 22;
                     }
 
-                    if (potion.getName() == "effect.healthBoost") {
+                    if (potion.getName().equals("effect.healthBoost")) {
                         icon = 23;
                     }
 
                     if (IgniteHUD.hasToughAsNails) {
-                        if (potion.getName() == "potion.thirst") {
+                        if (potion.getName().equals("potion.thirst")) {
                             icon = 24;
                         }
 
-                        if (potion.getName() == "potion.hydration") {
+                        if (potion.getName().equals("potion.hydration")) {
                             icon = 25;
                         }
 
-                        if (potion.getName() == "potion.hypothermia") {
+                        if (potion.getName().equals("potion.hypothermia")) {
                             icon = 26;
                         }
 
-                        if (potion.getName() == "potion.hyperthermia") {
+                        if (potion.getName().equals("potion.hyperthermia")) {
                             icon = 27;
                         }
 
-                        if (potion.getName() == "potion.heat_resistance") {
+                        if (potion.getName().equals("potion.heat_resistance")) {
                             icon = 28;
                         }
 
-                        if (potion.getName() == "potion.cold_resistance") {
+                        if (potion.getName().equals("potion.cold_resistance")) {
                             icon = 29;
                         }
                     }
 
                     int posX;
                     ++i;
-                    posX = screenWidth - 30 * (i % 6);
-                    posY = 5 + 27 * Math.floorDiv(i, 6);
+                    posX = screenWidth - 30 * (i % 5);
+                    posY = screenHeight - (27 * Math.floorDiv(i, 5)) - 21;
 
                     float f = 1.0F;
                     if (potioneffect.getDuration() <= 200) {

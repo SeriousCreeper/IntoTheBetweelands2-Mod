@@ -20,7 +20,7 @@ public class MixinItemSanityChecker extends Item {
     public ActionResult<ItemStack> onItemRightClick(World w, EntityPlayer p, EnumHand h) {
         if (!w.isRemote) {
             SanityCapability cap = (SanityCapability)p.getCapability(SanityCapability.INSTANCE, (EnumFacing)null);
-            p.sendMessage(new TextComponentString(TextFormatting.GOLD + "Mental State: " + cap.getSanity().toColoredString()));
+            p.sendMessage(new TextComponentString(TextFormatting.GOLD + "Mental State: " + cap.getSanity().toColoredString() + " [" + ItemStack.DECIMALFORMAT.format((double)cap.getSanityExact()) + "]"));
         }
 
         return new ActionResult(EnumActionResult.SUCCESS, p.getHeldItem(h));

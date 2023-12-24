@@ -116,6 +116,7 @@
     "thaumcraft.MixinUtils",
     "thaumicjei.MixinThaumcraftJEIPlugin",
     "thebetweenlands.MixinBetweenlandsSpawnerLogic",
+    "thebetweenlands.MixinBiomeDecoratorMarsh",
     "thebetweenlands.MixinBLFurnace",
     "thebetweenlands.MixinBlockBarrel",
     "thebetweenlands.MixinBlockPlant",

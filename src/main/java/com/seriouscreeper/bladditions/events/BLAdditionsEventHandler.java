@@ -60,6 +60,7 @@ import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.event.ForgeEventFactory;
+import net.minecraftforge.event.entity.item.ItemExpireEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.PotionEvent;
@@ -80,6 +81,7 @@ import net.tiffit.sanity.SanityModifier;
 import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.ThaumcraftApiHelper;
 import thaumcraft.api.aura.AuraHelper;
+import thaumcraft.api.blocks.BlocksTC;
 import thaumcraft.api.capabilities.IPlayerKnowledge;
 import thaumcraft.api.capabilities.IPlayerWarp;
 import thaumcraft.api.capabilities.ThaumcraftCapabilities;
@@ -94,6 +96,7 @@ import thaumcraft.common.items.armor.ItemGoggles;
 import thaumcraft.common.items.casters.ItemCaster;
 import thaumcraft.common.items.casters.ItemFocus;
 import thaumcraft.common.items.casters.foci.FocusEffectFire;
+import thaumcraft.common.items.consumables.ItemBathSalts;
 import thaumcraft.common.lib.utils.EntityUtils;
 import thaumcraft.common.lib.utils.InventoryUtils;
 import thebetweenlands.api.capability.IRotSmellCapability;
@@ -146,6 +149,18 @@ public class BLAdditionsEventHandler {
 
         newThirstCap.setThirstLevel(Math.max(6, oldThirstCap.getThirstLevel()));
         newThirstCap.setThirstSaturation(Math.max(6, oldThirstCap.getThirstSaturation()));
+    }
+
+
+    @SubscribeEvent
+    public static void itemExpire(ItemExpireEvent event) {
+        if (event.getEntityItem().getItem() != null && !event.getEntityItem().getItem().isEmpty() && event.getEntityItem().getItem().getItem() != null && event.getEntityItem().getItem().getItem() instanceof ItemBathSalts) {
+            BlockPos bp = new BlockPos(event.getEntityItem());
+            IBlockState bs = event.getEntityItem().world.getBlockState(bp);
+            if (bs.getBlock() == BlockRegistry.SWAMP_WATER && bs.getBlock().getMetaFromState(bs) == 0) {
+                event.getEntityItem().world.setBlockState(bp, BlocksTC.purifyingFluid.getDefaultState());
+            }
+        }
     }
 
 

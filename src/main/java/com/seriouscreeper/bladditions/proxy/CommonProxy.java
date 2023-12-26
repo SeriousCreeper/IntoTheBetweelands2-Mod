@@ -13,6 +13,7 @@ import com.rcx.mystgears.MysticalGears;
 import com.rcx.mystgears.block.BlockTurret;
 import com.rcx.mystgears.item.ItemGear;
 import com.seriouscreeper.bladditions.BLAdditions;
+import com.seriouscreeper.bladditions.Reference;
 import com.seriouscreeper.bladditions.blocks.*;
 import com.seriouscreeper.bladditions.config.ConfigBLAdditions;
 import com.seriouscreeper.bladditions.crafting.PatchedRecipeMagicDust;
@@ -85,6 +86,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -162,6 +164,7 @@ import java.util.stream.Stream;
 
 @Mod.EventBusSubscriber
 public class CommonProxy {
+    public static final ResourceLocation ANCIENT_ARMOR_CHEST = registerLootTable("loot/ancient_armor_chest");
     public static List<ItemStack> ADDITIONAL_ORES = new ArrayList<>();
     public static List<ItemStack> ADDITIONAL_INGOTS = new ArrayList<>();
     public static SoundEvent SORRY_CHARGED;
@@ -207,6 +210,11 @@ public class CommonProxy {
         }
 
         return false;
+    }
+
+
+    private static ResourceLocation registerLootTable(String id) {
+        return LootTableList.register(new ResourceLocation(BLAdditions.MODID, id));
     }
 
 

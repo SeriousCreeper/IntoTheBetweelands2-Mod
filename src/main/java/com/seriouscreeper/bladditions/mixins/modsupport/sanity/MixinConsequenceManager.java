@@ -14,7 +14,7 @@ import java.util.*;
 @Mixin(value = ConsequenceManager.class, remap = false)
 public class MixinConsequenceManager {
     @Shadow
-    public static List<IConsequence> CONSEQUENCES = new ArrayList();
+    public static List<IConsequence> CONSEQUENCES;
 
     @Shadow
     public static int getCooldown(IConsequence con, EntityPlayer p) {
@@ -41,7 +41,7 @@ public class MixinConsequenceManager {
         SanityCapability.SanityLevel level = cap.getSanity();
 
         for (IConsequence con : CONSEQUENCES) {
-            if (con.worksInDimension(p.dimension) && getCooldown(con, p) == 0) {
+            if (getCooldown(con, p) == 0) {
                 reset(con, p);
 
                 if (Math.random() <= con.getChance(level)) {

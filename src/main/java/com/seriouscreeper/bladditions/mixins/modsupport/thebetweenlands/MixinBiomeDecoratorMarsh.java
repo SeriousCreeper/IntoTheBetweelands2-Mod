@@ -9,7 +9,7 @@ import thebetweenlands.common.world.gen.biome.decorator.BiomeDecoratorBetweenlan
 import thebetweenlands.common.world.gen.biome.decorator.BiomeDecoratorMarsh;
 import thebetweenlands.common.world.gen.biome.decorator.DecorationHelper;
 
-@Mixin(value = BiomeDecoratorMarsh.class)
+@Mixin(value = BiomeDecoratorMarsh.class, remap = false)
 public class MixinBiomeDecoratorMarsh extends BiomeDecoratorBetweenlands {
     public MixinBiomeDecoratorMarsh(Biome biome) {
         super(biome);

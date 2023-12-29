@@ -13,7 +13,7 @@ import thebetweenlands.common.world.gen.feature.structure.utils.SludgeWormMazeBl
 
 import java.util.Random;
 
-@Mixin(SludgeWormMazeBlockHelper.class)
+@Mixin(value = SludgeWormMazeBlockHelper.class, remap = false)
 public class MixinSludgeWormMazeBlockHelper {
     /**
      * @author SC

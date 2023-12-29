@@ -20,6 +20,7 @@
     "embers.MixinAnvilRepairRecipe",
     "embers.MixinBlockSteamEngine",
     "embers.MixinMysticalMechanicsIntegration",
+    "embers.MixinResearchShowItem",
     "embers.MixinTileEntityBoilerBottom",
     "embers.MixinTileEntityBreaker",
     "embers.MixinTileEntityDawnstoneAnvil",

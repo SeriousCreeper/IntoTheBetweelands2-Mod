@@ -164,7 +164,6 @@ import java.util.stream.Stream;
 
 @Mod.EventBusSubscriber
 public class CommonProxy {
-    public static final ResourceLocation ANCIENT_ARMOR_CHEST = registerLootTable("loot/ancient_armor_chest");
     public static List<ItemStack> ADDITIONAL_ORES = new ArrayList<>();
     public static List<ItemStack> ADDITIONAL_INGOTS = new ArrayList<>();
     public static SoundEvent SORRY_CHARGED;
@@ -211,12 +210,6 @@ public class CommonProxy {
 
         return false;
     }
-
-
-    private static ResourceLocation registerLootTable(String id) {
-        return LootTableList.register(new ResourceLocation(BLAdditions.MODID, id));
-    }
-
 
     @SubscribeEvent
     public static void onCreateTool(CreateToolEvent event) {

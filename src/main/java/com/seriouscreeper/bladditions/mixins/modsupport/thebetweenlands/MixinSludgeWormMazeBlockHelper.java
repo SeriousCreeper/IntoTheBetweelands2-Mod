@@ -1,5 +1,6 @@
 package com.seriouscreeper.bladditions.mixins.modsupport.thebetweenlands;
 
+import com.seriouscreeper.bladditions.BLAdditions;
 import com.seriouscreeper.bladditions.proxy.CommonProxy;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
@@ -23,6 +24,6 @@ public class MixinSludgeWormMazeBlockHelper {
     public void placeArmourStandLoot(World world, BlockPos pos, EnumFacing facing, Random rand) {
         world.setBlockState(pos, BlockRegistry.WEEDWOOD_CHEST.getDefaultState(), 2);
         TileEntity tile = world.getTileEntity(pos);
-        ((TileEntityChest)tile).setLootTable(CommonProxy.ANCIENT_ARMOR_CHEST, world.rand.nextLong());
+        ((TileEntityChest)tile).setLootTable(BLAdditions.ANCIENT_ARMOR_CHEST, world.rand.nextLong());
     }
 }

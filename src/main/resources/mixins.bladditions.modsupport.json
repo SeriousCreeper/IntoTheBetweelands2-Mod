@@ -135,6 +135,7 @@
     "thebetweenlands.MixinItemNet",
     "thebetweenlands.MixinItemRegistry",
     "thebetweenlands.MixinItemRingOfDisperion",
+    "thebetweenlands.MixinLocationSludgeWormDungeon",
     "thebetweenlands.MixinRecipeRegistry",
     "thebetweenlands.MixinSludgeWormMazeBlockHelper",
     "thebetweenlands.MixinTeleporterBetweenlands",

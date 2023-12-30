@@ -1,7 +1,6 @@
 package com.seriouscreeper.bladditions.mixins.modsupport.sanity;
 
-import com.codetaylor.mc.pyrotech.modules.tech.basic.block.BlockCampfire;
-import gigaherz.eyes.entity.EntityEyes;
+import com.seriouscreeper.bladditions.config.ConfigBLAdditions;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.state.IBlockState;
@@ -16,11 +15,10 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import thaumcraft.common.blocks.world.ore.BlockCrystal;
 import thebetweenlands.common.block.misc.BlockOctine;
-import thebetweenlands.common.block.misc.BlockSulfurTorch;
-import thebetweenlands.common.block.plant.BlockBulbCappedMushroom;
 import thebetweenlands.common.block.terrain.BlockLifeCrystalStalactite;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -58,7 +56,9 @@ public class MixinLightSeekerConsequence {
                     IBlockState state = w.getBlockState(pos);
                     Block block = state.getBlock();
                     if (w.getTileEntity(pos) == null && !(block instanceof BlockLiquid) && (double)state.getLightValue(w, pos) > 0.2D) {
-                        if(block instanceof BlockCrystal || block instanceof BlockOctine || block instanceof BlockLifeCrystalStalactite) {
+                        List<String> blackList = Arrays.asList(ConfigBLAdditions.configSanity.sanity_lightseeker_blacklist);
+
+                        if(blackList.contains(block.getRegistryName().toString())) {
                             continue;
                         }
 

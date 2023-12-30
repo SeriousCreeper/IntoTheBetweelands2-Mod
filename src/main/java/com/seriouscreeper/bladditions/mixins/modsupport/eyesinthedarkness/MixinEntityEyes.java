@@ -6,13 +6,14 @@ import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
+import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.api.environment.IEnvironmentEvent;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 
 import java.util.List;
 
 @Mixin(value = EntityEyes.class, remap = false)
-public class MixinEntityEyes extends EntityMob {
+public class MixinEntityEyes extends EntityMob implements IEntityBL {
     public MixinEntityEyes(World worldIn) {
         super(worldIn);
     }

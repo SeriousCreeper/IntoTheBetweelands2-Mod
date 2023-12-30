@@ -29,24 +29,26 @@ public class MixinEyesConsequences {
     public void run(EntityPlayerMP player, SanityCapability.SanityLevel level) {
         BlockPos pos = this.findBestSpot(player);
         if (pos != null) {
-            SanityCapability cap = player.getCapability(SanityCapability.INSTANCE, null);
+            if(player.getRNG().nextInt(10) == 0) {
+                SanityCapability cap = player.getCapability(SanityCapability.INSTANCE, null);
 
-            if(cap != null && cap.getSanityExact() < 0) {
-                float chance = cap.getSanityExact() / -200F;
+                if (cap != null && cap.getSanityExact() < 0) {
+                    float chance = cap.getSanityExact() / -200F;
 
-                if(player.getRNG().nextFloat() < chance) {
-                    AxisAlignedBB aabb = (new AxisAlignedBB(player.getPosition())).grow(into_the_betweenlands_mod$radius);
+                    if (player.getRNG().nextFloat() < chance) {
+                        AxisAlignedBB aabb = (new AxisAlignedBB(player.getPosition())).grow(into_the_betweenlands_mod$radius);
 
-                    List<EntityEyes> otherEyes = player.getServerWorld().getEntitiesWithinAABB(EntityEyes.class, aabb, (a) -> a.getDistanceSq((double)((float)player.getPosition().getX() + 0.5F), (double)((float)player.getPosition().getY() + 0.5F), (double)((float)player.getPosition().getZ() + 0.5F)) <= (double)((float) into_the_betweenlands_mod$radius * (float) into_the_betweenlands_mod$radius));
+                        List<EntityEyes> otherEyes = player.getServerWorld().getEntitiesWithinAABB(EntityEyes.class, aabb, (a) -> a.getDistanceSq((double) ((float) player.getPosition().getX() + 0.5F), (double) ((float) player.getPosition().getY() + 0.5F), (double) ((float) player.getPosition().getZ() + 0.5F)) <= (double) ((float) into_the_betweenlands_mod$radius * (float) into_the_betweenlands_mod$radius));
 
-                    if(otherEyes.size() >= ConfigData.MaximumPackSize) {
+                        if (otherEyes.size() >= ConfigData.MaximumPackSize) {
+                            return;
+                        }
+
+                        EntityEyes eyes = new EntityEyes(player.world);
+                        eyes.setPosition(pos.getX() + .5, pos.getY() + .5, pos.getZ() + .5);
+                        player.world.spawnEntity(eyes);
                         return;
                     }
-
-                    EntityEyes eyes = new EntityEyes(player.world);
-                    eyes.setPosition(pos.getX() + .5, pos.getY() + .5, pos.getZ() + .5);
-                    player.world.spawnEntity(eyes);
-                    return;
                 }
             }
 

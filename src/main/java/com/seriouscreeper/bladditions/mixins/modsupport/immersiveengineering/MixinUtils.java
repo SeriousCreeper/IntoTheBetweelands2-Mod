@@ -16,14 +16,5 @@ import teamroots.embers.RegistryManager;
 public class MixinUtils {
     @Inject(method = "isBlockAt", at = @At("HEAD"), cancellable = true)
     private static void injectIsBlockAt(World world, BlockPos pos, Block b, int meta, CallbackInfoReturnable<Boolean> cir) {
-        IBlockState blockState = world.getBlockState(pos);
-
-        if(b == IEContent.blockMetalDevice0) {
-            System.out.println("is pump");
-
-            cir.setReturnValue(blockState.getBlock() == RegistryManager.mechanical_pump);
-        }
-
-        System.out.println(b);
     }
 }

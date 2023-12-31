@@ -1476,8 +1476,14 @@ public class BLAdditionsEventHandler {
         if(!hasGogglesOfRevealing) {
             boolean isFirst = false;
 
-            for (final Iterator<String> iterator = event.getCurrentTip().iterator(); iterator.hasNext(); ) {
+            for (final Iterator<String> iterator = event.getCurrentTip().iterator(); iterator.hasNext();) {
                 final String line = iterator.next();
+
+                if(line.contains("Integrity") ||
+                   line.contains("Hammer Power")
+                ) {
+                    continue;
+                }
 
                 if(!isFirst) {
                     isFirst = true;

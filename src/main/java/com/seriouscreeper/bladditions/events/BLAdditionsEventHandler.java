@@ -1173,7 +1173,7 @@ public class BLAdditionsEventHandler {
             // When facing up in the rain, player slowly recovers thirst.
             final double angle = player.getLookVec().y;
 
-            if (angle >= 0.8) {
+            if (angle >= 0.8 && world.canSeeSky(player.getPosition())) {
                 IThirstCapability capability = SDCapabilities.getThirstData(player);
                 BetweenlandsWorldStorage storage = BetweenlandsWorldStorage.forWorld(world);
 

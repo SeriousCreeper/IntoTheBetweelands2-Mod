@@ -55,6 +55,7 @@
     "quark.MixinEntityLeashKnot",
     "reccomplex.MixinTransformerNatural",
     "redstonepaste.MixinBlockRedstonePaste",
+    "roots.EventManager",
     "roots.MixinBlockCloudBerryCrop",
     "roots.MixinBlockCropBase",
     "roots.MixinBlockDewgoniaCrop",

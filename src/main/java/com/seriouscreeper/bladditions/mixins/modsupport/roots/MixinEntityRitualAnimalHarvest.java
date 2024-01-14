@@ -55,6 +55,7 @@ public class MixinEntityRitualAnimalHarvest extends EntityRitualBase {
                 EntityAnadia anadia = new EntityAnadia(world);
                 anadia.setLocationAndAngles((double)pos.getX() + 0.5, (double)pos.getY(), (double)pos.getZ() + 0.5, rand.nextFloat() * 360.0F, 0.0F);
                 world.spawnEntity(anadia);
+                anadia.onInitialSpawn(world.getDifficultyForLocation(pos), null);
             }
 
             PacketHandler.sendToAllTracking(new MessageRampantLifeInfusionFX((double)pos.getX(), (double)(pos.getY() + 1), (double)pos.getZ()), this);

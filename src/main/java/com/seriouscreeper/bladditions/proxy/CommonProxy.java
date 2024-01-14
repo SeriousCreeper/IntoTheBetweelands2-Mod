@@ -1,5 +1,6 @@
 package com.seriouscreeper.bladditions.proxy;
 
+import blusunrize.immersiveengineering.api.tool.ExternalHeaterHandler;
 import com.aranaira.arcanearchives.data.ClientNetwork;
 import com.aranaira.arcanearchives.data.DataHelper;
 import com.aranaira.arcanearchives.data.HiveSaveData;
@@ -15,6 +16,7 @@ import com.rcx.mystgears.item.ItemGear;
 import com.seriouscreeper.bladditions.BLAdditions;
 import com.seriouscreeper.bladditions.Reference;
 import com.seriouscreeper.bladditions.blocks.*;
+import com.seriouscreeper.bladditions.compat.ie.ExternalHeaterClasses;
 import com.seriouscreeper.bladditions.config.ConfigBLAdditions;
 import com.seriouscreeper.bladditions.crafting.PatchedRecipeMagicDust;
 import com.seriouscreeper.bladditions.entities.GreeblingMerchantEntity;
@@ -144,6 +146,9 @@ import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.tile.TileEntityAbstractBLFurnace;
+import thebetweenlands.common.tile.TileEntityBLDualFurnace;
+import thebetweenlands.common.tile.TileEntityBLFurnace;
 import thebetweenlands.common.world.storage.location.LocationStorage;
 import thecodex6824.thaumicaugmentation.api.TAItems;
 import thecodex6824.thaumicaugmentation.api.ThaumicAugmentationAPI;
@@ -355,6 +360,8 @@ public class CommonProxy {
         GameRegistry.registerWorldGenerator(new BLBeeHiveWorldGen(), 0);
 
         ConsequenceManager.CONSEQUENCES.add(new ConsequenceSounds());
+
+        ExternalHeaterHandler.registerHeatableAdapter(TileEntityAbstractBLFurnace.class, new ExternalHeaterClasses.HeaterBLFurnace());
 
         /*
         BoreOutput tcCrystalOutput = new BoreOutput(Sets.newHashSet(20), Sets.newHashSet(new ResourceLocation("thebetweenlands", "sludge_plains"), new ResourceLocation("thebetweenlands", "sludge_plains_clearing")), Lists.newArrayList(

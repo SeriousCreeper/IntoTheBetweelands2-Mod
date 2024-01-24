@@ -18,7 +18,7 @@ import thebetweenlands.common.registries.CapabilityRegistry;
 
 import java.util.Arrays;
 
-@Mixin(value = thebetweenlands.common.handler.PuppetHandler.class)
+@Mixin(value = thebetweenlands.common.handler.PuppetHandler.class, remap = false)
 public class PuppetHandler {
     @Inject(method = "onPlayerUpdate", at = @At("HEAD"), cancellable = true)
     private static void onPlayerUpdate(TickEvent.PlayerTickEvent event, CallbackInfo ci) {

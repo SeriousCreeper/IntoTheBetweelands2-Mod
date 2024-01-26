@@ -22,10 +22,14 @@ import com.seriouscreeper.bladditions.config.ConfigBLAdditions;
 import com.seriouscreeper.bladditions.interfaces.ISanityExtraInfo;
 import com.seriouscreeper.bladditions.potion.PotionThaumcraftResearch;
 import com.seriouscreeper.bladditions.proxy.CommonProxy;
+import epicsquid.roots.block.groves.BlockGroveStone;
 import epicsquid.roots.init.ModItems;
+import epicsquid.roots.init.ModSounds;
+import epicsquid.roots.item.wildwood.ItemWildwoodArmor;
 import hunternif.mc.atlas.api.AtlasAPI;
 import mcp.mobius.waila.api.event.WailaRenderEvent;
 import mcp.mobius.waila.api.event.WailaTooltipEvent;
+import net.darkhax.gamestages.GameStageHelper;
 import net.darkhax.gamestages.event.GameStageEvent;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCrops;
@@ -62,6 +66,7 @@ import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.entity.item.ItemExpireEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.PotionEvent;
 import net.minecraftforge.event.entity.player.BonemealEvent;
@@ -87,6 +92,7 @@ import thaumcraft.api.capabilities.IPlayerWarp;
 import thaumcraft.api.capabilities.ThaumcraftCapabilities;
 import thaumcraft.api.casters.FocusEffect;
 import thaumcraft.api.casters.FocusPackage;
+import thaumcraft.api.items.IWarpingGear;
 import thaumcraft.api.items.ItemsTC;
 import thaumcraft.api.research.ResearchCategories;
 import thaumcraft.common.blocks.world.ore.BlockCrystal;
@@ -108,6 +114,7 @@ import thebetweenlands.common.block.misc.BlockSulfurTorchExtinguished;
 import thebetweenlands.common.block.structure.BlockFenceBetweenlands;
 import thebetweenlands.common.block.structure.BlockSimulacrum;
 import thebetweenlands.common.block.structure.BlockWaystone;
+import thebetweenlands.common.entity.EntityBLLightningBolt;
 import thebetweenlands.common.entity.mobs.EntityAnadia;
 import thebetweenlands.common.entity.mobs.EntityGreebling;
 import thebetweenlands.common.entity.projectiles.EntityBetweenstonePebble;
@@ -122,6 +129,7 @@ import thebetweenlands.common.tile.TileEntityDugSoil;
 import thebetweenlands.common.tile.TileEntityRepeller;
 import thebetweenlands.common.tile.TileEntitySimulacrum;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.registries.SoundRegistry;
 import thecodex6824.thaumicaugmentation.common.item.ItemTieredCasterGauntlet;
 import vazkii.quark.decoration.entity.EntityLeashKnot2TheKnotting;
 import vazkii.quark.decoration.feature.IronLadders;
@@ -135,6 +143,97 @@ import java.util.*;
 
 @Mod.EventBusSubscriber
 public class BLAdditionsEventHandler {
+    @SubscribeEvent
+    public void unlockBloodMagicCheck(LivingDeathEvent event) {
+        Entity entity = event.getEntity();
+        World world = event.getEntity().getEntityWorld();
+        Entity murderer = event.getSource().getTrueSource();
+
+        // check if player killed greebling
+        if(!(murderer instanceof EntityPlayer) || !(entity instanceof EntityGreebling) || GameStageHelper.hasStage((EntityPlayer) murderer, "bloodmagic")) {
+            return;
+        }
+
+        // check if is insane
+        SanityCapability cap = murderer.getCapability(SanityCapability.INSTANCE, (EnumFacing)null);
+
+        if(cap == null || cap.getSanity() != SanityCapability.SanityLevel.INSANE) {
+            return;
+        }
+
+        // check if wearing void armor
+        Iterable<ItemStack> equipment = murderer.getArmorInventoryList();
+        boolean hasWarping = false;
+
+        for(ItemStack armor : equipment) {
+            if(armor.getItem() instanceof IWarpingGear) {
+                hasWarping = true;
+                break;
+            }
+        }
+
+        if(!hasWarping) {
+            return;
+        }
+
+        GameStageHelper.addStage((EntityPlayer)murderer, "bloodmagic");
+
+        world.playSound(null, murderer.getPosition().getX(), murderer.getPosition().getY(), murderer.getPosition().getZ(), SoundRegistry.STALKER_SCREAM, SoundCategory.HOSTILE, 2.0F, 0.1F);
+    }
+
+
+    @SubscribeEvent
+    public void unlockBotaniaCheck(TickEvent.PlayerTickEvent event) {
+        if(event.phase == TickEvent.Phase.START || event.player.ticksExisted % 20 != 0 || GameStageHelper.hasStage(event.player, "botania")) {
+            return;
+        }
+
+        EntityPlayer player = event.player;
+
+        // check if is happy
+        SanityCapability cap = player.getCapability(SanityCapability.INSTANCE, (EnumFacing)null);
+
+        if(cap == null || cap.getSanity() != SanityCapability.SanityLevel.VERY_HEALTHY) {
+            return;
+        }
+
+        // check for armor
+        Iterable<ItemStack> equipment = player.getArmorInventoryList();
+        int armorCount = 0;
+
+        for(ItemStack armor : equipment) {
+            if(armor.getItem() instanceof ItemWildwoodArmor) {
+                armorCount++;
+            }
+        }
+
+        if(armorCount < 4) {
+            return;
+        }
+
+        // check blocks around player
+        int blockSearchRadius = 5;
+
+        for(int y = -1; y <= 1; ++y) {
+            for(int x = -blockSearchRadius; x <= blockSearchRadius; ++x) {
+                for(int z = -blockSearchRadius; z <= blockSearchRadius; ++z) {
+                    IBlockState state = player.world.getBlockState(player.getPosition().add(x, y, z));
+                    Block block = state.getBlock();
+
+                    if(!(block instanceof BlockGroveStone) || !state.getValue(BlockGroveStone.VALID)) {
+                        continue;
+                    }
+
+                    // we have an active grovestone, unlock botania
+                    GameStageHelper.addStage(player, "botania");
+
+                    player.world.spawnEntity(new EntityBLLightningBolt(player.world, player.posX, player.posY, player.posZ, 0, false, false));
+                }
+            }
+        }
+    }
+
+
     @SubscribeEvent
     public void onPlayerRespawnBegin(net.minecraftforge.event.entity.player.PlayerEvent.Clone e) {
         if (e.isWasDeath() && !e.getEntityPlayer().world.isRemote) {

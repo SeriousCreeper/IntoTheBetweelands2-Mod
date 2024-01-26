@@ -9,6 +9,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TextComponentString;
@@ -51,7 +52,7 @@ public class MixinEntityLurker extends EntityCreature {
 
         if (!getEntityWorld().isRemote && !stack.isEmpty() && stack.getItem() == ItemRegistry.BL_BUCKET) {
             if(!getCanMilk()) {
-                player.sendStatusMessage(new TextComponentString("Can't milk lurker for another " + Math.round(getMilkCooldown() - getEntityWorld().getTotalWorldTime() / 20f) + " seconds"), true);
+                player.sendStatusMessage(new TextComponentString("Can't milk lurker for another " + Math.round((getMilkCooldown() - getEntityWorld().getTotalWorldTime()) / 20f) + " seconds"), true);
                 return false;
             }
 
@@ -84,5 +85,21 @@ public class MixinEntityLurker extends EntityCreature {
         }
 
         return super.processInteract(player, hand);
+    }
+
+
+    @Override
+    public void readFromNBT(NBTTagCompound compound) {
+        if(compound.hasKey("milk_cooldown")) {
+            setMilkCooldown(compound.getLong("milk_cooldown"));
+        }
+        super.readFromNBT(compound);
+    }
+
+    @Override
+    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+        compound.setLong("milk_cooldown", getMilkCooldown());
+
+        return super.writeToNBT(compound);
     }
 }

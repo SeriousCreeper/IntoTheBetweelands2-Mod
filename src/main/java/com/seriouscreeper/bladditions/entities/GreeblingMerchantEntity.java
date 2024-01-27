@@ -55,6 +55,7 @@ public class GreeblingMerchantEntity extends EntityCreature implements IEntityBL
     private EntityAILookIdle lookIdle;
     private NonNullList<ItemStack> loot = NonNullList.create();
     private int shutUpFFSTime;
+    private boolean readData = false;
     public int rowTicks;
     public float rowSpeed = 0.5F;
 
@@ -122,7 +123,7 @@ public class GreeblingMerchantEntity extends EntityCreature implements IEntityBL
             }
 
             // check time of day?
-            if((int)(this.world.getWorldTime() / 24000) != LastDaySinceChange()) {
+            if(readData && (int)(this.world.getWorldTime() / 24000) != LastDaySinceChange()) {
                 int currentType = GetMerchantType();
                 MerchantType type;
 
@@ -179,16 +180,19 @@ public class GreeblingMerchantEntity extends EntityCreature implements IEntityBL
     }
 
 
+    @Override
     public void writeEntityToNBT(NBTTagCompound nbt) {
         super.writeEntityToNBT(nbt);
         nbt.setInteger("_merch", (Integer)this.dataManager.get(TYPE));
         nbt.setInteger("last_shop_change", this.dataManager.get(LAST_SHOP_CHANGE));
     }
 
+    @Override
     public void readEntityFromNBT(NBTTagCompound nbt) {
         super.readEntityFromNBT(nbt);
         this.dataManager.set(TYPE, nbt.getInteger("_merch"));
         this.dataManager.set(LAST_SHOP_CHANGE, nbt.getInteger("last_shop_change"));
+        readData = true;
     }
 
     protected float getSoundVolume() {

@@ -2,6 +2,7 @@ package com.seriouscreeper.bladditions.items;
 
 import com.blamejared.ctgui.reference.Reference;
 import com.seriouscreeper.bladditions.BLAdditions;
+import com.seriouscreeper.bladditions.compat.arcaneworld.TeleporterDungeonCustom;
 import com.seriouscreeper.bladditions.libs.AdminExecute;
 import com.seriouscreeper.bladditions.libs.CustomTeleporter;
 import net.minecraft.block.state.IBlockState;
@@ -22,6 +23,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.translation.I18n;
@@ -30,6 +32,10 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import party.lemons.arcaneworld.config.ArcaneWorldConfig;
+import party.lemons.arcaneworld.gen.dungeon.dimension.TeleporterDungeon;
+import party.lemons.arcaneworld.util.capabilities.IRitualCoordinate;
+import party.lemons.arcaneworld.util.capabilities.RitualCoordinateProvider;
 import thebetweenlands.client.handler.ItemTooltipHandler;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.config.BetweenlandsConfig;
@@ -41,6 +47,7 @@ import thebetweenlands.util.PlayerUtil;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 public class ItemCorruptedBoneWayfinder extends ItemBoneWayfinder {
@@ -78,6 +85,24 @@ public class ItemCorruptedBoneWayfinder extends ItemBoneWayfinder {
         return 20;
     }
 
+
+    public boolean isDungeon(ItemStack stack) {
+        if (stack.hasTagCompound() && stack.getTagCompound() != null && stack.getTagCompound().hasKey("dungeon_id")) {
+            return true;
+        }
+
+        return false;
+    }
+
+
+    public String getDungeonId(ItemStack stack) {
+        if (stack.hasTagCompound() && stack.getTagCompound() != null && stack.getTagCompound().hasKey("dungeon_id")) {
+            return stack.getTagCompound().getString("dungeon_id");
+        }
+
+        return "";
+    }
+
     public BlockPos getTeleportPos(ItemStack stack) {
         int x = 0, y = 0, z = 0;
 
@@ -113,42 +138,27 @@ public class ItemCorruptedBoneWayfinder extends ItemBoneWayfinder {
 
             this.playThunderSounds(worldIn, entity.posX, entity.posY, entity.posZ);
 
-            MinecraftServer server = worldIn.getMinecraftServer();
-            ICommandSender sender = new AdminExecute((EntityPlayer)entity, entity.getPosition());
+            if(isDungeon(stack)) {
+                WorldServer ws = (WorldServer)worldIn;
+                TeleporterDungeon teleporter = new TeleporterDungeonCustom(ws, getDungeonId(stack));
 
-            String command = "tpj " + getDimension(stack);
+                ((IRitualCoordinate)entity.getCapability(RitualCoordinateProvider.RITUAL_COORDINATE_CAPABILITY, (EnumFacing)null)).setPos(new BlockPos(entity.posX, entity.posY, entity.posZ));
+                ((IRitualCoordinate)entity.getCapability(RitualCoordinateProvider.RITUAL_COORDINATE_CAPABILITY, (EnumFacing)null)).setDim(entity.dimension);
+                entity.changeDimension(ArcaneWorldConfig.DUNGEONS.DIM_ID, teleporter);
+            } else {
+                MinecraftServer server = worldIn.getMinecraftServer();
+                ICommandSender sender = new AdminExecute((EntityPlayer) entity, entity.getPosition());
 
-            FunctionObject func = FunctionObject.create(server.getFunctionManager(), Arrays.asList(command));
+                String command = "tpj " + getDimension(stack);
 
-            server.getFunctionManager().execute(func, sender);
+                FunctionObject func = FunctionObject.create(server.getFunctionManager(), Arrays.asList(command));
+
+                server.getFunctionManager().execute(func, sender);
+            }
 
             this.playThunderSounds(worldIn, entity.posX, entity.posY, entity.posZ);
 
             stack.shrink(1);
-
-            /*
-
-            if (waystone != null) {
-                EntityPlayerMP playerMP = (EntityPlayerMP)entity;
-
-                if(entity.isRiding())
-                    entity.dismountRidingEntity();
-
-                System.out.println(getDimension(stack));
-
-                this.playThunderSounds(worldIn, entity.posX, entity.posY, entity.posZ);
-
-                WorldServer worldDst = playerMP.getServer().getWorld(getDimension(stack));
-                playerMP.getServer().getPlayerList().transferPlayerToDimension(playerMP, getDimension(stack), new CustomTeleporter(worldDst));
-                playerMP.setLocationAndAngles(waystone.getX(), waystone.getY(), waystone.getZ(), 0, 0);
-
-                this.playThunderSounds(worldIn, entity.posX, entity.posY, entity.posZ);
-
-                //entity.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 60, 1));
-                stack.shrink(1);
-            }
-
-             */
         }
 
         return stack;

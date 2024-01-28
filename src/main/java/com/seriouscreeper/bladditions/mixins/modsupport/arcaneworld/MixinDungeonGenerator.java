@@ -57,10 +57,8 @@ public class MixinDungeonGenerator {
             ResourceLocation layout;
             if (x == 0 && y == 0) {
                 layout = new ResourceLocation("bladditions", "dungeon/start/open_start_1");
-            } else if (x == this.width - 1 && y == this.height - 1) {
-                layout = new ResourceLocation("arcaneworld", "dungeon/portals/open_end_1");
             } else {
-                layout = this.getRoomLayout(direction);
+                return true;
             }
 
             Template template = this.world.getSaveHandler().getStructureTemplateManager().getTemplate(this.world.getMinecraftServer(), layout);

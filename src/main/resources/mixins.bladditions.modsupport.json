@@ -12,7 +12,6 @@
     "MixinFoodBase",
     "MixinMystgears",
     "MixinPizzaOven",
-    "arcaneworld.MixinDungeonGenerator",
     "basketcase.MixinBlockTileEntryBasket",
     "charsetimmersion.MixinCharsetImmersion",
     "corpse.MixinEntityCorpse",

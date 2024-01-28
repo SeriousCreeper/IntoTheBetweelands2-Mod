@@ -83,6 +83,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.tiffit.sanity.Sanity;
 import net.tiffit.sanity.SanityCapability;
 import net.tiffit.sanity.SanityModifier;
+import party.lemons.arcaneworld.gen.dungeon.dimension.DungeonDimension;
 import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.ThaumcraftApiHelper;
 import thaumcraft.api.aura.AuraHelper;
@@ -371,6 +372,10 @@ public class BLAdditionsEventHandler {
     @SubscribeEvent
     public static void onBlockPlaced(BlockEvent.NeighborNotifyEvent event) {
         Block block = event.getState().getBlock();
+
+        if(event.getWorld().provider.getDimension() == DungeonDimension.TYPE.getId() || event.getWorld().provider.getDimension() == 0) {
+            return;
+        }
 
         if(block == BlockRegistry.SPREADING_SLUDGY_DIRT) {
             if(event.getWorld().rand.nextFloat() > 0.8) {

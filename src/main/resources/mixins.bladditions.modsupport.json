@@ -117,6 +117,7 @@
     "thaumcraft.entities.MixinEntityTaintSeed",
     "thaumcraft.entities.MixinEntityThaumcraftBoss",
     "thaumicjei.MixinThaumcraftJEIPlugin",
+    "thaumicperiphery.MixinItemPauldronRepulsion",
     "thebetweenlands.MixinBetweenlandsSpawnerLogic",
     "thebetweenlands.MixinBiomeDecoratorMarsh",
     "thebetweenlands.MixinBLFurnace",

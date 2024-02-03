@@ -16,6 +16,7 @@
     "botania.MixinBlockModMushroom",
     "botania.MixinItemFertilizer",
     "botania.MixinSubTileKekimurus",
+    "botania.MixinSubTileSpectrolus",
     "charsetimmersion.MixinCharsetImmersion",
     "corpse.MixinEntityCorpse",
     "embers.MixinAnvilBreakdownRecipe",

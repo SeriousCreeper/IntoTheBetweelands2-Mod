@@ -18,7 +18,7 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
-@Mixin(value = ItemFertilizer.class, remap = false)
+@Mixin(value = ItemFertilizer.class)
 public class MixinItemFertilizer {
     /**
      * @author

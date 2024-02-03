@@ -17,6 +17,7 @@
     "botania.MixinItemFertilizer",
     "botania.MixinSubTileGenerating",
     "botania.MixinSubTileKekimurus",
+    "botania.MixinSubTileNarslimmus",
     "botania.MixinSubTileSpectrolus",
     "charsetimmersion.MixinCharsetImmersion",
     "corpse.MixinEntityCorpse",

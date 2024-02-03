@@ -65,10 +65,7 @@ import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.entity.item.ItemExpireEvent;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.event.entity.living.LivingEvent;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import net.minecraftforge.event.entity.living.PotionEvent;
+import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.BonemealEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
@@ -76,6 +73,7 @@ import net.minecraftforge.fluids.*;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
@@ -118,6 +116,7 @@ import thebetweenlands.common.block.structure.BlockWaystone;
 import thebetweenlands.common.entity.EntityBLLightningBolt;
 import thebetweenlands.common.entity.mobs.EntityAnadia;
 import thebetweenlands.common.entity.mobs.EntityGreebling;
+import thebetweenlands.common.entity.mobs.EntitySludge;
 import thebetweenlands.common.entity.projectiles.EntityBetweenstonePebble;
 import thebetweenlands.common.entity.projectiles.EntityFishingSpear;
 import thebetweenlands.common.entity.projectiles.EntityPyradFlame;
@@ -144,6 +143,14 @@ import java.util.*;
 
 @Mod.EventBusSubscriber
 public class BLAdditionsEventHandler {
+    @SubscribeEvent
+    public void onSpawn(LivingSpawnEvent.CheckSpawn event) {
+        if (event.getEntityLiving() instanceof EntitySludge && event.getResult() != Event.Result.DENY) {
+            event.getEntityLiving().getEntityData().setBoolean("Botania:WorldSpawned", true);
+        }
+    }
+
+
     @SubscribeEvent
     public void unlockBloodMagicCheck(LivingDeathEvent event) {
         Entity entity = event.getEntity();

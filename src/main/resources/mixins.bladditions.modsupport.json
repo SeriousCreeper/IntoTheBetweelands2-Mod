@@ -19,6 +19,7 @@
     "botania.MixinSubTileKekimurus",
     "botania.MixinSubTileNarslimmus",
     "botania.MixinSubTileSpectrolus",
+    "botania.functional_flora.MixinSubTileJadedAmaranthus",
     "charsetimmersion.MixinCharsetImmersion",
     "corpse.MixinEntityCorpse",
     "embers.MixinAnvilBreakdownRecipe",

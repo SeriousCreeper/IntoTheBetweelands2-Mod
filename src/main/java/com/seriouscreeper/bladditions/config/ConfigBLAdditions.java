@@ -61,6 +61,7 @@ public class ConfigBLAdditions {
         public int MothHouseProductionSpeed = 500;
         public String RedstoneOreBlock = "minecraft:redstone_ore";
         public boolean DebugRecruitmentNames = false;
+        public int CrimsonCultSpawnRate = 250;
         public String[] RecruitmentBlacklist = new String[] {
                 "thaumcraft.common.entities.monster.cult.EntityCultistKnight",
                 "thaumcraft.common.entities.monster.cult.EntityCultistPortalLesser",

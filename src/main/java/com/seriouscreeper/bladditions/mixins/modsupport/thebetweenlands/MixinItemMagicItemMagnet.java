@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import thebetweenlands.common.item.misc.ItemMagicItemMagnet;
 import vazkii.botania.common.block.subtile.functional.SubTileSolegnolia;
 
-@Mixin(value = ItemMagicItemMagnet.class)
+@Mixin(value = ItemMagicItemMagnet.class, remap = false)
 public class MixinItemMagicItemMagnet {
     @Inject(method = "onEquipmentTick", at = @At("HEAD"), cancellable = true)
     private void injectOnEquipmentTick(ItemStack stack, Entity entity, IInventory inventory, CallbackInfo ci) {

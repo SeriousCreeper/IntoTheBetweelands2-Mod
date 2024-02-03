@@ -32,6 +32,7 @@
     "embers.MixinAnvilBreakdownRecipe",
     "embers.MixinAnvilRepairRecipe",
     "embers.MixinBlockSteamEngine",
+    "embers.MixinItemNonbelieverAmulet",
     "embers.MixinMysticalMechanicsIntegration",
     "embers.MixinResearchShowItem",
     "embers.MixinTileEntityBoilerBottom",

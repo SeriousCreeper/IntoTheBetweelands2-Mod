@@ -134,7 +134,7 @@ task sourcesJar(type: Jar, dependsOn: classes) {
     from sourceSets.main.allSource
 }
 
-//sourceSets { main { output.resourcesDir = output.classesDir } }
+sourceSets { main { output.resourcesDir = output.classesDir } }
 
 
 artifacts {

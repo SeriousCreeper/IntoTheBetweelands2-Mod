@@ -24,13 +24,13 @@ public class MixinSanityCapability implements ISanityExtraInfo {
         if(sanity > 0 && !into_the_betweenlands_mod$canIncrease) {
             ci.cancel();
         } else if(sanity < 0 && !into_the_betweenlands_mod$canDecrease) {
-            ci.cancel();;
+            ci.cancel();
         }
     }
 
     @Override
     public boolean getCanIncrease() {
-        return into_the_betweenlands_mod$canIncrease;
+        return true;
     }
 
     @Override

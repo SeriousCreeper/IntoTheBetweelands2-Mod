@@ -142,6 +142,7 @@
     "thebetweenlands.MixinEntityWight",
     "thebetweenlands.MixinFoodSicknessHandler",
     "thebetweenlands.MixinItemBarkAmulet",
+    "thebetweenlands.MixinItemMagicItemMagnet",
     "thebetweenlands.MixinItemMobAnadia",
     "thebetweenlands.MixinItemMummyBait",
     "thebetweenlands.MixinItemNet",

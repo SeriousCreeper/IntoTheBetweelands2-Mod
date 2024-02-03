@@ -15,6 +15,7 @@
     "basketcase.MixinBlockTileEntryBasket",
     "botania.MixinBlockModMushroom",
     "botania.MixinItemFertilizer",
+    "botania.MixinSubTileGenerating",
     "botania.MixinSubTileKekimurus",
     "botania.MixinSubTileSpectrolus",
     "charsetimmersion.MixinCharsetImmersion",

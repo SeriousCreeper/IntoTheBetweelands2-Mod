@@ -9,6 +9,7 @@
     "MapColorAccessor",
     "MixinBlockPistonBase",
     "MixinBlockRedstoneWire",
+    "MixinItemFoodBase",
     "MixinLeashKnot",
     "MixinMapColors",
     "MixinPotionUtils",

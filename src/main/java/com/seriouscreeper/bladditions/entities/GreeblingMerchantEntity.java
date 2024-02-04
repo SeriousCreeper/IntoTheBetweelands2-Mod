@@ -210,6 +210,7 @@ public class GreeblingMerchantEntity extends EntityCreature implements IEntityBL
             DeliveryClient.sendStoreMessage(type.getName(), false);
         }
 
+        player.stopActiveHand();
         return true;
     }
 

@@ -1,10 +1,12 @@
 package com.seriouscreeper.bladditions.mixins.modsupport.sanity;
 
+import com.codetaylor.mc.pyrotech.modules.tech.basic.tile.TileCampfire;
 import com.seriouscreeper.bladditions.config.ConfigBLAdditions;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.tiffit.sanity.SanityCapability;
@@ -55,7 +57,8 @@ public class MixinLightSeekerConsequence {
                     BlockPos pos = (new BlockPos(x, y, z)).add(p.getPosition());
                     IBlockState state = w.getBlockState(pos);
                     Block block = state.getBlock();
-                    if (w.getTileEntity(pos) == null && !(block instanceof BlockLiquid) && (double)state.getLightValue(w, pos) > 0.2D) {
+                    TileEntity te = w.getTileEntity(pos);
+                    if ((te == null || te instanceof TileCampfire) && !(block instanceof BlockLiquid) && (double)state.getLightValue(w, pos) > 0.2D) {
                         List<String> blackList = Arrays.asList(ConfigBLAdditions.configSanity.sanity_lightseeker_blacklist);
 
                         if(blackList.contains(block.getRegistryName().toString())) {

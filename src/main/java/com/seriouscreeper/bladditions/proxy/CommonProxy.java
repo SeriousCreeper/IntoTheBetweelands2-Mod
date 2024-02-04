@@ -8,6 +8,7 @@ import com.aranaira.arcanearchives.recipe.IngredientStack;
 import com.aranaira.arcanearchives.recipe.gct.GCTRecipeList;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import com.joshiegemfinder.betweenlandsredstone.blocks.dispenser.BlockScabystDispenser;
 import com.mrbysco.anotherliquidmilkmod.init.MilkRegistry;
 import com.rcx.mystgears.MysticalGears;
 import com.rcx.mystgears.block.BlockTurret;
@@ -381,6 +382,9 @@ public class CommonProxy {
          */
 
         NetworkRegistry.INSTANCE.registerGuiHandler(BLAdditions.instance, new GUIProxy());
+
+
+        ScanningManager.addScannableThing(new ScanItem("f_DISPENSER", new ItemStack(com.joshiegemfinder.betweenlandsredstone.ModBlocks.SCABYST_DISPENSER)));
 
         ScanningManager.addScannableThing(new ScanOreDictionary("f_MATIRON", new String[]{"oreSyrmorite", "ingotSyrmorite", "blockSyrmorite", "plateSyrmorite"}));
         ScanningManager.addScannableThing(new ScanItem("f_MATCLAY", new ItemStack(BlockRegistry.MUD)));

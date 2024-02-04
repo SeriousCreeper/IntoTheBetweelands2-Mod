@@ -54,6 +54,7 @@
     "itemstages.MixinItemStages",
     "livingchest.MixinChesterEntity",
     "pizzacraft.MixinBlockPizza",
+    "pizzacraft.MixinBlockPizzaBoardBase",
     "pyrotech.MixinBlockKilnPit",
     "pyrotech.MixinItemAxe",
     "pyrotech.MixinTileKilnBase",

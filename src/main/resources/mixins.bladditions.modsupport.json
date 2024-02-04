@@ -8,10 +8,9 @@
   "mixins": [
     "MixinBLFluidRegistry",
     "MixinBlockChoppingBoard",
-    "MixinBlockPizza",
-    "MixinFoodBase",
+    "pizzacraft.MixinFoodBase",
     "MixinMystgears",
-    "MixinPizzaOven",
+    "pizzacraft.MixinPizzaOven",
     "basketcase.MixinBlockTileEntryBasket",
     "botania.MixinBlockModMushroom",
     "botania.MixinItemFertilizer",

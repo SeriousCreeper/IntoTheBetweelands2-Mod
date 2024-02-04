@@ -1,4 +1,4 @@
-package com.seriouscreeper.bladditions.mixins.modsupport;
+package com.seriouscreeper.bladditions.mixins.modsupport.pizzacraft;
 
 import com.tiviacz.pizzacraft.items.FoodBase;
 import net.minecraft.client.resources.I18n;

@@ -1,4 +1,4 @@
-package com.seriouscreeper.bladditions.mixins.modsupport;
+package com.seriouscreeper.bladditions.mixins.modsupport.pizzacraft;
 
 import com.tiviacz.pizzacraft.PizzaCraft;
 import com.tiviacz.pizzacraft.blocks.BlockPizzaOven;

@@ -4,6 +4,7 @@ import com.tiviacz.pizzacraft.blocks.BlockPizza;
 import com.tiviacz.pizzacraft.handlers.ConfigHandler;
 import com.tiviacz.pizzacraft.init.ModItems;
 import com.tiviacz.pizzacraft.items.BlockBase;
+import growthcraft.core.shared.item.ItemTest;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.IBlockState;
@@ -18,13 +19,25 @@ import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import thebetweenlands.api.capability.IDecayCapability;
+import thebetweenlands.api.item.IDecayFood;
+import thebetweenlands.api.item.IFoodSicknessItem;
+import thebetweenlands.common.registries.CapabilityRegistry;
+
+import java.util.Objects;
+
+import static com.tiviacz.pizzacraft.blocks.BlockPizza.BITES;
 
 @Mixin(value = BlockPizza.class, remap = false)
-public class MixinBlockPizza extends BlockBase {
+public class MixinBlockPizza extends BlockBase implements IDecayFood, IFoodSicknessItem {
     @Final
     @Shadow public static final PropertyInteger BITES = PropertyInteger.create("bites", 0, 5);
-    @Final
-    @Shadow private Item pizzaslice;
+    @Shadow
+    private int foodstats;
+    @Shadow
+    private float saturation;
+    @Shadow
+    private Item pizzaslice;
 
     public MixinBlockPizza(String name, Material material) {
         super(name, material);
@@ -48,7 +61,7 @@ public class MixinBlockPizza extends BlockBase {
             }
 
             if (ConfigHandler.isKnifeNeeded) {
-                if (epicsquid.roots.init.ModItems.knives.contains(helditem.getItem())) {
+                if (ItemTest.itemMatchesOre(helditem, "toolKnife")) {
                     spawnAsEntity(worldIn, pos, new ItemStack(this.pizzaslice));
                     playerIn.getHeldItem(hand).damageItem(1, playerIn);
                     if (i < 5) {
@@ -70,8 +83,48 @@ public class MixinBlockPizza extends BlockBase {
         }
     }
 
-    @Shadow
+
+    @Override
+    public int getDecayHealAmount(ItemStack itemStack) {
+        return 1;
+    }
+
+    /**
+     * @author SC
+     */
+    @Overwrite
     private boolean eatCake(World worldIn, BlockPos pos, IBlockState state, EntityPlayer player) {
-        return true;
+        ItemStack helditem = player.getHeldItem(player.getActiveHand());
+        int i = (Integer)state.getValue(BITES);
+        if (player.canEat(false) && helditem.getItem() != ModItems.PEEL && !ItemTest.itemMatchesOre(helditem, "toolKnife") && !player.isSneaking()) {
+            player.getFoodStats().addStats(this.foodstats, this.saturation);
+
+            IDecayCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
+            if(cap != null && cap.getDecayStats().getDecayLevel() > 0) {
+                int decayValue = 0;
+
+                switch(Objects.requireNonNull(worldIn.getBlockState(pos).getBlock().getRegistryName()).toString()) {
+                    case "pizzacraft:pizza_5":
+                        decayValue = 4;
+                        break;
+
+                    case "pizzacraft:pizza_9":
+                        decayValue = 10;
+                        break;
+                }
+
+                cap.getDecayStats().addStats(-decayValue, 0);
+            }
+
+            if (i < 5) {
+                worldIn.setBlockState(pos, state.withProperty(BITES, i + 1), 3);
+            } else {
+                worldIn.setBlockToAir(pos);
+            }
+
+            return true;
+        } else {
+            return false;
+        }
     }
 }

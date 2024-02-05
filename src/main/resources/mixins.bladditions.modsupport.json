@@ -42,6 +42,7 @@
     "fishundeadrising.MixinEntityFishTameable",
     "fishundeadrising.MixinEntityMimic",
     "fishundeadrising.MixinEntityParasite",
+    "fishundeadrising.MixinEntityRaven",
     "fishundeadrising.MixinModEventHandler",
     "ftbquests.MixinButtonOpenInGuide",
     "growthcraft.MixinCheese",

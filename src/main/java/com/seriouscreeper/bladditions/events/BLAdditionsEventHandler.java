@@ -303,7 +303,7 @@ public class BLAdditionsEventHandler {
         knowledge.addResearch("!gotdream");
         knowledge.sync((EntityPlayerMP)player);
         ItemStack book = ConfigItems.startBook.copy();
-        book.getTagCompound().setString("author", player.getName());
+        book.getTagCompound().setString("author", "You");
         if (!player.inventory.addItemStackToInventory(book)) {
             InventoryUtils.dropItemAtEntity(player.world, book, player);
         }
@@ -323,14 +323,9 @@ public class BLAdditionsEventHandler {
             knowledge.addResearch("!gotcrystals");
             knowledge.sync((EntityPlayerMP)event.getEntityPlayer());
 
-            if (ModConfig.CONFIG_MISC.noSleep && !knowledge.isResearchKnown("!gotdream")) {
-                giveDreamJournal(event.getEntityPlayer());
-            }
-        } else if(event.getStageName().equals("knowledge_of_technology")) {
-            IPlayerKnowledge knowledge = ThaumcraftCapabilities.getKnowledge(event.getEntityPlayer());
-
-            knowledge.addResearch("!unlockedta");
-            knowledge.sync((EntityPlayerMP)event.getEntityPlayer());
+            //if (ModConfig.CONFIG_MISC.noSleep && !knowledge.isResearchKnown("!gotdream")) {
+            //    giveDreamJournal(event.getEntityPlayer());
+            //}
         }
     }
 

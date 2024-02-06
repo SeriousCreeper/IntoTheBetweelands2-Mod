@@ -159,7 +159,7 @@ public class BLAdditionsEventHandler {
         Entity murderer = event.getSource().getTrueSource();
 
         // check if player killed greebling
-        if(!(murderer instanceof EntityPlayer) || !(entity instanceof EntityGreebling) || GameStageHelper.hasStage((EntityPlayer) murderer, "bloodmagic")) {
+        if(!(murderer instanceof EntityPlayer) || !(entity instanceof EntityGreebling) || GameStageHelper.hasStage((EntityPlayer) murderer, "bloodmagic") || !GameStageHelper.hasStage((EntityPlayer) murderer, "chosen_bloodmagic")) {
             return;
         }
 
@@ -170,6 +170,7 @@ public class BLAdditionsEventHandler {
             return;
         }
 
+        /*
         // check if wearing void armor
         Iterable<ItemStack> equipment = murderer.getArmorInventoryList();
         boolean hasWarping = false;
@@ -184,6 +185,7 @@ public class BLAdditionsEventHandler {
         if(!hasWarping) {
             return;
         }
+         */
 
         GameStageHelper.addStage((EntityPlayer)murderer, "bloodmagic");
 
@@ -193,7 +195,7 @@ public class BLAdditionsEventHandler {
 
     @SubscribeEvent
     public void unlockBotaniaCheck(TickEvent.PlayerTickEvent event) {
-        if(event.phase == TickEvent.Phase.START || event.player.ticksExisted % 20 != 0 || GameStageHelper.hasStage(event.player, "botania")) {
+        if(event.phase == TickEvent.Phase.START || event.player.ticksExisted % 20 != 0 || GameStageHelper.hasStage(event.player, "botania") || !GameStageHelper.hasStage(event.player, "chosen_botania")) {
             return;
         }
 

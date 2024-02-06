@@ -25,6 +25,7 @@ import com.seriouscreeper.bladditions.proxy.CommonProxy;
 import epicsquid.roots.block.groves.BlockGroveStone;
 import epicsquid.roots.init.ModItems;
 import epicsquid.roots.init.ModSounds;
+import epicsquid.roots.item.ItemSylvanArmor;
 import epicsquid.roots.item.wildwood.ItemWildwoodArmor;
 import hunternif.mc.atlas.api.AtlasAPI;
 import mcp.mobius.waila.api.event.WailaRenderEvent;
@@ -206,11 +207,12 @@ public class BLAdditionsEventHandler {
         }
 
         // check for armor
+        /*
         Iterable<ItemStack> equipment = player.getArmorInventoryList();
         int armorCount = 0;
 
         for(ItemStack armor : equipment) {
-            if(armor.getItem() instanceof ItemWildwoodArmor) {
+            if(armor.getItem() instanceof ItemSylvanArmor) {
                 armorCount++;
             }
         }
@@ -218,6 +220,7 @@ public class BLAdditionsEventHandler {
         if(armorCount < 4) {
             return;
         }
+        */
 
         // check blocks around player
         int blockSearchRadius = 5;

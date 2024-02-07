@@ -4,6 +4,7 @@ import com.aranaira.arcanearchives.data.ClientNetwork;
 import com.aranaira.arcanearchives.data.DataHelper;
 import com.aranaira.arcanearchives.data.HiveSaveData;
 import com.aranaira.arcanearchives.init.RecipeLibrary;
+import com.aranaira.arcanearchives.items.ContainmentFieldItem;
 import com.aranaira.arcanearchives.recipe.IngredientStack;
 import com.aranaira.arcanearchives.recipe.gct.GCTRecipeList;
 import com.google.common.collect.Maps;
@@ -752,28 +753,91 @@ public class CommonProxy {
 
 
         // Enchanting recipes
-        InfusionEnchantmentRecipe IEBURROWING = new InfusionEnchantmentRecipe(EnumInfusionEnchantment.BURROWING, (new AspectList()).add(Aspect.SENSES, 80).add(Aspect.EARTH, 150), new Object[]{new IngredientNBTTC(new ItemStack(Items.ENCHANTED_BOOK)), new ItemStack(Items.RABBIT_FOOT)});
+        InfusionEnchantmentRecipe IEBURROWING = new InfusionEnchantmentRecipe(EnumInfusionEnchantment.BURROWING, (new AspectList()).add(Aspect.SENSES, 80).add(Aspect.EARTH, 150), new Object[]{
+                new ItemStack(com.aranaira.arcanearchives.init.ItemRegistry.COMPONENT_CONTAINMENTFIELD),
+                new ItemStack(ItemsTC.salisMundus),
+                new ItemStack(ItemRegistry.SILT_CRAB_CLAW),
+                new ItemStack(com.aranaira.arcanearchives.init.ItemRegistry.COMPONENT_CONTAINMENTFIELD),
+                new ItemStack(ItemsTC.salisMundus),
+                new ItemStack(ItemRegistry.SILT_CRAB_CLAW)
+        });
         ThaumcraftApi.addInfusionCraftingRecipe(new ResourceLocation("thaumcraft:IEBURROWING"), IEBURROWING);
         ThaumcraftApi.addFakeCraftingRecipe(new ResourceLocation("thaumcraft:IEBURROWINGFAKE"), new InfusionEnchantmentRecipe(IEBURROWING, new ItemStack(ItemRegistry.WEEDWOOD_PICKAXE)));
-        InfusionEnchantmentRecipe IECOLLECTOR = new InfusionEnchantmentRecipe(EnumInfusionEnchantment.COLLECTOR, (new AspectList()).add(Aspect.DESIRE, 80).add(Aspect.WATER, 100), new Object[]{new IngredientNBTTC(new ItemStack(Items.ENCHANTED_BOOK)), new ItemStack(Items.LEAD)});
+
+        InfusionEnchantmentRecipe IECOLLECTOR = new InfusionEnchantmentRecipe(EnumInfusionEnchantment.COLLECTOR, (new AspectList()).add(Aspect.DESIRE, 80).add(Aspect.WATER, 100), new Object[]{
+                new ItemStack(com.aranaira.arcanearchives.init.ItemRegistry.COMPONENT_CONTAINMENTFIELD),
+                new ItemStack(ItemsTC.salisMundus),
+                new ItemStack(RegistryManager.vacuum),
+                new ItemStack(com.aranaira.arcanearchives.init.ItemRegistry.COMPONENT_CONTAINMENTFIELD),
+                new ItemStack(ItemsTC.salisMundus),
+                new ItemStack(RegistryManager.vacuum)
+        });
         ThaumcraftApi.addInfusionCraftingRecipe(new ResourceLocation("thaumcraft:IECOLLECTOR"), IECOLLECTOR);
         ThaumcraftApi.addFakeCraftingRecipe(new ResourceLocation("thaumcraft:IECOLLECTORFAKE"), new InfusionEnchantmentRecipe(IECOLLECTOR, new ItemStack(ItemRegistry.BONE_AXE)));
-        InfusionEnchantmentRecipe IEDESTRUCTIVE = new InfusionEnchantmentRecipe(EnumInfusionEnchantment.DESTRUCTIVE, (new AspectList()).add(Aspect.AVERSION, 200).add(Aspect.ENTROPY, 250), new Object[]{new IngredientNBTTC(new ItemStack(Items.ENCHANTED_BOOK)), new ItemStack(Blocks.TNT)});
+
+        InfusionEnchantmentRecipe IEDESTRUCTIVE = new InfusionEnchantmentRecipe(EnumInfusionEnchantment.DESTRUCTIVE, (new AspectList()).add(Aspect.AVERSION, 200).add(Aspect.ENTROPY, 250), new Object[]{
+                new ItemStack(com.aranaira.arcanearchives.init.ItemRegistry.COMPONENT_CONTAINMENTFIELD),
+                new ItemStack(ItemsTC.salisMundus),
+                new ItemStack(ItemRegistry.ANGRY_PEBBLE),
+                new ItemStack(com.aranaira.arcanearchives.init.ItemRegistry.COMPONENT_CONTAINMENTFIELD),
+                new ItemStack(ItemsTC.salisMundus),
+                new ItemStack(ItemRegistry.ANGRY_PEBBLE)
+        });
         ThaumcraftApi.addInfusionCraftingRecipe(new ResourceLocation("thaumcraft:IEDESTRUCTIVE"), IEDESTRUCTIVE);
         ThaumcraftApi.addFakeCraftingRecipe(new ResourceLocation("thaumcraft:IEDESTRUCTIVEFAKE"), new InfusionEnchantmentRecipe(IEDESTRUCTIVE, new ItemStack(ItemRegistry.BONE_PICKAXE)));
-        InfusionEnchantmentRecipe IEREFINING = new InfusionEnchantmentRecipe(EnumInfusionEnchantment.REFINING, (new AspectList()).add(Aspect.ORDER, 80).add(Aspect.EXCHANGE, 60), new Object[]{new IngredientNBTTC(new ItemStack(Items.ENCHANTED_BOOK)), new ItemStack(ItemsTC.salisMundus)});
+
+        InfusionEnchantmentRecipe IEREFINING = new InfusionEnchantmentRecipe(EnumInfusionEnchantment.REFINING, (new AspectList()).add(Aspect.ORDER, 80).add(Aspect.EXCHANGE, 60), new Object[]{
+                new ItemStack(com.aranaira.arcanearchives.init.ItemRegistry.COMPONENT_CONTAINMENTFIELD),
+                new ItemStack(ItemsTC.salisMundus),
+                new ItemStack(ItemMisc.EnumItemMisc.LIMESTONE_FLUX.getItem()),
+                new ItemStack(com.aranaira.arcanearchives.init.ItemRegistry.COMPONENT_CONTAINMENTFIELD),
+                new ItemStack(ItemsTC.salisMundus),
+                new ItemStack(ItemMisc.EnumItemMisc.LIMESTONE_FLUX.getItem())
+        });
         ThaumcraftApi.addInfusionCraftingRecipe(new ResourceLocation("thaumcraft:IEREFINING"), IEREFINING);
         ThaumcraftApi.addFakeCraftingRecipe(new ResourceLocation("thaumcraft:IEREFININGFAKE"), new InfusionEnchantmentRecipe(IEREFINING, new ItemStack(ItemRegistry.OCTINE_PICKAXE)));
-        InfusionEnchantmentRecipe IESOUNDING = new InfusionEnchantmentRecipe(EnumInfusionEnchantment.SOUNDING, (new AspectList()).add(Aspect.SENSES, 40).add(Aspect.FIRE, 60), new Object[]{new IngredientNBTTC(new ItemStack(Items.ENCHANTED_BOOK)), new ItemStack(Items.MAP)});
+
+        InfusionEnchantmentRecipe IESOUNDING = new InfusionEnchantmentRecipe(EnumInfusionEnchantment.SOUNDING, (new AspectList()).add(Aspect.SENSES, 40).add(Aspect.FIRE, 60), new Object[]{
+                new ItemStack(com.aranaira.arcanearchives.init.ItemRegistry.COMPONENT_CONTAINMENTFIELD),
+                new ItemStack(ItemsTC.salisMundus),
+                new ItemStack(RegistryManager.resonating_bell),
+                new ItemStack(com.aranaira.arcanearchives.init.ItemRegistry.COMPONENT_CONTAINMENTFIELD),
+                new ItemStack(ItemsTC.salisMundus),
+                new ItemStack(RegistryManager.resonating_bell)
+        });
         ThaumcraftApi.addInfusionCraftingRecipe(new ResourceLocation("thaumcraft:IESOUNDING"), IESOUNDING);
         ThaumcraftApi.addFakeCraftingRecipe(new ResourceLocation("thaumcraft:IESOUNDINGFAKE"), new InfusionEnchantmentRecipe(IESOUNDING, new ItemStack(ItemRegistry.VALONITE_PICKAXE)));
-        InfusionEnchantmentRecipe IEARCING = new InfusionEnchantmentRecipe(EnumInfusionEnchantment.ARCING, (new AspectList()).add(Aspect.ENERGY, 40).add(Aspect.AIR, 60), new Object[]{new IngredientNBTTC(new ItemStack(Items.ENCHANTED_BOOK)), new ItemStack(Blocks.REDSTONE_BLOCK)});
+
+        InfusionEnchantmentRecipe IEARCING = new InfusionEnchantmentRecipe(EnumInfusionEnchantment.ARCING, (new AspectList()).add(Aspect.ENERGY, 40).add(Aspect.AIR, 60), new Object[]{
+                new ItemStack(com.aranaira.arcanearchives.init.ItemRegistry.COMPONENT_CONTAINMENTFIELD),
+                new ItemStack(ItemsTC.salisMundus),
+                new ItemStack(com.joshiegemfinder.betweenlandsredstone.ModBlocks.SCABYST_BLOCK),
+                new ItemStack(com.aranaira.arcanearchives.init.ItemRegistry.COMPONENT_CONTAINMENTFIELD),
+                new ItemStack(ItemsTC.salisMundus),
+                new ItemStack(com.joshiegemfinder.betweenlandsredstone.ModBlocks.SCABYST_BLOCK)
+        });
         ThaumcraftApi.addInfusionCraftingRecipe(new ResourceLocation("thaumcraft:IEARCING"), IEARCING);
         ThaumcraftApi.addFakeCraftingRecipe(new ResourceLocation("thaumcraft:IEARCINGFAKE"), new InfusionEnchantmentRecipe(IEARCING, new ItemStack(ItemRegistry.WEEDWOOD_SWORD)));
-        InfusionEnchantmentRecipe IEESSENCE = new InfusionEnchantmentRecipe(EnumInfusionEnchantment.ESSENCE, (new AspectList()).add(Aspect.BEAST, 40).add(Aspect.FLUX, 60), new Object[]{new IngredientNBTTC(new ItemStack(Items.ENCHANTED_BOOK)), new ItemStack(ItemsTC.crystalEssence)});
+
+        InfusionEnchantmentRecipe IEESSENCE = new InfusionEnchantmentRecipe(EnumInfusionEnchantment.ESSENCE, (new AspectList()).add(Aspect.BEAST, 40).add(Aspect.FLUX, 60), new Object[]{
+                new ItemStack(com.aranaira.arcanearchives.init.ItemRegistry.COMPONENT_CONTAINMENTFIELD),
+                new ItemStack(ItemsTC.salisMundus),
+                new ItemStack(ItemsTC.crystalEssence),
+                new ItemStack(com.aranaira.arcanearchives.init.ItemRegistry.COMPONENT_CONTAINMENTFIELD),
+                new ItemStack(ItemsTC.salisMundus),
+                new ItemStack(ItemsTC.crystalEssence)
+        });
         ThaumcraftApi.addInfusionCraftingRecipe(new ResourceLocation("thaumcraft:IEESSENCE"), IEESSENCE);
         ThaumcraftApi.addFakeCraftingRecipe(new ResourceLocation("thaumcraft:IEESSENCEFAKE"), new InfusionEnchantmentRecipe(IEESSENCE, new ItemStack(ItemRegistry.BONE_SWORD)));
-        InfusionEnchantmentRecipe IELAMPLIGHT = new InfusionEnchantmentRecipe(EnumInfusionEnchantment.LAMPLIGHT, (new AspectList()).add(Aspect.LIGHT, 80).add(Aspect.AIR, 20), new Object[]{new IngredientNBTTC(new ItemStack(Items.ENCHANTED_BOOK)), "nitor"});
+
+        InfusionEnchantmentRecipe IELAMPLIGHT = new InfusionEnchantmentRecipe(EnumInfusionEnchantment.LAMPLIGHT, (new AspectList()).add(Aspect.LIGHT, 80).add(Aspect.AIR, 20), new Object[]{
+                new ItemStack(com.aranaira.arcanearchives.init.ItemRegistry.COMPONENT_CONTAINMENTFIELD),
+                new ItemStack(ItemsTC.salisMundus),
+                "nitor",
+                new ItemStack(com.aranaira.arcanearchives.init.ItemRegistry.COMPONENT_CONTAINMENTFIELD),
+                new ItemStack(ItemsTC.salisMundus),
+                "nitor"
+        });
         ThaumcraftApi.addInfusionCraftingRecipe(new ResourceLocation("thaumcraft:IELAMPLIGHT"), IELAMPLIGHT);
         ThaumcraftApi.addFakeCraftingRecipe(new ResourceLocation("thaumcraft:IELAMPLIGHTFAKE"), new InfusionEnchantmentRecipe(IELAMPLIGHT, new ItemStack(ItemRegistry.OCTINE_PICKAXE)));
     }

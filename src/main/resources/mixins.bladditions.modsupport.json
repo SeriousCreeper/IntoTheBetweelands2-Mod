@@ -111,6 +111,7 @@
     "thaumcraft.MixinBlockGolemBuilder",
     "thaumcraft.MixinBlockResearchTable",
     "thaumcraft.MixinBlockStonePorous",
+    "thaumcraft.MixinBlockUtils",
     "thaumcraft.MixinConfigResearch",
     "thaumcraft.MixinFocusEffectBreak",
     "thaumcraft.MixinFocusEffectFire",

@@ -1,5 +1,6 @@
 package com.seriouscreeper.bladditions.mixins.modsupport.botania;
 
+import com.seriouscreeper.bladditions.config.ConfigBLAdditions;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
@@ -46,7 +47,7 @@ public class MixinSubTileSpectrolus extends SubTileGenerating {
                 if (!stack.isEmpty() && stack.getItem() == wool && !item.isDead && item.age >= slowdown) {
                     int meta = stack.getItemDamage();
                     if (meta == this.nextColor) {
-                        this.mana = Math.min(this.getMaxMana(), this.mana + 9600);
+                        this.mana = Math.min(this.getMaxMana(), this.mana + ConfigBLAdditions.configBotania.ManaSpectrolus);
                         this.nextColor = this.nextColor == 15 ? 0 : this.nextColor + 1;
                         this.sync();
                         ((WorldServer)this.supertile.getWorld()).spawnParticle(EnumParticleTypes.ITEM_CRACK, false, item.posX, item.posY, item.posZ, 20, 0.1, 0.1, 0.1, 0.05, new int[]{Item.getIdFromItem(stack.getItem()), stack.getItemDamage()});

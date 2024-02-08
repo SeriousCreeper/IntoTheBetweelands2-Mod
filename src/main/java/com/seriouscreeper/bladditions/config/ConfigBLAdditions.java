@@ -2,26 +2,15 @@ package com.seriouscreeper.bladditions.config;
 
 import com.seriouscreeper.bladditions.BLAdditions;
 import com.seriouscreeper.bladditions.proxy.CommonProxy;
-import epicsquid.mysticallib.util.ConfigUtil;
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.oredict.OreDictionary;
-import net.minecraftforge.registries.GameData;
-import scala.Int;
-import thebetweenlands.common.registries.ItemRegistry;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 @Mod.EventBusSubscriber(modid = BLAdditions.MODID)
@@ -30,11 +19,18 @@ public class ConfigBLAdditions {
     public static final ConfigGeneral configGeneral = new ConfigGeneral();
     public static final ConfigTea configTea = new ConfigTea();
     public static final ConfigAutoMapping configAutoMapping = new ConfigAutoMapping();
-
     public static final ConfigSanity configSanity = new ConfigSanity();
+    public static final ConfigBotania configBotania = new ConfigBotania();
 
     @Config.Ignore
     private static Map<String, Float> blEventBonuses = null;
+
+    public static class ConfigBotania {
+        public int ManaKekimurus = 15000;
+        public int ManaNarslimmus = 1200;
+        public int ManaSpectrolus = 4800;
+        public float DamageChakram = 6;
+    }
 
     public static class ConfigTea {
         @Config.Comment({"Chance that tea gives research point"})

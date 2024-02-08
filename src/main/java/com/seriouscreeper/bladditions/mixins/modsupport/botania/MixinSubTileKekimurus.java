@@ -1,5 +1,6 @@
 package com.seriouscreeper.bladditions.mixins.modsupport.botania;
 
+import com.seriouscreeper.bladditions.config.ConfigBLAdditions;
 import com.tiviacz.pizzacraft.blocks.BlockPizza;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -22,7 +23,7 @@ public class MixinSubTileKekimurus extends SubTileGenerating {
     public void onUpdate() {
         super.onUpdate();
         if (!this.supertile.getWorld().isRemote) {
-            int mana = 1800;
+            int mana = ConfigBLAdditions.configBotania.ManaKekimurus;
             if (this.getMaxMana() - this.mana >= mana && !this.supertile.getWorld().isRemote && this.ticksExisted % 80 == 0) {
                 for(int i = 0; i < 11; ++i) {
                     for(int j = 0; j < 11; ++j) {

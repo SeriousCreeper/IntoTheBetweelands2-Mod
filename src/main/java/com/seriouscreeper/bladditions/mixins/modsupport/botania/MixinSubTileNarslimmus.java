@@ -1,5 +1,6 @@
 package com.seriouscreeper.bladditions.mixins.modsupport.botania;
 
+import com.seriouscreeper.bladditions.config.ConfigBLAdditions;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -35,7 +36,7 @@ public class MixinSubTileNarslimmus extends SubTileGenerating {
                 if (slime.getEntityData().getBoolean("Botania:WorldSpawned") && !slime.isDead) {
                     int size = (int)Math.floor(slime.width * 2);
                     int mul = (int)Math.pow(2.0, (double)size);
-                    int mana = 1200 * mul;
+                    int mana = ConfigBLAdditions.configBotania.ManaNarslimmus * mul;
                     if (!slime.world.isRemote) {
                         slime.setDead();
                         slime.playSound(size > 1 ? SoundEvents.ENTITY_SLIME_SQUISH : SoundEvents.ENTITY_SMALL_SLIME_SQUISH, 1.0F, 0.02F);

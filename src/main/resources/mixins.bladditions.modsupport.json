@@ -156,6 +156,7 @@
     "thebetweenlands.MixinEntityGiantToad",
     "thebetweenlands.MixinEntityLurker",
     "thebetweenlands.MixinEntityRockSnot",
+    "thebetweenlands.MixinEntitySwarm",
     "thebetweenlands.MixinEntityWight",
     "thebetweenlands.MixinFoodSicknessHandler",
     "thebetweenlands.MixinItemBarkAmulet",

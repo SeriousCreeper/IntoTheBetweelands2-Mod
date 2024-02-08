@@ -17,6 +17,7 @@
     "botania.MixinEntityCorporeaSpark",
     "botania.MixinItemCobbleRod",
     "botania.MixinItemFertilizer",
+    "botania.MixinItemManaResource",
     "botania.MixinOrechidIgnemRecipeWrapper",
     "botania.MixinOrechidRecipeWrapper",
     "botania.MixinSubTileGenerating",

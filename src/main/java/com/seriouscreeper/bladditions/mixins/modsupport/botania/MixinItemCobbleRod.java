@@ -12,13 +12,18 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import thebetweenlands.common.registries.BlockRegistry;
 import vazkii.botania.api.mana.ManaItemHandler;
+import vazkii.botania.common.item.ItemMod;
 import vazkii.botania.common.item.rod.ItemCobbleRod;
 import vazkii.botania.common.item.rod.ItemDirtRod;
 
 import javax.annotation.Nonnull;
 
 @Mixin(value = ItemCobbleRod.class, remap = false)
-public class MixinItemCobbleRod {
+public class MixinItemCobbleRod extends ItemMod {
+    public MixinItemCobbleRod(String name) {
+        super(name);
+    }
+
     /**
      * @author
      * @reason

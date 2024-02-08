@@ -2,9 +2,12 @@ package com.seriouscreeper.bladditions.mixins.modsupport.botania;
 
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.world.World;
+import net.minecraftforge.registries.IForgeRegistryEntry;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
 import thebetweenlands.common.registries.ItemRegistry;
 import vazkii.botania.api.mana.ICompositableLens;
 import vazkii.botania.common.crafting.recipe.CompositeLensRecipe;
@@ -12,7 +15,7 @@ import vazkii.botania.common.crafting.recipe.CompositeLensRecipe;
 import javax.annotation.Nonnull;
 
 @Mixin(value = CompositeLensRecipe.class, remap = false)
-public class MixinCompositeLensRecipe {
+public class MixinCompositeLensRecipe extends IForgeRegistryEntry.Impl<IRecipe> implements IRecipe {
     /**
      * @author SC
      * @reason
@@ -43,5 +46,20 @@ public class MixinCompositeLensRecipe {
         }
 
         return foundSecondLens && foundSlimeball;
+    }
+
+    @Shadow
+    public ItemStack getCraftingResult(InventoryCrafting inventoryCrafting) {
+        return null;
+    }
+
+    @Shadow
+    public boolean canFit(int i, int i1) {
+        return false;
+    }
+
+    @Shadow
+    public ItemStack getRecipeOutput() {
+        return null;
     }
 }

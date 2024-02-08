@@ -70,6 +70,7 @@ import net.minecraft.client.multiplayer.ClientAdvancementManager;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -81,9 +82,8 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.*;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
@@ -106,6 +106,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.OreIngredient;
 import net.tiffit.sanity.consequences.ConsequenceManager;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import soot.Registry;
 import soot.recipe.ItemRenameStampingRecipe;
 import teamroots.embers.RegistryManager;
@@ -157,6 +158,7 @@ import thecodex6824.thaumicaugmentation.api.item.IMorphicItem;
 import thecodex6824.thaumicaugmentation.common.item.ItemThaumiumRobes;
 import thecodex6824.thaumicaugmentation.common.recipe.InfusionRecipeComplexResearch;
 import thecodex6824.thaumicaugmentation.common.util.MorphicArmorHelper;
+import vazkii.botania.api.mana.IManaPool;
 import vazkii.quark.base.module.Feature;
 import vazkii.quark.tweaks.base.BlockStack;
 
@@ -197,6 +199,22 @@ public class CommonProxy {
 
 
     public void registerAntiqueAtlasTextures() {
+    }
+
+
+    public static void DyeBotaniaManaPool(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ, CallbackInfoReturnable<EnumActionResult> cir) {
+        ItemStack stack = player.getHeldItem(hand);
+        EnumDyeColor color = EnumDyeColor.byMetadata(15 - stack.getItemDamage());
+        TileEntity tile = world.getTileEntity(pos);
+        if (tile instanceof IManaPool) {
+            IManaPool pool = (IManaPool)tile;
+
+            if (color != pool.getColor()) {
+                pool.setColor(color);
+                stack.shrink(1);
+                cir.setReturnValue(EnumActionResult.SUCCESS);
+            }
+        }
     }
 
 

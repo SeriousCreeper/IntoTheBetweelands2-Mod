@@ -15,6 +15,7 @@
     "botania.MixinCompositeLensRecipe",
     "botania.MixinCompositeLensRecipeWrapper",
     "botania.MixinEntityCorporeaSpark",
+    "botania.MixinEntityThornChakram",
     "botania.MixinItemCobbleRod",
     "botania.MixinItemFertilizer",
     "botania.MixinItemManaResource",

@@ -46,6 +46,7 @@ import net.minecraftforge.common.IShearable;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
+import thebetweenlands.common.entity.mobs.EntitySwarm;
 
 import java.util.Iterator;
 import java.util.List;
@@ -88,6 +89,11 @@ public class MixinRunicShears extends ItemShearsBase {
 
                                 cap.setCooldown(cooldown);
                                 EntityItem ent = entity.entityDropItem(recipe.getDrop(entity).copy(), 1.0F);
+
+                                if(entity instanceof EntitySwarm) {
+                                    entity.setHealth(entity.getHealth() - 5);
+                                }
+
                                 ent.motionY += (double)(rand.nextFloat() * 0.05F);
                                 ent.motionX += (double)((rand.nextFloat() - rand.nextFloat()) * 0.1F);
                                 ent.motionZ += (double)((rand.nextFloat() - rand.nextFloat()) * 0.1F);

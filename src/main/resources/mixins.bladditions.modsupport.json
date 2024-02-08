@@ -19,6 +19,8 @@
     "botania.MixinItemCobbleRod",
     "botania.MixinItemFertilizer",
     "botania.MixinItemManaResource",
+    "botania.MixinLensMine",
+    "botania.MixinLensPiston",
     "botania.MixinOrechidIgnemRecipeWrapper",
     "botania.MixinOrechidRecipeWrapper",
     "botania.MixinSubTileGenerating",

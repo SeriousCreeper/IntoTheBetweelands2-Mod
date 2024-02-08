@@ -143,6 +143,7 @@
     "thebetweenlands.MixinBLFurnace",
     "thebetweenlands.MixinBlockBarrel",
     "thebetweenlands.MixinBlockPlant",
+    "thebetweenlands.MixinBlockSaplingSpiritTree",
     "thebetweenlands.MixinDruidAltarRecipeMaker",
     "thebetweenlands.MixinEntityChiromawTame",
     "thebetweenlands.MixinEntityDarkDruid",

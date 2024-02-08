@@ -82,8 +82,8 @@ public class MixinRunicShears extends ItemShearsBase {
 
                                 boolean isPacifist = CommonProxy.IsPacifist((EntityPlayerMP) player);
 
-                                if(!isPacifist) {
-                                    cooldown *= 4;
+                                if(isPacifist) {
+                                    cooldown /= 4;
                                 }
 
                                 cap.setCooldown(cooldown);

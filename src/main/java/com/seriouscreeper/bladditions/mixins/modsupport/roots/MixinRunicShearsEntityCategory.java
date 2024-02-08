@@ -23,7 +23,7 @@ public class MixinRunicShearsEntityCategory {
         IGuiItemStackGroup group = recipeLayout.getItemStacks();
         group.addTooltipCallback((slotIndex, input, ingredient, tooltip) -> {
             tooltip.add("");
-            tooltip.add(I18n.format("jei.roots.runic_shears.cooldown", new Object[]{ recipeWrapper.getCooldown() * 4, recipeWrapper.getCooldown() }));
+            tooltip.add(I18n.format("jei.roots.runic_shears.cooldown", new Object[]{ recipeWrapper.getCooldown(), recipeWrapper.getCooldown() / 4 }));
         });
         group.init(0, true, 104, 32);
         group.set(0, (List)ingredients.getOutputs(VanillaTypes.ITEM).get(0));

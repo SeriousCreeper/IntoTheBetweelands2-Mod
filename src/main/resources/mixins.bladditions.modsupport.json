@@ -14,6 +14,7 @@
     "botania.MixinBlockSpecialFlower",
     "botania.MixinCompositeLensRecipe",
     "botania.MixinCompositeLensRecipeWrapper",
+    "botania.MixinEntityCorporeaSpark",
     "botania.MixinItemCobbleRod",
     "botania.MixinItemFertilizer",
     "botania.MixinOrechidIgnemRecipeWrapper",

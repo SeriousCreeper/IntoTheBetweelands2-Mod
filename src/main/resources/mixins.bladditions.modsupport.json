@@ -12,6 +12,8 @@
     "basketcase.MixinBlockTileEntryBasket",
     "botania.MixinBlockModMushroom",
     "botania.MixinBlockSpecialFlower",
+    "botania.MixinCompositeLensRecipe",
+    "botania.MixinCompositeLensRecipeWrapper",
     "botania.MixinItemFertilizer",
     "botania.MixinOrechidIgnemRecipeWrapper",
     "botania.MixinOrechidRecipeWrapper",

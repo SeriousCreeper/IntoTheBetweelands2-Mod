@@ -136,6 +136,7 @@
     "thaumcraft.entities.MixinEntityOwnedConstruct",
     "thaumcraft.entities.MixinEntityTaintSeed",
     "thaumcraft.entities.MixinEntityThaumcraftBoss",
+    "thaumicaugmentation.MixinFocusEffectLight",
     "thaumicjei.MixinThaumcraftJEIPlugin",
     "thaumicperiphery.MixinItemPauldronRepulsion",
     "thebetweenlands.MixinBetweenlandsSpawnerLogic",

@@ -61,6 +61,8 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldProvider;
+import net.minecraft.world.WorldProviderSurface;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.IPlantable;
@@ -83,6 +85,7 @@ import net.tiffit.sanity.Sanity;
 import net.tiffit.sanity.SanityCapability;
 import net.tiffit.sanity.SanityModifier;
 import party.lemons.arcaneworld.gen.dungeon.dimension.DungeonDimension;
+import party.lemons.arcaneworld.gen.dungeon.dimension.DungeonDimensionProvider;
 import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.ThaumcraftApiHelper;
 import thaumcraft.api.aura.AuraHelper;
@@ -388,14 +391,20 @@ public class BLAdditionsEventHandler {
             if(event.getWorld().rand.nextFloat() > 0.8) {
                 AuraHelper.polluteAura(event.getWorld(), event.getPos(), 2, true);
             }
-        } else if(block == Blocks.DIRT) {
-            event.getWorld().setBlockState(event.getPos(), BlockRegistry.SWAMP_DIRT.getDefaultState());
-        } else if(block == Blocks.ICE) {
-            event.getWorld().setBlockState(event.getPos(), BlockRegistry.BLACK_ICE.getDefaultState());
-        } else if(block == Blocks.SNOW_LAYER) {
-            event.getWorld().setBlockState(event.getPos(), BlockRegistry.SNOW.getDefaultState());
-        } else if(block == BlockRegistry.WAYSTONE && ConfigBLAdditions.configAutoMapping.AutoMapMenhir && event.getState() == event.getState().withProperty(BlockWaystone.PART, BlockWaystone.Part.BOTTOM)) {
-            if(!event.getWorld().isRemote) {
+        }
+
+        if(!(event.getWorld().provider instanceof WorldProviderSurface) && !(event.getWorld().provider instanceof DungeonDimensionProvider)) {
+            if (block == Blocks.DIRT) {
+                event.getWorld().setBlockState(event.getPos(), BlockRegistry.SWAMP_DIRT.getDefaultState());
+            } else if (block == Blocks.ICE) {
+                event.getWorld().setBlockState(event.getPos(), BlockRegistry.BLACK_ICE.getDefaultState());
+            } else if (block == Blocks.SNOW_LAYER) {
+                event.getWorld().setBlockState(event.getPos(), BlockRegistry.SNOW.getDefaultState());
+            }
+        }
+
+        if (block == BlockRegistry.WAYSTONE && ConfigBLAdditions.configAutoMapping.AutoMapMenhir && event.getState() == event.getState().withProperty(BlockWaystone.PART, BlockWaystone.Part.BOTTOM)) {
+            if (!event.getWorld().isRemote) {
                 AtlasAPI.getMarkerAPI().putGlobalMarker(event.getWorld(), false, CommonProxy.MARKER_MENHIR.toString(), "Menhir", event.getPos().getX(), event.getPos().getZ());
             }
         }

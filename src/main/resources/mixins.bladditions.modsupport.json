@@ -54,6 +54,7 @@
     "fishundeadrising.MixinEntityRaven",
     "fishundeadrising.MixinModEventHandler",
     "ftbquests.MixinButtonOpenInGuide",
+    "ftbquests.MixinButtonQuest",
     "growthcraft.MixinCheese",
     "growthcraft.MixinDeviceBeeBox",
     "growthcraft.MixinHarvestDropsEventHandler",

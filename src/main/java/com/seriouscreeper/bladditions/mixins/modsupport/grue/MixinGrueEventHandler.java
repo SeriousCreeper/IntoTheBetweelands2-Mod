@@ -62,7 +62,7 @@ public class MixinGrueEventHandler {
 
                 DimensionData data = Grue.getDimensionConfig(player.dimension);
 
-                if(sanityCapability.getSanityExact() > -20) {
+                if(sanityCapability.getSanityExact() > -30) {
                     if (event.getEntityLiving().ticksExisted % 20 == 0) {
                         int light = Grue.dynLightPausesTimer ? DarknessLibAPI.getInstance().getLight(player, true) : DarknessLibAPI.getInstance().getLightWithAdditions(player, true);
 

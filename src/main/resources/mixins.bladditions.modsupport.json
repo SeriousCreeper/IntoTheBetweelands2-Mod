@@ -9,6 +9,7 @@
     "MixinBLFluidRegistry",
     "MixinBlockChoppingBoard",
     "MixinMystgears",
+    "arcanearchives.MixinRadiantTankTileEntity",
     "arcaneworld.MixinBiomeArcaneDungeon",
     "basketcase.MixinBlockTileEntryBasket",
     "botania.MixinBlockModMushroom",

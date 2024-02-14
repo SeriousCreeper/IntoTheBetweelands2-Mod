@@ -57,9 +57,9 @@ public class MixinModConfig {
         ThaumcraftApi.addLootBagItem(new ItemStack(ItemRegistry.ROCK_SNOT_PEARL), 5, new int[]{0});
         ThaumcraftApi.addLootBagItem(new ItemStack(ItemRegistry.ROCK_SNOT_PEARL), 10, new int[]{1});
         ThaumcraftApi.addLootBagItem(new ItemStack(ItemRegistry.ROCK_SNOT_PEARL), 20, new int[]{2});
-        ThaumcraftApi.addLootBagItem(new ItemStack(ItemRegistry.SPIRIT_FRUIT, 1, 1), 1, new int[]{0});
-        ThaumcraftApi.addLootBagItem(new ItemStack(ItemRegistry.SPIRIT_FRUIT, 1, 1), 2, new int[]{1});
-        ThaumcraftApi.addLootBagItem(new ItemStack(ItemRegistry.SPIRIT_FRUIT, 1, 1), 3, new int[]{2});
+        ThaumcraftApi.addLootBagItem(new ItemStack(ItemRegistry.SPIRIT_FRUIT, 1, 0), 1, new int[]{0});
+        ThaumcraftApi.addLootBagItem(new ItemStack(ItemRegistry.SPIRIT_FRUIT, 1, 0), 2, new int[]{1});
+        ThaumcraftApi.addLootBagItem(new ItemStack(ItemRegistry.SPIRIT_FRUIT, 1, 0), 3, new int[]{2});
         ThaumcraftApi.addLootBagItem(new ItemStack(ItemRegistry.SPIRIT_FRUIT, 1, 0), 3, new int[]{0});
         ThaumcraftApi.addLootBagItem(new ItemStack(ItemRegistry.SPIRIT_FRUIT, 1, 0), 6, new int[]{1});
         ThaumcraftApi.addLootBagItem(new ItemStack(ItemRegistry.SPIRIT_FRUIT, 1, 0), 9, new int[]{2});

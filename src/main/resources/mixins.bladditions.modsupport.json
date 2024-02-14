@@ -64,6 +64,7 @@
     "ignitehud.MixinGuiWidget",
     "itemstages.MixinItemStages",
     "livingchest.MixinChesterEntity",
+    "mysticallib.MixinBreakUtil",
     "pizzacraft.MixinBlockPizza",
     "pizzacraft.MixinBlockPizzaBoardBase",
     "pizzacraft.MixinFoodBase",

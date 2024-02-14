@@ -202,6 +202,18 @@ public class CommonProxy {
     }
 
 
+    public static ItemStack CreateItemStackFromOreDictionary(String oreName) {
+        if (OreDictionary.doesOreNameExist(oreName)) {
+            List<ItemStack> oreItems = OreDictionary.getOres(oreName);
+            if (!oreItems.isEmpty()) {
+                ItemStack itemStack = oreItems.get(0).copy();
+                itemStack.setCount(1);
+                return itemStack;
+            }
+        }
+        return ItemStack.EMPTY;
+    }
+
     public static void DyeBotaniaManaPool(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ, CallbackInfoReturnable<EnumActionResult> cir) {
         ItemStack stack = player.getHeldItem(hand);
         EnumDyeColor color = EnumDyeColor.byMetadata(15 - stack.getItemDamage());

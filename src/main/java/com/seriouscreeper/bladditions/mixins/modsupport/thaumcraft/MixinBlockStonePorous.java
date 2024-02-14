@@ -1,5 +1,6 @@
 package com.seriouscreeper.bladditions.mixins.modsupport.thaumcraft;
 
+import com.seriouscreeper.bladditions.proxy.CommonProxy;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -7,6 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.WeightedRandom;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
+import net.minecraftforge.oredict.OreIngredient;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
@@ -78,24 +80,15 @@ public class MixinBlockStonePorous {
         }
 
         pdrops.add(new WeightedRandomLoot(new ItemStack(ItemsTC.amber), 20));
-        pdrops.add(new WeightedRandomLoot(new ItemStack(ItemsTC.clusters, 1, 0), 20));
+        pdrops.add(new WeightedRandomLoot(CommonProxy.CreateItemStackFromOreDictionary("clusterSyrmorite"), 20));
+        pdrops.add(new WeightedRandomLoot(CommonProxy.CreateItemStackFromOreDictionary("clusterOctine"), 14));
+        pdrops.add(new WeightedRandomLoot(CommonProxy.CreateItemStackFromOreDictionary("clusterNickel"), 10));
+        pdrops.add(new WeightedRandomLoot(CommonProxy.CreateItemStackFromOreDictionary("clusterAluminium"), 10));
+        pdrops.add(new WeightedRandomLoot(new ItemStack(ItemsTC.clusters, 1, 2), 10)); // copper
+        pdrops.add(new WeightedRandomLoot(new ItemStack(ItemsTC.clusters, 1, 5), 10)); // lead
+        pdrops.add(new WeightedRandomLoot(new ItemStack(ItemsTC.clusters, 1, 4), 10)); // silver
+        pdrops.add(new WeightedRandomLoot(new ItemStack(ItemsTC.clusters, 1, 6), 8)); // cinnabar
 
-        if (ModConfig.foundCopperIngot) {
-            pdrops.add(new WeightedRandomLoot(new ItemStack(ItemsTC.clusters, 1, 2), 10));
-        }
-
-        if (ModConfig.foundTinIngot) {
-            pdrops.add(new WeightedRandomLoot(new ItemStack(ItemsTC.clusters, 1, 3), 10));
-        }
-
-        if (ModConfig.foundSilverIngot) {
-            pdrops.add(new WeightedRandomLoot(new ItemStack(ItemsTC.clusters, 1, 4), 8));
-        }
-
-        if (ModConfig.foundLeadIngot) {
-            pdrops.add(new WeightedRandomLoot(new ItemStack(ItemsTC.clusters, 1, 5), 10));
-            pdrops.add(new WeightedRandomLoot(new ItemStack(ItemsTC.clusters, 1, 6), 10));
-        }
 
         /*
         pdrops.add(new WeightedRandomLoot(new ItemStack(Items.DIAMOND), 2));

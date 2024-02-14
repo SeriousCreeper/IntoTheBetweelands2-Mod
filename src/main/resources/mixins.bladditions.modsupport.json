@@ -12,6 +12,7 @@
     "arcanearchives.MixinRadiantTankTileEntity",
     "arcaneworld.MixinBiomeArcaneDungeon",
     "basketcase.MixinBlockTileEntryBasket",
+    "botania.MixinBlockAltar",
     "botania.MixinBlockModMushroom",
     "botania.MixinBlockSpecialFlower",
     "botania.MixinCompositeLensRecipe",

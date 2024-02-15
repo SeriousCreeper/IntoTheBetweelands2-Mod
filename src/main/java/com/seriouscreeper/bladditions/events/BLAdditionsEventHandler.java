@@ -63,6 +63,7 @@ import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.WorldProviderSurface;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.IPlantable;
@@ -86,6 +87,7 @@ import net.tiffit.sanity.SanityCapability;
 import net.tiffit.sanity.SanityModifier;
 import party.lemons.arcaneworld.gen.dungeon.dimension.DungeonDimension;
 import party.lemons.arcaneworld.gen.dungeon.dimension.DungeonDimensionProvider;
+import party.lemons.arcaneworld.gen.dungeon.dimension.TeleporterDungeonReturn;
 import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.ThaumcraftApiHelper;
 import thaumcraft.api.aura.AuraHelper;
@@ -132,9 +134,13 @@ import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntityDugSoil;
 import thebetweenlands.common.tile.TileEntityRepeller;
 import thebetweenlands.common.tile.TileEntitySimulacrum;
+import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.registries.SoundRegistry;
+import thebetweenlands.common.world.teleporter.TeleporterBetweenlands;
+import thebetweenlands.common.world.teleporter.TeleporterHandler;
 import thecodex6824.thaumicaugmentation.common.item.ItemTieredCasterGauntlet;
+import timeisup.events.custom.TimeIsUpTickEvent;
 import vazkii.quark.decoration.entity.EntityLeashKnot2TheKnotting;
 import vazkii.quark.decoration.feature.IronLadders;
 import vazkii.quark.tweaks.base.BlockStack;
@@ -147,6 +153,22 @@ import java.util.*;
 
 @Mod.EventBusSubscriber
 public class BLAdditionsEventHandler {
+    @SubscribeEvent
+    public void onTimeIsUp(TimeIsUpTickEvent.TimeIsUpEvent event) {
+        if(event.getWorld().provider instanceof DungeonDimensionProvider) {
+            event.getPlayer().changeDimension(20, new TeleporterDungeonReturn((WorldServer)event.getPlayer().world));
+        } else {
+            WorldServer otherDim = ((WorldServer)event.getWorld()).getMinecraftServer().getWorld(20);
+
+            if (otherDim != null) {
+                TeleporterHandler.transferToDim(event.getPlayer(), otherDim);
+            }
+        }
+
+        event.setCanceled(true);
+    }
+
+
     @SubscribeEvent
     public void onSpawn(LivingSpawnEvent.CheckSpawn event) {
         if (event.getEntityLiving() instanceof EntitySludge && event.getResult() != Event.Result.DENY) {

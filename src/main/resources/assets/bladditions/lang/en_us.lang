@@ -8,6 +8,8 @@ bladditions.potion.tc_eldritch=Focus: Eldritch
 bladditions.potion.tc_artifice=Focus: Artifice
 bladditions.potion.tc_arcane=Focus: Infusion
 
+chat.bone_wayfinder.wrong_dimension=Can only be used within the Betweenlands
+
 entity.greeblingmerchant.name=Greebling Merchant
 
 book.custom.start.title=Strange Visions

@@ -20,7 +20,7 @@ import vazkii.botania.common.item.ModItems;
 
 import java.util.List;
 
-@Mixin(value = EntityCorporeaSpark.class, remap = false)
+@Mixin(value = EntityCorporeaSpark.class)
 public class MixinEntityCorporeaSpark extends Entity implements ICorporeaSpark {
     public MixinEntityCorporeaSpark(World worldIn) {
         super(worldIn);

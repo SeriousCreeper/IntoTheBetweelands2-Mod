@@ -137,6 +137,7 @@ import thaumcraft.common.lib.crafting.InfusionEnchantmentRecipe;
 import thaumcraft.common.lib.enchantment.EnumInfusionEnchantment;
 import thaumcraft.common.lib.utils.CropUtils;
 import thaumicperiphery.ModContent;
+import thebetweenlands.api.item.CorrosionHelper;
 import thebetweenlands.api.recipes.ISmokingRackRecipe;
 import thebetweenlands.common.entity.draeton.EntityDraeton;
 import thebetweenlands.common.entity.mobs.*;
@@ -553,6 +554,18 @@ public class CommonProxy {
         setupPizzaRecipes();
         setupWellnessBlocks();
         SWAMP_WATER = FluidRegistry.SWAMP_WATER;
+
+        CorrosionHelper.addCorrosionPropertyOverrides(vazkii.botania.common.item.ModItems.manasteelAxe);
+        CorrosionHelper.addCorrosionPropertyOverrides(vazkii.botania.common.item.ModItems.manasteelShovel);
+        CorrosionHelper.addCorrosionPropertyOverrides(vazkii.botania.common.item.ModItems.manasteelPick);
+        CorrosionHelper.addCorrosionPropertyOverrides(vazkii.botania.common.item.ModItems.manasteelSword);
+
+        CorrosionHelper.addCorrosionPropertyOverrides(vazkii.botania.common.item.ModItems.elementiumAxe);
+        CorrosionHelper.addCorrosionPropertyOverrides(vazkii.botania.common.item.ModItems.elementiumShovel);
+        CorrosionHelper.addCorrosionPropertyOverrides(vazkii.botania.common.item.ModItems.elementiumPick);
+        CorrosionHelper.addCorrosionPropertyOverrides(vazkii.botania.common.item.ModItems.elementiumSword);
+
+        CorrosionHelper.addCorrosionPropertyOverrides(vazkii.botania.common.item.ModItems.terraSword);
 
         ThaumcraftApi.getCraftingRecipes().remove(new ResourceLocation("thaumcraft:LiquidDeath"));
         ThaumcraftApi.addCrucibleRecipe(new ResourceLocation("thaumcraft:LiquidDeath"), new CrucibleRecipe("LIQUIDDEATH", ItemRegistry.BL_BUCKET.withFluid(1, ConfigBlocks.FluidDeath.instance), new ItemStack(ItemRegistry.BL_BUCKET, 1, 1), (new AspectList()).add(Aspect.DEATH, 100).add(Aspect.ALCHEMY, 20).add(Aspect.ENTROPY, 50)));

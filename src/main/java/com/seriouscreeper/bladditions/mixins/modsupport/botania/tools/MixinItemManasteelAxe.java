@@ -28,8 +28,6 @@ import java.util.List;
 public class MixinItemManasteelAxe extends ItemAxe implements ICorrodible {
     public MixinItemManasteelAxe(Item.ToolMaterial material) {
         super(material);
-
-        CorrosionHelper.addCorrosionPropertyOverrides(this);
     }
 
 

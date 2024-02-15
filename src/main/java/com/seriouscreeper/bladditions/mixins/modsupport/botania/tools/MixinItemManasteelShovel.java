@@ -39,8 +39,6 @@ import java.util.List;
 public class MixinItemManasteelShovel extends ItemSpade implements ICorrodible {
     public MixinItemManasteelShovel(ToolMaterial material) {
         super(material);
-
-        CorrosionHelper.addCorrosionPropertyOverrides(this);
     }
 
     /**

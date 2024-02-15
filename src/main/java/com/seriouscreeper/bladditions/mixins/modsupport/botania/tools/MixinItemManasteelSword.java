@@ -27,8 +27,6 @@ import java.util.List;
 public class MixinItemManasteelSword extends ItemSword implements ICorrodible {
     public MixinItemManasteelSword(Item.ToolMaterial material) {
         super(material);
-
-        CorrosionHelper.addCorrosionPropertyOverrides(this);
     }
 
 

@@ -26,8 +26,6 @@ import java.util.List;
 public class MixinItemManasteelPick extends ItemPickaxe implements ICorrodible {
     public MixinItemManasteelPick(ToolMaterial material) {
         super(material);
-
-        CorrosionHelper.addCorrosionPropertyOverrides(this);
     }
 
 

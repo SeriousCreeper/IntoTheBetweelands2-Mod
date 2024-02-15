@@ -99,7 +99,7 @@ public class ConfigBLAdditions {
         public double[] sanity_chance_sounds = new double[] { 0, 0, 0, 0, 0 };
         public int sanity_cooldown_sounds = 10;
         public String[] sanity_sounds_list = new String[] { "thebetweenlands:wight_hurt", "thebetweenlands:wight_moan" };
-        public String[] sanity_lightseeker_blacklist = new String[] { "thebetweenlands:tree_portal" };
+        public String[] sanity_lightseeker_whitelist = new String[] { "" };
     }
 
 

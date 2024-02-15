@@ -2,6 +2,7 @@ package com.seriouscreeper.bladditions.mixins.modsupport.sanity;
 
 import com.codetaylor.mc.pyrotech.modules.tech.basic.tile.TileCampfire;
 import com.seriouscreeper.bladditions.config.ConfigBLAdditions;
+import com.seriouscreeper.bladditions.proxy.CommonProxy;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.state.IBlockState;
@@ -15,9 +16,7 @@ import net.tiffit.sanity.entity.LightSeekerEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
-import thaumcraft.common.blocks.world.ore.BlockCrystal;
-import thebetweenlands.common.block.misc.BlockOctine;
-import thebetweenlands.common.block.terrain.BlockLifeCrystalStalactite;
+import thebetweenlands.common.world.WorldProviderBetweenlands;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,8 +30,13 @@ public class MixinLightSeekerConsequence {
      */
     @Overwrite
     public void run(EntityPlayerMP player, SanityCapability.SanityLevel level) {
+        if(!(player.world.provider instanceof WorldProviderBetweenlands)) {
+            return;
+        }
+
         BlockPos pos = this.findLight(player);
-        if (pos != null) {
+
+        if (pos != null && !CommonProxy.IsWithinLocation(player.world, pos)) {
             BlockPos spawn = pos.add(this.getOffset());
             LightSeekerEntity ent = new LightSeekerEntity(player.world);
             ent.setTarget(pos);
@@ -40,7 +44,6 @@ public class MixinLightSeekerConsequence {
             player.world.spawnEntity(ent);
         }
     }
-
 
     /**
      * @author SC
@@ -59,9 +62,9 @@ public class MixinLightSeekerConsequence {
                     Block block = state.getBlock();
                     TileEntity te = w.getTileEntity(pos);
                     if ((te == null || te instanceof TileCampfire) && !(block instanceof BlockLiquid) && (double)state.getLightValue(w, pos) > 0.2D) {
-                        List<String> blackList = Arrays.asList(ConfigBLAdditions.configSanity.sanity_lightseeker_blacklist);
+                        List<String> whitelist = Arrays.asList(ConfigBLAdditions.configSanity.sanity_lightseeker_whitelist);
 
-                        if(blackList.contains(block.getRegistryName().toString())) {
+                        if(!whitelist.contains(block.getRegistryName().toString())) {
                             continue;
                         }
 

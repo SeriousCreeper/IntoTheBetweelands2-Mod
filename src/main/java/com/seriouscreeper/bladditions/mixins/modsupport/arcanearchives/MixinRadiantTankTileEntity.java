@@ -12,6 +12,6 @@ public class MixinRadiantTankTileEntity {
      */
     @Overwrite
     public int getCapacity(int capacity) {
-        return 10000 + ((capacity + 1) * 2000);
+        return 10000 + (capacity * 2000);
     }
 }

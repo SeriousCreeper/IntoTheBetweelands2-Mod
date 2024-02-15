@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import party.lemons.arcaneworld.block.BlockReturnPortal;
 
-@Mixin(value = BlockReturnPortal.class, remap = false)
+@Mixin(value = BlockReturnPortal.class)
 public class MixinBlockReturnPortal {
     /**
      * @author

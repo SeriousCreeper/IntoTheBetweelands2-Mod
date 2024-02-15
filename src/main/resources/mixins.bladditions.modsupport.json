@@ -11,6 +11,7 @@
     "MixinMystgears",
     "arcanearchives.MixinRadiantTankTileEntity",
     "arcaneworld.MixinBiomeArcaneDungeon",
+    "arcaneworld.MixinBlockReturnPortal",
     "basketcase.MixinBlockTileEntryBasket",
     "botania.MixinBlockAltar",
     "botania.MixinBlockModMushroom",

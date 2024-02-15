@@ -158,7 +158,9 @@ public class ItemCorruptedBoneWayfinder extends ItemBoneWayfinder {
 
             this.playThunderSounds(worldIn, entity.posX, entity.posY, entity.posZ);
 
-            stack.shrink(1);
+            if(!(entity instanceof EntityPlayer) || !((EntityPlayer)entity).isCreative()) {
+                stack.shrink(1);
+            }
         }
 
         return stack;

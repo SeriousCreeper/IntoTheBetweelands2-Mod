@@ -118,6 +118,8 @@
     "simpledifficulty.MixinThirstUtilInternal",
     "soot.MixinCraftingRegistry",
     "starterkit.MixinClaimTracker",
+    "storagedrawers.MixinDrawerData",
+    "storagedrawers.MixinTileEntityDrawers",
     "teastory.MixinKettle",
     "teastory.MixinTeaDrink",
     "teastory.MixinTeaPlant",

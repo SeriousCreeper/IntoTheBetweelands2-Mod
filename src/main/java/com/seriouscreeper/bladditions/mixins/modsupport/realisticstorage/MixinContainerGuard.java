@@ -39,7 +39,7 @@ public class MixinContainerGuard {
 
         for (Pattern pattern : alwaysEjectedPatterns) {
             if (pattern.matcher(itemName).matches() || pattern.matcher(itemNameWithMeta).matches())
-                return true;
+                return false;
         }
 
         for (Pattern pattern : neverEjectedPatterns) {

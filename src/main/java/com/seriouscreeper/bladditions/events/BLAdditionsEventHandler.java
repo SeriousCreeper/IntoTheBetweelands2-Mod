@@ -184,7 +184,7 @@ public class BLAdditionsEventHandler {
         Entity murderer = event.getSource().getTrueSource();
 
         // check if player killed greebling
-        if(!(murderer instanceof EntityPlayer) || !(entity instanceof EntityGreebling) || GameStageHelper.hasStage((EntityPlayer) murderer, "bloodmagic") || !GameStageHelper.hasStage((EntityPlayer) murderer, "chosen_bloodmagic")) {
+        if(!(murderer instanceof EntityPlayer) || !(entity instanceof EntityGreebling) || GameStageHelper.hasStage((EntityPlayer) murderer, "unlocked_bloodmagic") || !GameStageHelper.hasStage((EntityPlayer) murderer, "chose_bloodmagic")) {
             return;
         }
 
@@ -212,7 +212,7 @@ public class BLAdditionsEventHandler {
         }
          */
 
-        GameStageHelper.addStage((EntityPlayer)murderer, "bloodmagic");
+        GameStageHelper.addStage((EntityPlayer)murderer, "unlocked_bloodmagic");
 
         world.playSound(null, murderer.getPosition().getX(), murderer.getPosition().getY(), murderer.getPosition().getZ(), SoundRegistry.STALKER_SCREAM, SoundCategory.HOSTILE, 2.0F, 0.1F);
     }
@@ -220,7 +220,7 @@ public class BLAdditionsEventHandler {
 
     @SubscribeEvent
     public void unlockBotaniaCheck(TickEvent.PlayerTickEvent event) {
-        if(event.phase == TickEvent.Phase.START || event.player.ticksExisted % 20 != 0 || GameStageHelper.hasStage(event.player, "botania") || !GameStageHelper.hasStage(event.player, "chosen_botania")) {
+        if(event.phase == TickEvent.Phase.START || event.player.ticksExisted % 20 != 0 || GameStageHelper.hasStage(event.player, "unlocked_botania") || !GameStageHelper.hasStage(event.player, "chose_botania")) {
             return;
         }
 
@@ -263,7 +263,7 @@ public class BLAdditionsEventHandler {
                     }
 
                     // we have an active grovestone, unlock botania
-                    GameStageHelper.addStage(player, "botania");
+                    GameStageHelper.addStage(player, "unlocked_botania");
 
                     player.world.spawnEntity(new EntityBLLightningBolt(player.world, player.posX, player.posY, player.posZ, 0, false, false));
                 }

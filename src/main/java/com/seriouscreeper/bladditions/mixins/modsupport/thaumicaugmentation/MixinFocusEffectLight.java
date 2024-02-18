@@ -4,6 +4,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
@@ -33,6 +35,7 @@ public class MixinFocusEffectLight extends FocusEffect {
     }
 
     @Shadow
+    @SideOnly(Side.CLIENT)
     public void renderParticleFX(World world, double v, double v1, double v2, double v3, double v4, double v5) {
 
     }

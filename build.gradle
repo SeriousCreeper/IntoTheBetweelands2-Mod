@@ -18,7 +18,7 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'org.spongepowered.mixin'
 apply plugin: 'com.wynprice.cursemaven'
 
-version = "1.5.4"
+version = "1.5.5"
 group = "com.seriouscreeper.bladditions" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "bladditions"
 
@@ -134,7 +134,7 @@ task sourcesJar(type: Jar, dependsOn: classes) {
     from sourceSets.main.allSource
 }
 
-sourceSets { main { output.resourcesDir = output.classesDir } }
+//sourceSets { main { output.resourcesDir = output.classesDir } }
 
 
 artifacts {

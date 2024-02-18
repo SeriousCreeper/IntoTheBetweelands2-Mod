@@ -10,11 +10,15 @@ import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import thaumcraft.common.config.ModConfig;
 import thaumcraft.common.entities.monster.cult.EntityCultistPortalLesser;
 import thaumcraft.common.world.ThaumcraftWorldGenerator;
 import thaumcraft.common.world.biomes.BiomeHandler;
 import thaumcraft.common.world.objects.WorldGenMound;
+import thecodex6824.thaumicaugmentation.common.world.WorldProviderEmptiness;
 
 import java.util.Random;
 
@@ -34,6 +38,14 @@ public class MixinThaumcraftWorldGenerator {
     @Overwrite
     public static boolean generateSilverwood(World world, Random random, int chunkX, int chunkZ) {
         return false;
+    }
+
+
+    @Inject(method = "worldGeneration", at = @At("HEAD"), cancellable = true)
+    private void onInjectWorldGeneration(Random random, int chunkX, int chunkZ, World world, boolean newGen, CallbackInfo ci) {
+        if(world.provider.getDimension() != 20 || world.provider.getDimension() != 14676) {
+            ci.cancel();
+        }
     }
 
 

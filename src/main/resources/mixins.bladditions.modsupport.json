@@ -64,6 +64,7 @@
     "ftbquests.MixinButtonQuest",
     "growthcraft.MixinCheese",
     "growthcraft.MixinDeviceBeeBox",
+    "growthcraft.MixinGrapesDropHandler",
     "growthcraft.MixinHarvestDropsEventHandler",
     "growthcraft.MixinInitBees",
     "grue.MixinGrueEventHandler",

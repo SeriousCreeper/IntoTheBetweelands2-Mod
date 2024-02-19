@@ -132,6 +132,7 @@
     "teastory.teas.MixinYellowTea",
     "thaumcraft.MixinBlockBarrier",
     "thaumcraft.MixinBlockGolemBuilder",
+    "thaumcraft.MixinBlockHungryChest",
     "thaumcraft.MixinBlockResearchTable",
     "thaumcraft.MixinBlockStonePorous",
     "thaumcraft.MixinBlockUtils",

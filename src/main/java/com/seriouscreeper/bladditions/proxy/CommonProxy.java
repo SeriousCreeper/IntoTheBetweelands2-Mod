@@ -534,7 +534,7 @@ public class CommonProxy {
 
         manager.addRecipe(new BaseShapelessOreRecipe(new ItemStack(ModBlocks.RAW_PIZZA_0, 1), "foodPizzaDough", "foodCheese"));
         manager.addRecipe(new BaseShapelessOreRecipe(new ItemStack(ModBlocks.RAW_PIZZA_1, 1), "foodPizzaDough", "foodCheese", "foodMushroom"));
-        manager.addRecipe(new BaseShapelessOreRecipe(new ItemStack(ModBlocks.RAW_PIZZA_2, 1), "foodPizzaDough", new ItemStack(ItemRegistry.ANADIA_MEAT_SMOKED), new ItemStack(ItemRegistry.SWAMP_KELP_ITEM)));
+        manager.addRecipe(new BaseShapelessOreRecipe(new ItemStack(ModBlocks.RAW_PIZZA_2, 1), "foodPizzaDough", "foodCheese", new ItemStack(ItemRegistry.ANADIA_MEAT_RAW), new ItemStack(ItemRegistry.SWAMP_KELP_ITEM)));
         manager.addRecipe(new BaseShapelessOreRecipe(new ItemStack(ModBlocks.RAW_PIZZA_3, 1), "foodPizzaDough", "foodCheese", new ItemStack(ItemRegistry.SNAIL_FLESH_RAW), new ItemStack(ItemRegistry.MIRE_SNAIL_EGG_COOKED)));
         manager.addRecipe(new BaseShapelessOreRecipe(new ItemStack(ModBlocks.RAW_PIZZA_4, 1), "foodPizzaDough", "foodCheese", "foodMushroom", new ItemStack(ItemRegistry.FROG_LEGS_RAW), new ItemStack(BlockRegistry.NETTLE)));
         manager.addRecipe(new BaseShapelessOreRecipe(new ItemStack(ModBlocks.RAW_PIZZA_5, 1), "foodPizzaDough", "foodCheese", "foodMushroom", new ItemStack(ItemRegistry.SAP_BALL), new ItemStack(ItemRegistry.SAP_SPIT), new ItemStack(ItemRegistry.SLUDGE_BALL)));

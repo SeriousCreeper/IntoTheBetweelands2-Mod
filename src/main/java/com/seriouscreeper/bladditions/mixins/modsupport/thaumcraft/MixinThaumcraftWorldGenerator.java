@@ -43,7 +43,7 @@ public class MixinThaumcraftWorldGenerator {
 
     @Inject(method = "worldGeneration", at = @At("HEAD"), cancellable = true)
     private void onInjectWorldGeneration(Random random, int chunkX, int chunkZ, World world, boolean newGen, CallbackInfo ci) {
-        if(world.provider.getDimension() != 20 || world.provider.getDimension() != 14676) {
+        if(world.provider.getDimension() != 20 && world.provider.getDimension() != 14676) {
             ci.cancel();
         }
     }

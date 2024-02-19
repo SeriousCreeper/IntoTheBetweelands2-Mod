@@ -22,11 +22,16 @@ public class MixinDrawerData implements IDrawer {
         }
     }
 
-    @Inject(method = "setStoredItem(Lnet/minecraft/item/ItemStack;)Lcom/jaquadro/minecraft/storagedrawers/api/storage/IDrawer;", at = @At("HEAD"), cancellable = true)
-    private void injectSetStoredItem(ItemStack itemPrototype, CallbackInfoReturnable<IDrawer> cir) {
+    @Inject(method = "setStoredItem(Lnet/minecraft/item/ItemStack;Z)Lcom/jaquadro/minecraft/storagedrawers/api/storage/IDrawer;", at = @At("HEAD"), cancellable = true)
+    private void injectSetStoredItem(ItemStack itemPrototype, boolean notify, CallbackInfoReturnable<IDrawer> cir) {
         if(BlockedItemsHelper.isBlocked(itemPrototype)) {
+            this.reset(notify);
             cir.setReturnValue(this);
         }
+    }
+
+    @Shadow
+    protected void reset(boolean notify) {
     }
 
     @Shadow
@@ -35,6 +40,7 @@ public class MixinDrawerData implements IDrawer {
 
     }
 
+    @Nonnull
     @Shadow
     public IDrawer setStoredItem(@Nonnull ItemStack itemStack) {
         return null;

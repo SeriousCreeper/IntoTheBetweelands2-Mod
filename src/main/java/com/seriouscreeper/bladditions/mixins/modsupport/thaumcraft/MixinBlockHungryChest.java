@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import thaumcraft.common.blocks.devices.BlockHungryChest;
 import thaumcraft.common.tiles.devices.TileHungryChest;
 
-@Mixin(value = BlockHungryChest.class, remap = false)
+@Mixin(value = BlockHungryChest.class)
 public class MixinBlockHungryChest {
     @Inject(method = "onEntityCollision", at = @At("HEAD"), cancellable = true)
     private void injectOnEntityCollision(World world, BlockPos pos, IBlockState state, Entity entity, CallbackInfo ci) {

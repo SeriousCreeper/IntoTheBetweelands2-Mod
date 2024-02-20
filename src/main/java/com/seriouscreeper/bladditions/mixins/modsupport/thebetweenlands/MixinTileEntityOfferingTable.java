@@ -1,6 +1,8 @@
 package com.seriouscreeper.bladditions.mixins.modsupport.thebetweenlands;
 
+import com.seriouscreeper.bladditions.compat.arcaneworld.TeleporterDungeonCustom;
 import com.seriouscreeper.bladditions.init.ModItems;
+import com.seriouscreeper.bladditions.items.ItemCorruptedBoneWayfinder;
 import com.seriouscreeper.bladditions.libs.AdminExecute;
 import net.minecraft.command.FunctionObject;
 import net.minecraft.command.ICommandSender;
@@ -9,11 +11,14 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.spongepowered.asm.mixin.Mixin;
@@ -22,6 +27,10 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import party.lemons.arcaneworld.config.ArcaneWorldConfig;
+import party.lemons.arcaneworld.gen.dungeon.dimension.TeleporterDungeon;
+import party.lemons.arcaneworld.util.capabilities.IRitualCoordinate;
+import party.lemons.arcaneworld.util.capabilities.RitualCoordinateProvider;
 import thebetweenlands.common.item.equipment.ItemRing;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.tile.TileEntityGroundItem;
@@ -104,27 +113,53 @@ public class MixinTileEntityOfferingTable extends TileEntityGroundItem {
                 double radius = 2.5;
                 AxisAlignedBB aabb = (new AxisAlignedBB(this.getPos())).grow(radius);
 
-                List<EntityPlayer> it = this.world.getEntitiesWithinAABB(EntityPlayer.class, aabb, (p) -> {
+                List<EntityPlayer> nearbyPlayers = this.world.getEntitiesWithinAABB(EntityPlayer.class, aabb, (p) -> {
                     return p.getDistanceSq((double)((float)this.pos.getX() + 0.5F), (double)((float)this.pos.getY() + 0.5F), (double)((float)this.pos.getZ() + 0.5F)) <= radius * radius;
                 });
 
                 this.playThunderSounds(entity.world, entity.posX, entity.posY, entity.posZ);
                 MinecraftServer server = entity.world.getMinecraftServer();
 
-                for(EntityPlayer entityPlayer : it) {
-                    if(entityPlayer.isRiding())
-                        entityPlayer.dismountRidingEntity();
+                if(ItemCorruptedBoneWayfinder.isDungeon(stack)) {
+                    // teleport original player first
+                    WorldServer ws = (WorldServer)world;
+                    TeleporterDungeon teleporter = new TeleporterDungeonCustom(ws, ItemCorruptedBoneWayfinder.getDungeonId(stack), true);
 
-                    ICommandSender sender = new AdminExecute(entityPlayer, entityPlayer.getPosition());
+                    ((IRitualCoordinate)entity.getCapability(RitualCoordinateProvider.RITUAL_COORDINATE_CAPABILITY, (EnumFacing)null)).setPos(new BlockPos(entity.posX, entity.posY, entity.posZ));
+                    ((IRitualCoordinate)entity.getCapability(RitualCoordinateProvider.RITUAL_COORDINATE_CAPABILITY, (EnumFacing)null)).setDim(entity.dimension);
+                    entity.changeDimension(ArcaneWorldConfig.DUNGEONS.DIM_ID, teleporter);
 
-                    String command = "tpj " + into_the_betweenlands_mod$getDimension(stack);
+                    // then teleport others to that player
+                    for(EntityPlayer entityPlayer : nearbyPlayers) {
+                        if(entityPlayer == entity) {
+                            continue;
+                        }
 
-                    FunctionObject func = FunctionObject.create(server.getFunctionManager(), Arrays.asList(command));
+                        if(entityPlayer.isRiding())
+                            entityPlayer.dismountRidingEntity();
 
-                    server.getFunctionManager().execute(func, sender);
+                        teleporter = new TeleporterDungeonCustom(ws, ItemCorruptedBoneWayfinder.getDungeonId(stack), false);
 
-                    this.playThunderSounds(entity.world, entity.posX, entity.posY, entity.posZ);
+                        ((IRitualCoordinate)entityPlayer.getCapability(RitualCoordinateProvider.RITUAL_COORDINATE_CAPABILITY, (EnumFacing)null)).setPos(new BlockPos(entityPlayer.posX, entityPlayer.posY, entityPlayer.posZ));
+                        ((IRitualCoordinate)entityPlayer.getCapability(RitualCoordinateProvider.RITUAL_COORDINATE_CAPABILITY, (EnumFacing)null)).setDim(entityPlayer.dimension);
+                        entityPlayer.changeDimension(ArcaneWorldConfig.DUNGEONS.DIM_ID, teleporter);
+                    }
+                } else {
+                    for(EntityPlayer entityPlayer : nearbyPlayers) {
+                        if(entityPlayer.isRiding())
+                            entityPlayer.dismountRidingEntity();
+
+                        ICommandSender sender = new AdminExecute(entityPlayer, entityPlayer.getPosition());
+
+                        String command = "tpj " + into_the_betweenlands_mod$getDimension(stack);
+
+                        FunctionObject func = FunctionObject.create(server.getFunctionManager(), Arrays.asList(command));
+
+                        server.getFunctionManager().execute(func, sender);
+                    }
                 }
+
+                this.playThunderSounds(entity.world, entity.posX, entity.posY, entity.posZ);
 
                 stack.shrink(1);
             }

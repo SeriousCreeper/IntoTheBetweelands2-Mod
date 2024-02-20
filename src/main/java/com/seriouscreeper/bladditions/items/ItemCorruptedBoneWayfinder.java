@@ -86,7 +86,7 @@ public class ItemCorruptedBoneWayfinder extends ItemBoneWayfinder {
     }
 
 
-    public boolean isDungeon(ItemStack stack) {
+    public static boolean isDungeon(ItemStack stack) {
         if (stack.hasTagCompound() && stack.getTagCompound() != null && stack.getTagCompound().hasKey("dungeon_id")) {
             return true;
         }
@@ -95,7 +95,7 @@ public class ItemCorruptedBoneWayfinder extends ItemBoneWayfinder {
     }
 
 
-    public String getDungeonId(ItemStack stack) {
+    public static String getDungeonId(ItemStack stack) {
         if (stack.hasTagCompound() && stack.getTagCompound() != null && stack.getTagCompound().hasKey("dungeon_id")) {
             return stack.getTagCompound().getString("dungeon_id");
         }

@@ -58,6 +58,8 @@ import growthcraft.core.shared.utils.TickUtils;
 import growthcraft.milk.common.Init;
 import growthcraft.milk.shared.fluids.MilkFluidTags;
 import growthcraft.milk.shared.init.GrowthcraftMilkFluids;
+import kpan.bq_popup.config.ConfigHolder;
+import kpan.bq_popup.config.core.ConfigHandler;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementManager;
 import net.minecraft.advancements.PlayerAdvancements;
@@ -547,6 +549,9 @@ public class CommonProxy {
 
 
     public void postInit(FMLPostInitializationEvent e) {
+        ConfigHolder.client.showOtherTeamTask = false;
+        ConfigHolder.client.showAbsentCompletedTask = false;
+
         registerMultiblocks();
         registerInfusionRecipes();
         registerSmeltingRecipes();

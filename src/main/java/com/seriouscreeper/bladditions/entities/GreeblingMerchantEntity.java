@@ -189,6 +189,7 @@ public class GreeblingMerchantEntity extends EntityCreature implements IEntityBL
     }
 
     public boolean attackEntityFrom(DamageSource source, float damage) {
+        if(source == DamageSource.outOfWorld) return super.attackEntityFrom(source, damage);
         return false;
     }
 

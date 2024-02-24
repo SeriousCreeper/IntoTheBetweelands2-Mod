@@ -203,6 +203,7 @@
     "thebetweenlands.structures.MixinWorldGenSludgeWormDungeon",
     "thebetweenlands.structures.MixinWorldGenSpiritTree",
     "thebetweenlands.structures.WorldGenWightFortress",
+    "toolbelt.MixinToolbeltConfig",
     "waterstrainer.MixinAPIUtils"
   ],
   "client": [

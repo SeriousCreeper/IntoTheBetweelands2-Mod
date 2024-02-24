@@ -85,6 +85,8 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.tiffit.sanity.Sanity;
 import net.tiffit.sanity.SanityCapability;
 import net.tiffit.sanity.SanityModifier;
+import party.lemons.arcaneworld.ArcaneWorld;
+import party.lemons.arcaneworld.config.ArcaneWorldConfig;
 import party.lemons.arcaneworld.gen.dungeon.dimension.DungeonDimension;
 import party.lemons.arcaneworld.gen.dungeon.dimension.DungeonDimensionProvider;
 import party.lemons.arcaneworld.gen.dungeon.dimension.TeleporterDungeonReturn;
@@ -1148,6 +1150,10 @@ public class BLAdditionsEventHandler {
 
 
     private void addSanityForCaves(EntityPlayer player, World world) {
+        if(world.provider.getDimension() == ArcaneWorldConfig.DUNGEONS.DIM_ID) {
+            return;
+        }
+
         float y = player.getPosition().getY();
         float multiplier = 1f - Math.max(0, Math.min(1.1f, y / (float)80));
 

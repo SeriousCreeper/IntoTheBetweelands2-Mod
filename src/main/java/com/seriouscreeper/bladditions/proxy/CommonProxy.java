@@ -1,5 +1,7 @@
 package com.seriouscreeper.bladditions.proxy;
 
+import WayofTime.bloodmagic.altar.ComponentType;
+import WayofTime.bloodmagic.api.impl.BloodMagicAPI;
 import com.aranaira.arcanearchives.data.ClientNetwork;
 import com.aranaira.arcanearchives.data.DataHelper;
 import com.aranaira.arcanearchives.data.HiveSaveData;
@@ -551,6 +553,12 @@ public class CommonProxy {
     public void postInit(FMLPostInitializationEvent e) {
         ConfigHolder.client.showOtherTeamTask = false;
         ConfigHolder.client.showAbsentCompletedTask = false;
+
+        BloodMagicAPI.INSTANCE.unregisterAltarComponent(Blocks.GLOWSTONE.getDefaultState(), "GLOWSTONE");
+        BloodMagicAPI.INSTANCE.registerAltarComponent(RegistryManager.block_dawnstone.getDefaultState(), "GLOWSTONE");
+
+        BloodMagicAPI.INSTANCE.unregisterAltarComponent(Blocks.BEACON.getDefaultState(), "BEACON");
+        BloodMagicAPI.INSTANCE.registerAltarComponent(BlocksTC.metalBlockVoid.getDefaultState(), "BEACON");
 
         registerMultiblocks();
         registerInfusionRecipes();

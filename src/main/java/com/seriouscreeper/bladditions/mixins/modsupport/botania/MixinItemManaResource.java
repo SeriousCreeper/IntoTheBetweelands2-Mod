@@ -26,7 +26,8 @@ public class MixinItemManaResource extends Item {
     public void onPlayerInteract(PlayerInteractEvent.RightClickBlock event) {
         ItemStack stack = event.getItemStack();
         boolean correctStack = !stack.isEmpty() && stack.getItem() == Items.GLASS_BOTTLE;
-        boolean ender = event.getWorld().provider instanceof WorldProviderEmptiness;
+        int dimensionID = event.getWorld().provider.getDimension();
+        boolean ender = event.getWorld().provider instanceof WorldProviderEmptiness || (dimensionID >= 21 && dimensionID <= 30);
         if (correctStack && ender) {
             if (event.getWorld().isRemote) {
                 event.getEntityPlayer().swingArm(event.getHand());

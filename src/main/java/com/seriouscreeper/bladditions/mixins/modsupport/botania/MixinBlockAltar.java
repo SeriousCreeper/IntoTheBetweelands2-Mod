@@ -30,7 +30,7 @@ public class MixinBlockAltar {
         }
     }
 
-    @ModifyArg(method = "onBlockActivated", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/EntityPlayer;setHeldItem(Lnet/minecraft/util/EnumHand;Lnet/minecraft/item/ItemStack;)V"), index = 1)
+    @ModifyArg(remap = true, method = "onBlockActivated", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/EntityPlayer;setHeldItem(Lnet/minecraft/util/EnumHand;Lnet/minecraft/item/ItemStack;)V"), index = 1)
     private ItemStack modifySetHeldItem(ItemStack stack) {
         return this.drain(FluidRegistry.SWAMP_WATER, stack);
     }

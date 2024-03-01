@@ -353,6 +353,7 @@ public class BLAdditionsEventHandler {
             IPlayerKnowledge knowledge = ThaumcraftCapabilities.getKnowledge(event.getEntityPlayer());
 
             knowledge.addResearch("!gotcrystals");
+            knowledge.addResearch("!gotdream");
             knowledge.sync((EntityPlayerMP)event.getEntityPlayer());
 
             //if (ModConfig.CONFIG_MISC.noSleep && !knowledge.isResearchKnown("!gotdream")) {

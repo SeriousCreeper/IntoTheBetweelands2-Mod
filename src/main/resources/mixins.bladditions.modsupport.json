@@ -33,6 +33,7 @@
     "botania.MixinSubTileKekimurus",
     "botania.MixinSubTileNarslimmus",
     "botania.MixinSubTileSpectrolus",
+    "botania.MixinTileHourglass",
     "botania.MixinTileSpecialFlower",
     "botania.functional_flora.MixinSubTileAgricarnation",
     "botania.functional_flora.MixinSubTileClayconia",

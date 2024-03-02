@@ -141,7 +141,10 @@ import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.teleporter.TeleporterBetweenlands;
 import thebetweenlands.common.world.teleporter.TeleporterHandler;
+import thecodex6824.thaumicaugmentation.ThaumicAugmentation;
+import thecodex6824.thaumicaugmentation.common.TAConfigHolder;
 import thecodex6824.thaumicaugmentation.common.item.ItemTieredCasterGauntlet;
+import thecodex6824.thaumicaugmentation.common.world.WorldProviderEmptiness;
 import timeisup.events.custom.TimeIsUpTickEvent;
 import vazkii.quark.decoration.entity.EntityLeashKnot2TheKnotting;
 import vazkii.quark.decoration.feature.IronLadders;
@@ -1151,7 +1154,7 @@ public class BLAdditionsEventHandler {
 
 
     private void addSanityForCaves(EntityPlayer player, World world) {
-        if(world.provider.getDimension() == ArcaneWorldConfig.DUNGEONS.DIM_ID) {
+        if(world.provider.getDimension() != 20) {
             return;
         }
 

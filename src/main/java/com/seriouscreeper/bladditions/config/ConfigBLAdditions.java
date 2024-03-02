@@ -26,7 +26,7 @@ public class ConfigBLAdditions {
     private static Map<String, Float> blEventBonuses = null;
 
     public static class ConfigBotania {
-        public int ManaKekimurus = 15000;
+        public int ManaKekimurus = 5000;
         public int ManaNarslimmus = 1200;
         public int ManaSpectrolus = 4800;
         public float DamageChakram = 6;

@@ -2,6 +2,7 @@ package com.seriouscreeper.bladditions.proxy;
 
 import WayofTime.bloodmagic.altar.ComponentType;
 import WayofTime.bloodmagic.api.impl.BloodMagicAPI;
+import WayofTime.bloodmagic.core.RegistrarBloodMagicItems;
 import com.aranaira.arcanearchives.data.ClientNetwork;
 import com.aranaira.arcanearchives.data.DataHelper;
 import com.aranaira.arcanearchives.data.HiveSaveData;
@@ -579,6 +580,11 @@ public class CommonProxy {
         CorrosionHelper.addCorrosionPropertyOverrides(vazkii.botania.common.item.ModItems.elementiumSword);
 
         CorrosionHelper.addCorrosionPropertyOverrides(vazkii.botania.common.item.ModItems.terraSword);
+
+        CorrosionHelper.addCorrosionPropertyOverrides(RegistrarBloodMagicItems.BOUND_SWORD);
+        CorrosionHelper.addCorrosionPropertyOverrides(RegistrarBloodMagicItems.BOUND_AXE);
+        CorrosionHelper.addCorrosionPropertyOverrides(RegistrarBloodMagicItems.BOUND_SHOVEL);
+        CorrosionHelper.addCorrosionPropertyOverrides(RegistrarBloodMagicItems.BOUND_PICKAXE);
 
         ThaumcraftApi.getCraftingRecipes().remove(new ResourceLocation("thaumcraft:LiquidDeath"));
         ThaumcraftApi.addCrucibleRecipe(new ResourceLocation("thaumcraft:LiquidDeath"), new CrucibleRecipe("LIQUIDDEATH", ItemRegistry.BL_BUCKET.withFluid(1, ConfigBlocks.FluidDeath.instance), new ItemStack(ItemRegistry.BL_BUCKET, 1, 1), (new AspectList()).add(Aspect.DEATH, 100).add(Aspect.ALCHEMY, 20).add(Aspect.ENTROPY, 50)));

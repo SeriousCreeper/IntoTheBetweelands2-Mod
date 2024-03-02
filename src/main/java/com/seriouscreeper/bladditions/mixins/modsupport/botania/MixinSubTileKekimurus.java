@@ -1,5 +1,6 @@
 package com.seriouscreeper.bladditions.mixins.modsupport.botania;
 
+import com.codetaylor.mc.pyrotech.modules.tech.basic.tile.TileCampfire;
 import com.seriouscreeper.bladditions.config.ConfigBLAdditions;
 import com.tiviacz.pizzacraft.blocks.BlockPizza;
 import net.minecraft.block.Block;
@@ -13,6 +14,8 @@ import org.spongepowered.asm.mixin.Overwrite;
 import vazkii.botania.api.subtile.SubTileGenerating;
 import vazkii.botania.common.block.subtile.generating.SubTileKekimurus;
 
+import java.lang.reflect.Field;
+
 @Mixin(value = SubTileKekimurus.class, remap = false)
 public class MixinSubTileKekimurus extends SubTileGenerating {
     /**
@@ -23,8 +26,7 @@ public class MixinSubTileKekimurus extends SubTileGenerating {
     public void onUpdate() {
         super.onUpdate();
         if (!this.supertile.getWorld().isRemote) {
-            int mana = ConfigBLAdditions.configBotania.ManaKekimurus;
-            if (this.getMaxMana() - this.mana >= mana && !this.supertile.getWorld().isRemote && this.ticksExisted % 80 == 0) {
+            if (!this.supertile.getWorld().isRemote && this.ticksExisted % 80 == 0) {
                 for(int i = 0; i < 11; ++i) {
                     for(int j = 0; j < 11; ++j) {
                         for(int k = 0; k < 11; ++k) {
@@ -32,6 +34,29 @@ public class MixinSubTileKekimurus extends SubTileGenerating {
                             IBlockState state = this.supertile.getWorld().getBlockState(pos);
                             Block block = state.getBlock();
                             if (block instanceof BlockPizza) {
+                                Field fieldFoodstats;
+
+                                try {
+                                    fieldFoodstats = BlockPizza.class.getDeclaredField("foodstats");
+                                    fieldFoodstats.setAccessible(true);
+                                } catch (NoSuchFieldException e) {
+                                    throw new RuntimeException(e);
+                                }
+
+                                int foodstats = 0;
+
+                                try {
+                                    foodstats = fieldFoodstats.getInt(block);
+                                } catch (IllegalAccessException e) {
+                                    throw new RuntimeException(e);
+                                }
+
+                                int mana = foodstats * ConfigBLAdditions.configBotania.ManaKekimurus;
+
+                                if(this.getMaxMana() - this.mana < mana) {
+                                    return;
+                                }
+
                                 int nextSlicesEaten = state.getValue(BlockPizza.BITES) + 1;
                                 if (nextSlicesEaten >= 6) {
                                     this.supertile.getWorld().setBlockToAir(pos);
@@ -50,5 +75,15 @@ public class MixinSubTileKekimurus extends SubTileGenerating {
                 }
             }
         }
+    }
+
+
+    /**
+     * @author
+     * @reason
+     */
+    @Overwrite
+    public int getMaxMana() {
+        return 20001;
     }
 }

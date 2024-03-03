@@ -68,6 +68,6 @@ public class MixinItemBoundSword extends ItemSword implements IActivatable, ICor
     @Nonnull
     @Overwrite
     public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
-        return CorrosionHelper.getAttributeModifiers(super.getAttributeModifiers(slot, stack), slot, stack, ATTACK_DAMAGE_MODIFIER, CorrosionHelper.getModifier(stack) * (this.getActivated(stack) ? 5.0f : 2.0f));
+        return CorrosionHelper.getAttributeModifiers(super.getAttributeModifiers(slot, stack), slot, stack, ATTACK_DAMAGE_MODIFIER, CorrosionHelper.getModifier(stack) * (this.getActivated(stack) ? 6.0f : 2.0f));
     }
 }

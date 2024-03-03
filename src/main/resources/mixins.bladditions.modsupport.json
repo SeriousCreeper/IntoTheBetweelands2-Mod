@@ -23,6 +23,7 @@
     "bloodmagic.MixinItemSentientPickaxe",
     "bloodmagic.MixinItemSentientShovel",
     "bloodmagic.MixinItemSentientSword",
+    "bloodmagic.MixinModRecipes",
     "botania.MixinBlockAltar",
     "botania.MixinBlockModMushroom",
     "botania.MixinBlockSpecialFlower",

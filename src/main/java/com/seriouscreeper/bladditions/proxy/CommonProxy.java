@@ -586,6 +586,11 @@ public class CommonProxy {
         CorrosionHelper.addCorrosionPropertyOverrides(RegistrarBloodMagicItems.BOUND_SHOVEL);
         CorrosionHelper.addCorrosionPropertyOverrides(RegistrarBloodMagicItems.BOUND_PICKAXE);
 
+        CorrosionHelper.addCorrosionPropertyOverrides(RegistrarBloodMagicItems.SENTIENT_SWORD);
+        CorrosionHelper.addCorrosionPropertyOverrides(RegistrarBloodMagicItems.SENTIENT_AXE);
+        CorrosionHelper.addCorrosionPropertyOverrides(RegistrarBloodMagicItems.SENTIENT_SHOVEL);
+        CorrosionHelper.addCorrosionPropertyOverrides(RegistrarBloodMagicItems.SENTIENT_PICKAXE);
+
         ThaumcraftApi.getCraftingRecipes().remove(new ResourceLocation("thaumcraft:LiquidDeath"));
         ThaumcraftApi.addCrucibleRecipe(new ResourceLocation("thaumcraft:LiquidDeath"), new CrucibleRecipe("LIQUIDDEATH", ItemRegistry.BL_BUCKET.withFluid(1, ConfigBlocks.FluidDeath.instance), new ItemStack(ItemRegistry.BL_BUCKET, 1, 1), (new AspectList()).add(Aspect.DEATH, 100).add(Aspect.ALCHEMY, 20).add(Aspect.ENTROPY, 50)));
 

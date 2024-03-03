@@ -21,6 +21,7 @@ public class ConfigBLAdditions {
     public static final ConfigAutoMapping configAutoMapping = new ConfigAutoMapping();
     public static final ConfigSanity configSanity = new ConfigSanity();
     public static final ConfigBotania configBotania = new ConfigBotania();
+    public static final ConfigBloodMagic configBloodMagic = new ConfigBloodMagic();
 
     @Config.Ignore
     private static Map<String, Float> blEventBonuses = null;
@@ -30,6 +31,45 @@ public class ConfigBLAdditions {
         public int ManaNarslimmus = 1200;
         public int ManaSpectrolus = 4800;
         public float DamageChakram = 6;
+    }
+
+
+    public static class ConfigBloodMagic {
+        public class ConfigSentientTool {
+            public double defaultDamage = 5;
+            public double[] defaultDamageAdded = new double[]{1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0};
+            public double[] destructiveDamageAdded = new double[]{1.5, 2.25, 3.0, 3.75, 4.5, 5.25, 6.0};
+            public double[] vengefulDamageAdded = new double[]{0.0, 0.5, 1.0, 1.5, 2.0, 2.25, 2.5};
+            public double[] steadfastDamageAdded = new double[]{0.0, 0.5, 1.0, 1.5, 2.0, 2.25, 2.5};
+        }
+
+        @Config.Name("Sentient Shovel")
+        public ConfigSentientTool configShovel = new ConfigSentientTool();
+        @Config.Name("Sentient Sword")
+        public ConfigSentientTool configSword = new ConfigSentientTool();
+        @Config.Name("Sentient Axe")
+        public ConfigSentientTool configAxe = new ConfigSentientTool();
+        @Config.Name("Sentient Pickaxe")
+        public ConfigSentientTool configPickaxe = new ConfigSentientTool();
+        {
+            configPickaxe.defaultDamage = 3;
+            configPickaxe.defaultDamageAdded = new double[]{1.0, 2.0, 3.0, 3.5, 4.0};
+            configPickaxe.destructiveDamageAdded = new double[]{2.0, 3.0, 4.0, 5.0, 6.0};
+            configPickaxe.vengefulDamageAdded = new double[]{0.0, 0.5, 1.0, 1.5, 2.0};
+            configPickaxe.steadfastDamageAdded = new double[]{0.0, 0.5, 1.0, 1.5, 2.0};
+
+            configShovel.defaultDamage = 3;
+            configShovel.defaultDamageAdded = new double[]{1.0, 2.0, 3.0, 3.5, 4.0};
+            configShovel.destructiveDamageAdded = new double[]{2.0, 3.0, 4.0, 5.0, 6.0};
+            configShovel.vengefulDamageAdded = new double[]{0.0, 0.5, 1.0, 1.5, 2.0};
+            configShovel.steadfastDamageAdded = new double[]{0.0, 0.5, 1.0, 1.5, 2.0};
+
+            configAxe.defaultDamage = 8;
+            configAxe.defaultDamageAdded = new double[]{1.0, 2.0, 3.0, 3.5, 4.0};
+            configAxe.destructiveDamageAdded = new double[]{2.0, 3.0, 4.0, 5.0, 6.0};
+            configAxe.vengefulDamageAdded = new double[]{0.0, 0.5, 1.0, 1.5, 2.0};
+            configAxe.steadfastDamageAdded = new double[]{0.0, 0.5, 1.0, 1.5, 2.0};
+        }
     }
 
     public static class ConfigTea {

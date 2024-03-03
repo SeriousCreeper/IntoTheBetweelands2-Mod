@@ -19,6 +19,7 @@
     "bloodmagic.MixinItemBoundPickaxe",
     "bloodmagic.MixinItemBoundShovel",
     "bloodmagic.MixinItemBoundSword",
+    "bloodmagic.MixinItemSentientArmour",
     "bloodmagic.MixinItemSentientAxe",
     "bloodmagic.MixinItemSentientPickaxe",
     "bloodmagic.MixinItemSentientShovel",

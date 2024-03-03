@@ -43,6 +43,17 @@ public class ConfigBLAdditions {
             public double[] steadfastDamageAdded = new double[]{0.0, 0.5, 1.0, 1.5, 2.0, 2.25, 2.5};
         }
 
+        public class ConfigSentientArmor {
+            public double[] extraProtectionLevel = new double[]{0.0, 0.25, 0.5, 0.6, 0.7, 0.75, 0.85, 0.9};
+            public double[] steadfastProtectionLevel = new double[]{0.25, 0.5, 0.6, 0.7, 0.75, 0.85, 0.9, 0.95};
+            public double[] knockbackBonus = new double[]{0.2, 0.4, 0.6, 0.8, 1.0, 1.0, 1.0, 1.0};
+            public double[] damageBoost = new double[]{0.03, 0.06, 0.09, 0.12, 0.15, 0.18, 0.22, 0.25};
+            public double[] attackSpeed = new double[]{-0.02, -0.04, -0.06, -0.08, -0.1, -0.12, -0.14, -0.16};
+            public double[] speedBonus = new double[]{0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4};
+        }
+
+        @Config.Name("Sentient Armor")
+        public ConfigSentientArmor configSentientArmor = new ConfigSentientArmor();
         @Config.Name("Sentient Shovel")
         public ConfigSentientTool configShovel = new ConfigSentientTool();
         @Config.Name("Sentient Sword")

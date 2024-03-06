@@ -16,6 +16,9 @@ import net.minecraft.util.ResourceLocation;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import teamroots.embers.RegistryManager;
+import thaumcraft.api.items.ItemsTC;
+import thebetweenlands.common.item.misc.ItemMisc;
+import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
 @Mixin(value = ModRecipes.class)
@@ -34,17 +37,17 @@ public class MixinModRecipes {
         AlchemyArrayRecipeRegistry.registerRecipe(ComponentTypes.REAGENT_BINDING.getStack(), new ItemStack(RegistryManager.ashen_cloak_chest), new AlchemyArrayEffectBinding("livingChest", new ItemStack(RegistrarBloodMagicItems.LIVING_ARMOUR_CHEST)));
         AlchemyArrayRecipeRegistry.registerRecipe(ComponentTypes.REAGENT_BINDING.getStack(), new ItemStack(RegistryManager.ashen_cloak_legs), new AlchemyArrayEffectBinding("livingLegs", new ItemStack(RegistrarBloodMagicItems.LIVING_ARMOUR_LEGGINGS)));
         AlchemyArrayRecipeRegistry.registerRecipe(ComponentTypes.REAGENT_BINDING.getStack(), new ItemStack(RegistryManager.ashen_cloak_boots), new AlchemyArrayEffectBinding("livingBoots", new ItemStack(RegistrarBloodMagicItems.LIVING_ARMOUR_BOOTS)));
-        AlchemyArrayRecipeRegistry.registerRecipe(new ItemStack(Items.ROTTEN_FLESH), new ItemStack(Items.ROTTEN_FLESH), new AlchemyArrayEffectAttractor("attractor"), new AttractorAlchemyCircleRenderer());
-        AlchemyArrayRecipeRegistry.registerRecipe(new ItemStack(Items.FEATHER), new ItemStack(Items.REDSTONE), new AlchemyArrayEffectMovement("movement"), new StaticAlchemyCircleRenderer(new ResourceLocation("bloodmagic", "textures/models/AlchemyArrays/MovementArray.png")));
-        AlchemyArrayRecipeRegistry.registerRecipe(new ItemStack(Items.FEATHER), new ItemStack(Items.GLOWSTONE_DUST), new AlchemyArrayEffectUpdraft("updraft"), new AttractorAlchemyCircleRenderer(new ResourceLocation("bloodmagic", "textures/models/AlchemyArrays/UpdraftArray.png")));
-        AlchemyArrayRecipeRegistry.registerRecipe(new ItemStack(Items.SLIME_BALL), new ItemStack(Items.REDSTONE), new AlchemyArrayEffectBounce("bounce"), new SingleAlchemyCircleRenderer(new ResourceLocation("bloodmagic", "textures/models/AlchemyArrays/BounceArray.png")));
+        AlchemyArrayRecipeRegistry.registerRecipe(new ItemStack(ItemsTC.brain), new ItemStack(ItemsTC.brain), new AlchemyArrayEffectAttractor("attractor"), new AttractorAlchemyCircleRenderer());
+        AlchemyArrayRecipeRegistry.registerRecipe(ItemMisc.EnumItemMisc.DRAGONFLY_WING.create(1), new ItemStack(ModItems.SCABYST_DUST), new AlchemyArrayEffectMovement("movement"), new StaticAlchemyCircleRenderer(new ResourceLocation("bloodmagic", "textures/models/AlchemyArrays/MovementArray.png")));
+        AlchemyArrayRecipeRegistry.registerRecipe(ItemMisc.EnumItemMisc.DRAGONFLY_WING.create(1), new ItemStack(BlockRegistry.WISP), new AlchemyArrayEffectUpdraft("updraft"), new AttractorAlchemyCircleRenderer(new ResourceLocation("bloodmagic", "textures/models/AlchemyArrays/UpdraftArray.png")));
+        AlchemyArrayRecipeRegistry.registerRecipe(new ItemStack(ModItems.SCABYST_SLIME_1), new ItemStack(ModItems.SCABYST_DUST), new AlchemyArrayEffectBounce("bounce"), new SingleAlchemyCircleRenderer(new ResourceLocation("bloodmagic", "textures/models/AlchemyArrays/BounceArray.png")));
         //AlchemyArrayRecipeRegistry.registerRecipe(new ItemStack(Items.COAL), new ItemStack(Items.REDSTONE), new AlchemyArrayEffectFurnaceFuel("furnace"), new LowAlchemyCircleRenderer(new ResourceLocation("bloodmagic", "textures/models/AlchemyArrays/FurnaceArray.png")));
         //AlchemyArrayRecipeRegistry.registerRecipe(new ItemStack(Items.ARROW), new ItemStack(Items.FEATHER), new AlchemyArrayEffectSkeletonTurret("skeletonTurret"), new DualAlchemyCircleRenderer(new ResourceLocation("bloodmagic", "textures/models/AlchemyArrays/SkeletonTurret1.png"), new ResourceLocation("bloodmagic", "textures/models/AlchemyArrays/SkeletonTurret2.png")));
-        AlchemyArrayRecipeRegistry.registerRecipe(new ItemStack(Items.ENDER_PEARL), new ItemStack(Items.REDSTONE), new AlchemyArrayEffectTeleport("teleport"), new StaticAlchemyCircleRenderer(new ResourceLocation("bloodmagic", "textures/models/AlchemyArrays/teleportation.png")));
-        AlchemyArrayRecipeRegistry.registerRecipe(new ItemStack(Items.BOW), new ItemStack(Items.ARROW), new AlchemyArrayEffectArrowTurret("turret"), new TurretAlchemyCircleRenderer(new ResourceLocation("bloodmagic", "textures/models/AlchemyArrays/SkeletonTurret1.png")));
-        AlchemyArrayRecipeRegistry.registerRecipe(new ItemStack(ModItems.SCABYST_DUST), new ItemStack(Blocks.LAPIS_BLOCK), new AlchemyArrayEffectLaputa("laputa"), new AttractorAlchemyCircleRenderer(new ResourceLocation("bloodmagic", "textures/models/AlchemyArrays/shardoflaputa.png")));
-        AlchemyArrayRecipeRegistry.registerRecipe(new ItemStack(Blocks.COBBLESTONE), new ItemStack(Items.IRON_INGOT), new AlchemyArrayEffectSpike("spike"), new LowStaticAlchemyCircleRenderer(new ResourceLocation("bloodmagic", "textures/models/AlchemyArrays/spikearray.png")));
-        AlchemyArrayRecipeRegistry.registerRecipe(new ItemStack(Blocks.REDSTONE_BLOCK), new ItemStack(Items.REDSTONE), new AlchemyArrayEffectMobSacrifice("mobSacrifice"), new MobSacrificeAlchemyCircleRenderer());
-        AlchemyArrayRecipeRegistry.registerRecipe(ComponentTypes.REAGENT_FAST_MINER.getStack(), new ItemStack(Items.IRON_PICKAXE), new AlchemyArrayEffectSigil("fastMiner", (ISigil)RegistrarBloodMagicItems.SIGIL_FAST_MINER), new SingleAlchemyCircleRenderer(new ResourceLocation("bloodmagic", "textures/models/AlchemyArrays/FastMinerSigil.png")));
+        AlchemyArrayRecipeRegistry.registerRecipe(new ItemStack(ItemRegistry.SHIMMER_STONE), new ItemStack(ModItems.SCABYST_BLOCK), new AlchemyArrayEffectTeleport("teleport"), new StaticAlchemyCircleRenderer(new ResourceLocation("bloodmagic", "textures/models/AlchemyArrays/teleportation.png")));
+        AlchemyArrayRecipeRegistry.registerRecipe(new ItemStack(ItemRegistry.WEEDWOOD_BOW), new ItemStack(ItemRegistry.ANGLER_TOOTH_ARROW), new AlchemyArrayEffectArrowTurret("turret"), new TurretAlchemyCircleRenderer(new ResourceLocation("bloodmagic", "textures/models/AlchemyArrays/SkeletonTurret1.png")));
+        AlchemyArrayRecipeRegistry.registerRecipe(new ItemStack(ModItems.SCABYST_BLOCK), new ItemStack(epicsquid.roots.init.ModItems.cloud_berry), new AlchemyArrayEffectLaputa("laputa"), new AttractorAlchemyCircleRenderer(new ResourceLocation("bloodmagic", "textures/models/AlchemyArrays/shardoflaputa.png")));
+        //AlchemyArrayRecipeRegistry.registerRecipe(new ItemStack(Blocks.COBBLESTONE), new ItemStack(Items.IRON_INGOT), new AlchemyArrayEffectSpike("spike"), new LowStaticAlchemyCircleRenderer(new ResourceLocation("bloodmagic", "textures/models/AlchemyArrays/spikearray.png")));
+        //AlchemyArrayRecipeRegistry.registerRecipe(new ItemStack(Blocks.REDSTONE_BLOCK), new ItemStack(Items.REDSTONE), new AlchemyArrayEffectMobSacrifice("mobSacrifice"), new MobSacrificeAlchemyCircleRenderer());
+        AlchemyArrayRecipeRegistry.registerRecipe(ComponentTypes.REAGENT_FAST_MINER.getStack(), new ItemStack(ItemRegistry.BONE_PICKAXE), new AlchemyArrayEffectSigil("fastMiner", (ISigil)RegistrarBloodMagicItems.SIGIL_FAST_MINER), new SingleAlchemyCircleRenderer(new ResourceLocation("bloodmagic", "textures/models/AlchemyArrays/FastMinerSigil.png")));
     }
 }

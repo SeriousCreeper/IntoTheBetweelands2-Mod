@@ -3,6 +3,9 @@ package com.seriouscreeper.bladditions.proxy;
 import WayofTime.bloodmagic.altar.ComponentType;
 import WayofTime.bloodmagic.api.impl.BloodMagicAPI;
 import WayofTime.bloodmagic.core.RegistrarBloodMagicItems;
+import WayofTime.bloodmagic.incense.EnumTranquilityType;
+import WayofTime.bloodmagic.incense.IncenseTranquilityRegistry;
+import WayofTime.bloodmagic.incense.TranquilityStack;
 import com.aranaira.arcanearchives.data.ClientNetwork;
 import com.aranaira.arcanearchives.data.DataHelper;
 import com.aranaira.arcanearchives.data.HiveSaveData;
@@ -68,6 +71,7 @@ import net.minecraft.advancements.AdvancementManager;
 import net.minecraft.advancements.PlayerAdvancements;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCrops;
+import net.minecraft.block.BlockLog;
 import net.minecraft.block.BlockPistonBase;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
@@ -133,6 +137,7 @@ import thaumcraft.api.crafting.*;
 import thaumcraft.api.golems.GolemHelper;
 import thaumcraft.api.items.ItemsTC;
 import thaumcraft.api.research.*;
+import thaumcraft.common.blocks.misc.BlockNitor;
 import thaumcraft.common.config.ConfigBlocks;
 import thaumcraft.common.config.ConfigItems;
 import thaumcraft.common.config.ConfigRecipes;
@@ -560,6 +565,51 @@ public class CommonProxy {
 
         BloodMagicAPI.INSTANCE.unregisterAltarComponent(Blocks.BEACON.getDefaultState(), "BEACON");
         BloodMagicAPI.INSTANCE.registerAltarComponent(BlocksTC.metalBlockVoid.getDefaultState(), "BEACON");
+
+        BloodMagicAPI.INSTANCE.getValueManager().setTranquility(BlockRegistry.DUG_PURIFIED_SWAMP_DIRT, new TranquilityStack(EnumTranquilityType.EARTHEN, 1.0));
+        BloodMagicAPI.INSTANCE.getValueManager().setTranquility(BlockRegistry.DUG_PURIFIED_SWAMP_GRASS, new TranquilityStack(EnumTranquilityType.EARTHEN, 1.0));
+        BloodMagicAPI.INSTANCE.getValueManager().setTranquility(BlockRegistry.SWAMP_DIRT, new TranquilityStack(EnumTranquilityType.EARTHEN, 0.25));
+
+        BloodMagicAPI.INSTANCE.getValueManager().setTranquility(BlockRegistry.MIDDLE_FRUIT_BUSH, new TranquilityStack(EnumTranquilityType.CROP, 1.0));
+        BloodMagicAPI.INSTANCE.getValueManager().setTranquility(BlockRegistry.FUNGUS_CROP, new TranquilityStack(EnumTranquilityType.CROP, 1.0));
+        BloodMagicAPI.INSTANCE.getValueManager().setTranquility(epicsquid.roots.init.ModBlocks.cloud_berry, new TranquilityStack(EnumTranquilityType.CROP, 1.0));
+        BloodMagicAPI.INSTANCE.getValueManager().setTranquility(epicsquid.roots.init.ModBlocks.dewgonia, new TranquilityStack(EnumTranquilityType.CROP, 1.0));
+        BloodMagicAPI.INSTANCE.getValueManager().setTranquility(epicsquid.roots.init.ModBlocks.stalicripe, new TranquilityStack(EnumTranquilityType.CROP, 1.0));
+        BloodMagicAPI.INSTANCE.getValueManager().setTranquility(epicsquid.roots.init.ModBlocks.infernal_bulb, new TranquilityStack(EnumTranquilityType.CROP, 1.0));
+        BloodMagicAPI.INSTANCE.getValueManager().setTranquility(epicsquid.roots.init.ModBlocks.spirit_herb, new TranquilityStack(EnumTranquilityType.CROP, 1.0));
+        BloodMagicAPI.INSTANCE.getValueManager().setTranquility(epicsquid.roots.init.ModBlocks.pereskia, new TranquilityStack(EnumTranquilityType.CROP, 1.0));
+        BloodMagicAPI.INSTANCE.getValueManager().setTranquility(epicsquid.roots.init.ModBlocks.moonglow, new TranquilityStack(EnumTranquilityType.CROP, 1.0));
+
+        BloodMagicAPI.INSTANCE.getValueManager().setTranquility(BlockRegistry.SWAMP_WATER, new TranquilityStack(EnumTranquilityType.WATER, 1.0));
+
+        BloodMagicAPI.INSTANCE.getValueManager().setTranquility(BlockRegistry.LOG_SPIRIT_TREE, new TranquilityStack(EnumTranquilityType.TREE, 1.2));
+        BloodMagicAPI.INSTANCE.getValueManager().setTranquility(BlocksTC.logSilverwood, new TranquilityStack(EnumTranquilityType.TREE, 1.2));
+        BloodMagicAPI.INSTANCE.getValueManager().setTranquility(BlocksTC.logGreatwood, new TranquilityStack(EnumTranquilityType.TREE, 1.1));
+        BloodMagicAPI.INSTANCE.getValueManager().setTranquility(epicsquid.roots.init.ModBlocks.wildwood_log, new TranquilityStack(EnumTranquilityType.TREE, 1.1));
+
+        BloodMagicAPI.INSTANCE.getValueManager().setTranquility(BlockRegistry.PEAT_SMOULDERING, new TranquilityStack(EnumTranquilityType.FIRE, 0.5));
+
+        BloodMagicAPI.INSTANCE.getValueManager().setTranquility(BlockRegistry.WISP.getDefaultState(), "magical", 1.0);
+        BloodMagicAPI.INSTANCE.getValueManager().setTranquility(BlockRegistry.SIMULACRUM_DEEPMAN.getDefaultState(), "magical", 1.1);
+        BloodMagicAPI.INSTANCE.getValueManager().setTranquility(BlockRegistry.SIMULACRUM_ROOTMAN.getDefaultState(), "magical", 1.1);
+        BloodMagicAPI.INSTANCE.getValueManager().setTranquility(BlockRegistry.SIMULACRUM_LAKE_CAVERN.getDefaultState(), "magical", 1.1);
+
+
+        /*
+        api.getValueManager().setTranquility(Blocks.LAVA, new TranquilityStack(EnumTranquilityType.LAVA, 1.2));
+        api.getValueManager().setTranquility(Blocks.FLOWING_LAVA, new TranquilityStack(EnumTranquilityType.LAVA, 1.2));
+        api.getValueManager().setTranquility(Blocks.WATER, new TranquilityStack(EnumTranquilityType.WATER, 1.0));
+        api.getValueManager().setTranquility(Blocks.FLOWING_WATER, new TranquilityStack(EnumTranquilityType.WATER, 1.0));
+        api.getValueManager().setTranquility(RegistrarBloodMagicBlocks.LIFE_ESSENCE, new TranquilityStack(EnumTranquilityType.WATER, 1.5));
+        api.getValueManager().setTranquility(Blocks.NETHERRACK, new TranquilityStack(EnumTranquilityType.FIRE, 0.5));
+        api.getValueManager().setTranquility(Blocks.DIRT, new TranquilityStack(EnumTranquilityType.EARTHEN, 0.25));
+        api.getValueManager().setTranquility(Blocks.FARMLAND, new TranquilityStack(EnumTranquilityType.EARTHEN, 1.0));
+        api.getValueManager().setTranquility(Blocks.POTATOES, new TranquilityStack(EnumTranquilityType.CROP, 1.0));
+        api.getValueManager().setTranquility(Blocks.CARROTS, new TranquilityStack(EnumTranquilityType.CROP, 1.0));
+        api.getValueManager().setTranquility(Blocks.WHEAT, new TranquilityStack(EnumTranquilityType.CROP, 1.0));
+        api.getValueManager().setTranquility(Blocks.NETHER_WART, new TranquilityStack(EnumTranquilityType.CROP, 1.0));
+        api.getValueManager().setTranquility(Blocks.BEETROOTS, new TranquilityStack(EnumTranquilityType.CROP, 1.0));
+         */
 
         registerMultiblocks();
         registerInfusionRecipes();

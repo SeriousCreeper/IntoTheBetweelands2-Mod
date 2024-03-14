@@ -14,6 +14,7 @@
     "arcanearchives.MixinRadiantTroveTileEntity",
     "arcaneworld.MixinBiomeArcaneDungeon",
     "arcaneworld.MixinBlockReturnPortal",
+    "arcaneworld.MixinDungeonDimension",
     "basketcase.MixinBlockTileEntryBasket",
     "bloodmagic.MixinItemBoundAxe",
     "bloodmagic.MixinItemBoundPickaxe",

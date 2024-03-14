@@ -73,6 +73,7 @@
     "fishundeadrising.MixinEntityMimic",
     "fishundeadrising.MixinEntityParasite",
     "fishundeadrising.MixinEntityRaven",
+    "fishundeadrising.MixinLootTableHandler",
     "fishundeadrising.MixinModEventHandler",
     "ftbquests.MixinButtonOpenInGuide",
     "ftbquests.MixinButtonQuest",

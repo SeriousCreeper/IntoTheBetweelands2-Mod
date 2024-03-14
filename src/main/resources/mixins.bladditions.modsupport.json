@@ -28,6 +28,7 @@
     "bloodmagic.MixinItemSentientSword",
     "bloodmagic.MixinModRecipes",
     "bloodmagic.MixinRegistrarBloodMagicRecipes",
+    "bloodmagic.MixinTileInversionPillar",
     "botania.MixinBlockAltar",
     "botania.MixinBlockModMushroom",
     "botania.MixinBlockSpecialFlower",

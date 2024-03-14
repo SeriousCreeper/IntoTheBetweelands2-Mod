@@ -15,6 +15,7 @@
     "arcaneworld.MixinBiomeArcaneDungeon",
     "arcaneworld.MixinBlockReturnPortal",
     "arcaneworld.MixinDungeonDimension",
+    "arcaneworld.MixinDungeonDimensionProvider",
     "basketcase.MixinBlockTileEntryBasket",
     "bloodmagic.MixinItemBoundAxe",
     "bloodmagic.MixinItemBoundPickaxe",

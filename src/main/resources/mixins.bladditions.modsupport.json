@@ -169,6 +169,7 @@
     "thaumcraft.MixinModConfig",
     "thaumcraft.MixinPacketFXScanSource",
     "thaumcraft.MixinPlayerEvents",
+    "thaumcraft.MixinThaumcraftCraftingManager",
     "thaumcraft.MixinThaumcraftWorldGenerator",
     "thaumcraft.MixinTileBarrierStone",
     "thaumcraft.MixinUtils",

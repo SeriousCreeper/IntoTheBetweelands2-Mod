@@ -122,9 +122,8 @@ import thebetweenlands.common.block.structure.BlockFenceBetweenlands;
 import thebetweenlands.common.block.structure.BlockSimulacrum;
 import thebetweenlands.common.block.structure.BlockWaystone;
 import thebetweenlands.common.entity.EntityBLLightningBolt;
-import thebetweenlands.common.entity.mobs.EntityAnadia;
-import thebetweenlands.common.entity.mobs.EntityGreebling;
-import thebetweenlands.common.entity.mobs.EntitySludge;
+import thebetweenlands.common.entity.EntityTameableBL;
+import thebetweenlands.common.entity.mobs.*;
 import thebetweenlands.common.entity.projectiles.EntityBetweenstonePebble;
 import thebetweenlands.common.entity.projectiles.EntityFishingSpear;
 import thebetweenlands.common.entity.projectiles.EntityPyradFlame;
@@ -189,7 +188,11 @@ public class BLAdditionsEventHandler {
         Entity murderer = event.getSource().getTrueSource();
 
         // check if player killed greebling
-        if(!(murderer instanceof EntityPlayer) || !(entity instanceof EntityGreebling) || GameStageHelper.hasStage((EntityPlayer) murderer, "unlocked_bloodmagic") || !GameStageHelper.hasStage((EntityPlayer) murderer, "chose_bloodmagic")) {
+        if(!(murderer instanceof EntityPlayer) || !(entity instanceof EntityGreebling || entity instanceof EntityTameableBL) || GameStageHelper.hasStage((EntityPlayer) murderer, "unlocked_bloodmagic") || !GameStageHelper.hasStage((EntityPlayer) murderer, "chose_bloodmagic")) {
+            return;
+        }
+
+        if(entity instanceof EntityTameableBL && !((EntityTameableBL) entity).isOwner((EntityLivingBase)murderer)) {
             return;
         }
 

@@ -15,6 +15,9 @@ import net.minecraft.potion.PotionUtils;
 import net.minecraftforge.oredict.OreDictionary;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
+import thebetweenlands.common.item.misc.ItemMisc;
+import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.ItemRegistry;
 
 import java.util.List;
 import java.util.Set;
@@ -28,6 +31,7 @@ public class MixinRegistrarBloodMagicRecipes {
     @Overwrite
     public static void registerAlchemyTableRecipes(BloodMagicRecipeRegistrar registrar) {
         registrar.addAlchemyTable(ItemLivingArmourPointsUpgrade.UpgradeType.DRAFT_ANGELUS.getStack(), 20000, 400, 3, new Object[]{ComponentTypes.NEURO_TOXIN.getStack(), ComponentTypes.ANTISEPTIC.getStack(), "dustGold", Items.FERMENTED_SPIDER_EYE, new ItemStack(RegistrarBloodMagicItems.BLOOD_SHARD, 1, 0), Items.GHAST_TEAR});
+        registrar.addAlchemyTable(new ItemStack(BlockRegistry.SWAMP_GRASS), 200, 200, 1, new Object[]{BlockRegistry.SWAMP_GRASS, ItemMisc.EnumItemMisc.COMPOST.create(1), ItemRegistry.MIDDLE_FRUIT_BUSH_SEEDS});
 
         // Original recipes
         /*

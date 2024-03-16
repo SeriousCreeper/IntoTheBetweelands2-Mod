@@ -17,6 +17,7 @@
     "arcaneworld.MixinDungeonDimension",
     "arcaneworld.MixinDungeonDimensionProvider",
     "basketcase.MixinBlockTileEntryBasket",
+    "blockcraftery.MixinTileEditableBlock",
     "bloodmagic.MixinAlchemyArrayEffectArrowTurret",
     "bloodmagic.MixinItemBoundAxe",
     "bloodmagic.MixinItemBoundPickaxe",

@@ -21,14 +21,16 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import thebetweenlands.api.item.CorrosionHelper;
+import thebetweenlands.api.item.IAnimatorRepairable;
 import thebetweenlands.api.item.ICorrodible;
+import thebetweenlands.common.item.BLMaterialRegistry;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
 @Mixin(value = ItemBoundSword.class, remap = false)
-public class MixinItemBoundSword extends ItemSword implements IActivatable, ICorrodible {
+public class MixinItemBoundSword extends ItemSword implements IActivatable, ICorrodible, IAnimatorRepairable {
     public MixinItemBoundSword(ToolMaterial material) {
         super(material);
     }
@@ -69,5 +71,21 @@ public class MixinItemBoundSword extends ItemSword implements IActivatable, ICor
     @Overwrite
     public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
         return CorrosionHelper.getAttributeModifiers(super.getAttributeModifiers(slot, stack), slot, stack, ATTACK_DAMAGE_MODIFIER, CorrosionHelper.getModifier(stack) * (this.getActivated(stack) ? 6.0f : 2.0f));
+    }
+
+    public int getMinRepairFuelCost(ItemStack stack) {
+        return BLMaterialRegistry.getMinRepairFuelCost(BLMaterialRegistry.TOOL_VALONITE);
+    }
+
+    public int getFullRepairFuelCost(ItemStack stack) {
+        return BLMaterialRegistry.getFullRepairFuelCost(BLMaterialRegistry.TOOL_VALONITE);
+    }
+
+    public int getMinRepairLifeCost(ItemStack stack) {
+        return BLMaterialRegistry.getMinRepairLifeCost(BLMaterialRegistry.TOOL_VALONITE);
+    }
+
+    public int getFullRepairLifeCost(ItemStack stack) {
+        return BLMaterialRegistry.getFullRepairLifeCost(BLMaterialRegistry.TOOL_VALONITE);
     }
 }

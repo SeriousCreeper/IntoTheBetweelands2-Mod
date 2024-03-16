@@ -34,8 +34,10 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.spongepowered.asm.mixin.*;
 import thebetweenlands.api.item.CorrosionHelper;
+import thebetweenlands.api.item.IAnimatorRepairable;
 import thebetweenlands.api.item.ICorrodible;
 import thebetweenlands.common.entity.mobs.EntityTinySludgeWorm;
+import thebetweenlands.common.item.BLMaterialRegistry;
 import thebetweenlands.common.registries.AdvancementCriterionRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
 
@@ -45,7 +47,7 @@ import java.util.List;
 import java.util.Set;
 
 @Mixin(value = ItemBoundShovel.class, remap = false)
-public class MixinItemBoundShovel extends ItemBoundTool implements IActivatable, ICorrodible {
+public class MixinItemBoundShovel extends ItemBoundTool implements IActivatable, ICorrodible, IAnimatorRepairable {
     @Final
     @Shadow
     private static Set<Block> EFFECTIVE_ON;
@@ -208,5 +210,21 @@ public class MixinItemBoundShovel extends ItemBoundTool implements IActivatable,
         }
 
         return multimap;
+    }
+
+    public int getMinRepairFuelCost(ItemStack stack) {
+        return BLMaterialRegistry.getMinRepairFuelCost(BLMaterialRegistry.TOOL_VALONITE);
+    }
+
+    public int getFullRepairFuelCost(ItemStack stack) {
+        return BLMaterialRegistry.getFullRepairFuelCost(BLMaterialRegistry.TOOL_VALONITE);
+    }
+
+    public int getMinRepairLifeCost(ItemStack stack) {
+        return BLMaterialRegistry.getMinRepairLifeCost(BLMaterialRegistry.TOOL_VALONITE);
+    }
+
+    public int getFullRepairLifeCost(ItemStack stack) {
+        return BLMaterialRegistry.getFullRepairLifeCost(BLMaterialRegistry.TOOL_VALONITE);
     }
 }

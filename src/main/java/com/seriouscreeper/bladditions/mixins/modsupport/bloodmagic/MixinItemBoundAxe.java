@@ -32,14 +32,16 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import thebetweenlands.api.item.CorrosionHelper;
+import thebetweenlands.api.item.IAnimatorRepairable;
 import thebetweenlands.api.item.ICorrodible;
+import thebetweenlands.common.item.BLMaterialRegistry;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Set;
 
 @Mixin(value = ItemBoundAxe.class, remap = false)
-public class MixinItemBoundAxe extends ItemBoundTool implements IActivatable, ICorrodible {
+public class MixinItemBoundAxe extends ItemBoundTool implements IActivatable, ICorrodible, IAnimatorRepairable {
     @Final
     @Shadow
     private static Set<Block> EFFECTIVE_ON;
@@ -122,5 +124,21 @@ public class MixinItemBoundAxe extends ItemBoundTool implements IActivatable, IC
         }
 
         return multimap;
+    }
+
+    public int getMinRepairFuelCost(ItemStack stack) {
+        return BLMaterialRegistry.getMinRepairFuelCost(BLMaterialRegistry.TOOL_VALONITE);
+    }
+
+    public int getFullRepairFuelCost(ItemStack stack) {
+        return BLMaterialRegistry.getFullRepairFuelCost(BLMaterialRegistry.TOOL_VALONITE);
+    }
+
+    public int getMinRepairLifeCost(ItemStack stack) {
+        return BLMaterialRegistry.getMinRepairLifeCost(BLMaterialRegistry.TOOL_VALONITE);
+    }
+
+    public int getFullRepairLifeCost(ItemStack stack) {
+        return BLMaterialRegistry.getFullRepairLifeCost(BLMaterialRegistry.TOOL_VALONITE);
     }
 }

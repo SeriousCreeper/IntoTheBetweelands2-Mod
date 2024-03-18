@@ -103,6 +103,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.OreIngredient;
 import net.tiffit.sanity.consequences.ConsequenceManager;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import party.lemons.arcaneworld.config.ArcaneWorldConfig;
 import soot.Registry;
 import soot.recipe.ItemRenameStampingRecipe;
 import teamroots.embers.RegistryManager;
@@ -239,6 +240,11 @@ public class CommonProxy {
 
         return false;
     }
+
+    public static boolean IsInDungeonWorld(World world) {
+        return world.provider.getDimension() == ArcaneWorldConfig.DUNGEONS.DIM_ID;
+    }
+
 
     @SubscribeEvent
     public static void onCreateTool(CreateToolEvent event) {

@@ -96,6 +96,7 @@ public class ConfigBLAdditions {
     }
 
     public static class ConfigGeneral {
+        public int DungeonDimensionID = -500;
         public int SulfurExplosionDamage = 4;
         public int SulfurExplosionChance = 5;
         public int SmokingRackRecipeModifier = 5;

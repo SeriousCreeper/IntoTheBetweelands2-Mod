@@ -3,6 +3,7 @@ package com.seriouscreeper.bladditions;
 import com.seriouscreeper.bladditions.commands.BLAdditionsCommands;
 import com.seriouscreeper.bladditions.config.ConfigBLAdditions;
 import com.seriouscreeper.bladditions.events.BLAdditionsEventHandler;
+import com.seriouscreeper.bladditions.events.DungeonEventHandler;
 import com.seriouscreeper.bladditions.proxy.CommonProxy;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.LootTableList;
@@ -25,7 +26,6 @@ public class BLAdditions
     public static final ResourceLocation ANCIENT_ARMOR_CHEST = registerLootTable("loot/ancient_armor_chest");
 
 
-
     @SidedProxy(clientSide = Reference.CLIENT_PROXY_CLASS, serverSide = Reference.SERVER_PROXY_CLASS)
     public static CommonProxy proxy;
 
@@ -37,6 +37,7 @@ public class BLAdditions
         proxy.preInit(event);
 
         MinecraftForge.EVENT_BUS.register(new BLAdditionsEventHandler());
+        MinecraftForge.EVENT_BUS.register(new DungeonEventHandler());
     }
 
     @EventHandler

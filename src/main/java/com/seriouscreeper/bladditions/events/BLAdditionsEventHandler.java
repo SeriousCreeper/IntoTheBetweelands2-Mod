@@ -90,6 +90,8 @@ import party.lemons.arcaneworld.config.ArcaneWorldConfig;
 import party.lemons.arcaneworld.gen.dungeon.dimension.DungeonDimension;
 import party.lemons.arcaneworld.gen.dungeon.dimension.DungeonDimensionProvider;
 import party.lemons.arcaneworld.gen.dungeon.dimension.TeleporterDungeonReturn;
+import party.lemons.arcaneworld.util.capabilities.IRitualCoordinate;
+import party.lemons.arcaneworld.util.capabilities.RitualCoordinateProvider;
 import thaumcraft.api.ThaumcraftApi;
 import thaumcraft.api.ThaumcraftApiHelper;
 import thaumcraft.api.aura.AuraHelper;
@@ -157,6 +159,18 @@ import java.util.*;
 
 @Mod.EventBusSubscriber
 public class BLAdditionsEventHandler {
+    @SubscribeEvent
+    public static void onEntityTick(TickEvent.PlayerTickEvent event) {
+        if (event.player.world.provider.getDimension() == ConfigBLAdditions.configGeneral.DungeonDimensionID && event.player.posY < 10.0) {
+            event.player.fallDistance = 0.0F;
+            if (!event.player.world.isRemote) {
+                int returnDim = ((IRitualCoordinate)event.player.getCapability(RitualCoordinateProvider.RITUAL_COORDINATE_CAPABILITY, (EnumFacing)null)).getDim();
+                event.player.changeDimension(returnDim, new TeleporterDungeonReturn((WorldServer)event.player.world));
+            }
+        }
+    }
+
+
     @SubscribeEvent
     public void onTimeIsUp(TimeIsUpTickEvent.TimeIsUpEvent event) {
         if(event.getWorld().provider instanceof DungeonDimensionProvider) {
@@ -414,7 +428,7 @@ public class BLAdditionsEventHandler {
     public static void onBlockPlaced(BlockEvent.NeighborNotifyEvent event) {
         Block block = event.getState().getBlock();
 
-        if(event.getWorld().provider.getDimension() == DungeonDimension.TYPE.getId() || event.getWorld().provider.getDimension() == 0) {
+        if(event.getWorld().provider.getDimension() == ConfigBLAdditions.configGeneral.DungeonDimensionID || event.getWorld().provider.getDimension() == 0) {
             return;
         }
 

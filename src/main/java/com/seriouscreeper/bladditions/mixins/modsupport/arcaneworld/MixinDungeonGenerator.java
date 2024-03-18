@@ -15,6 +15,8 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import party.lemons.arcaneworld.gen.dungeon.generation.DungeonGenerator;
 import party.lemons.arcaneworld.gen.dungeon.generation.DungeonRoomProcessor;
 import party.lemons.arcaneworld.gen.dungeon.generation.RoomDirection;
+import party.lemons.arcaneworld.gen.dungeon.generation.TickerDungeon;
+import party.lemons.lemonlib.ticker.TickerHandler;
 
 @Mixin(value = DungeonGenerator.class, remap = false)
 public class MixinDungeonGenerator {
@@ -73,5 +75,14 @@ public class MixinDungeonGenerator {
     @Shadow
     public ResourceLocation getRoomLayout(RoomDirection direction) {
         return null;
+    }
+
+
+    /**
+     * @author
+     * @reason
+     */
+    @Overwrite
+    public void generate() {
     }
 }

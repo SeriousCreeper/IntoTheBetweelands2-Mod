@@ -1,6 +1,7 @@
 package com.seriouscreeper.bladditions.mixins.modsupport.thebetweenlands;
 
 import com.seriouscreeper.bladditions.compat.arcaneworld.TeleporterDungeonCustom;
+import com.seriouscreeper.bladditions.config.ConfigBLAdditions;
 import com.seriouscreeper.bladditions.init.ModItems;
 import com.seriouscreeper.bladditions.items.ItemCorruptedBoneWayfinder;
 import com.seriouscreeper.bladditions.libs.AdminExecute;
@@ -127,7 +128,7 @@ public class MixinTileEntityOfferingTable extends TileEntityGroundItem {
 
                     ((IRitualCoordinate)entity.getCapability(RitualCoordinateProvider.RITUAL_COORDINATE_CAPABILITY, (EnumFacing)null)).setPos(new BlockPos(entity.posX, entity.posY, entity.posZ));
                     ((IRitualCoordinate)entity.getCapability(RitualCoordinateProvider.RITUAL_COORDINATE_CAPABILITY, (EnumFacing)null)).setDim(entity.dimension);
-                    entity.changeDimension(ArcaneWorldConfig.DUNGEONS.DIM_ID, teleporter);
+                    entity.changeDimension(ConfigBLAdditions.configGeneral.DungeonDimensionID, teleporter);
 
                     // then teleport others to that player
                     for(EntityPlayer entityPlayer : nearbyPlayers) {
@@ -142,7 +143,7 @@ public class MixinTileEntityOfferingTable extends TileEntityGroundItem {
 
                         ((IRitualCoordinate)entityPlayer.getCapability(RitualCoordinateProvider.RITUAL_COORDINATE_CAPABILITY, (EnumFacing)null)).setPos(new BlockPos(entityPlayer.posX, entityPlayer.posY, entityPlayer.posZ));
                         ((IRitualCoordinate)entityPlayer.getCapability(RitualCoordinateProvider.RITUAL_COORDINATE_CAPABILITY, (EnumFacing)null)).setDim(entityPlayer.dimension);
-                        entityPlayer.changeDimension(ArcaneWorldConfig.DUNGEONS.DIM_ID, teleporter);
+                        entityPlayer.changeDimension(ConfigBLAdditions.configGeneral.DungeonDimensionID, teleporter);
                     }
                 } else {
                     for(EntityPlayer entityPlayer : nearbyPlayers) {

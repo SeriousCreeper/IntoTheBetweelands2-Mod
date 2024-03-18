@@ -16,6 +16,7 @@
     "arcaneworld.MixinBlockReturnPortal",
     "arcaneworld.MixinDungeonDimension",
     "arcaneworld.MixinDungeonDimensionEvents",
+    "arcaneworld.MixinDungeonDimensionEventsClient",
     "arcaneworld.MixinDungeonDimensionProvider",
     "basketcase.MixinBlockTileEntryBasket",
     "blockcraftery.MixinTileEditableBlock",

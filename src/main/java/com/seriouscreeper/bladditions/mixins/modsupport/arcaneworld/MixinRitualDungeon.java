@@ -1,6 +1,7 @@
 package com.seriouscreeper.bladditions.mixins.modsupport.arcaneworld;
 
 import com.seriouscreeper.bladditions.compat.arcaneworld.TeleporterDungeonCustom;
+import com.seriouscreeper.bladditions.config.ConfigBLAdditions;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -37,7 +38,7 @@ public class MixinRitualDungeon {
             EntityLivingBase p = (EntityLivingBase)var8.next();
             ((IRitualCoordinate)p.getCapability(RitualCoordinateProvider.RITUAL_COORDINATE_CAPABILITY, (EnumFacing)null)).setPos(new BlockPos(p.posX, p.posY, p.posZ));
             ((IRitualCoordinate)p.getCapability(RitualCoordinateProvider.RITUAL_COORDINATE_CAPABILITY, (EnumFacing)null)).setDim(p.dimension);
-            p.changeDimension(ArcaneWorldConfig.DUNGEONS.DIM_ID, teleporter);
+            p.changeDimension(ConfigBLAdditions.configGeneral.DungeonDimensionID, teleporter);
         }
 
         ci.cancel();

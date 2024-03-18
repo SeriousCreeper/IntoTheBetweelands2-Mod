@@ -46,8 +46,6 @@ public class TeleporterDungeonCustom extends TeleporterDungeon {
 
                 this.generateNewDungeon = false;
 
-                System.out.println(data.getDungeonCount());
-
                 this.hasGenerated = true;
             }
 

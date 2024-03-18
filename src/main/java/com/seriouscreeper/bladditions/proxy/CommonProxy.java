@@ -242,7 +242,7 @@ public class CommonProxy {
     }
 
     public static boolean IsInDungeonWorld(World world) {
-        return world.provider.getDimension() == ArcaneWorldConfig.DUNGEONS.DIM_ID;
+        return world.provider.getDimension() == ConfigBLAdditions.configGeneral.DungeonDimensionID;
     }
 
 

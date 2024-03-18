@@ -78,5 +78,10 @@ public class DungeonGeneratorCustom extends DungeonGenerator {
         Template template = this.world.getSaveHandler().getStructureTemplateManager().getTemplate(this.world.getMinecraftServer(), layout);
         template.addBlocksToWorld(this.world, generatePos.add(offsetX, 0, offsetZ), new DungeonRoomProcessor(), settings, 2);
         return true;
-}
+    }
+
+
+    @Override
+    public void generate() {
+    }
 }

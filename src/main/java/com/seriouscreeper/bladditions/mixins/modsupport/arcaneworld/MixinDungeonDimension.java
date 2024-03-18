@@ -1,5 +1,6 @@
 package com.seriouscreeper.bladditions.mixins.modsupport.arcaneworld;
 
+import com.seriouscreeper.bladditions.config.ConfigBLAdditions;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -47,8 +48,12 @@ public class MixinDungeonDimension {
     }
 
 
-    @Shadow
+    /**
+     * @author
+     * @reason
+     */
+    @Overwrite
     private static boolean isInDim(World world) {
-        return world.provider.getDimension() == ArcaneWorldConfig.DUNGEONS.DIM_ID;
+        return world.provider.getDimension() == ConfigBLAdditions.configGeneral.DungeonDimensionID;
     }
 }

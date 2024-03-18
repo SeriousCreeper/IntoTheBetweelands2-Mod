@@ -3,6 +3,7 @@ package com.seriouscreeper.bladditions.items;
 import com.blamejared.ctgui.reference.Reference;
 import com.seriouscreeper.bladditions.BLAdditions;
 import com.seriouscreeper.bladditions.compat.arcaneworld.TeleporterDungeonCustom;
+import com.seriouscreeper.bladditions.config.ConfigBLAdditions;
 import com.seriouscreeper.bladditions.libs.AdminExecute;
 import com.seriouscreeper.bladditions.libs.CustomTeleporter;
 import net.minecraft.block.state.IBlockState;
@@ -144,7 +145,7 @@ public class ItemCorruptedBoneWayfinder extends ItemBoneWayfinder {
 
                 ((IRitualCoordinate)entity.getCapability(RitualCoordinateProvider.RITUAL_COORDINATE_CAPABILITY, (EnumFacing)null)).setPos(new BlockPos(entity.posX, entity.posY, entity.posZ));
                 ((IRitualCoordinate)entity.getCapability(RitualCoordinateProvider.RITUAL_COORDINATE_CAPABILITY, (EnumFacing)null)).setDim(entity.dimension);
-                entity.changeDimension(ArcaneWorldConfig.DUNGEONS.DIM_ID, teleporter);
+                entity.changeDimension(ConfigBLAdditions.configGeneral.DungeonDimensionID, teleporter);
             } else {
                 MinecraftServer server = worldIn.getMinecraftServer();
                 ICommandSender sender = new AdminExecute((EntityPlayer) entity, entity.getPosition());

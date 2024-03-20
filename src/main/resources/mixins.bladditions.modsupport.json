@@ -129,6 +129,7 @@
     "roots.MixinRunicShearsEntityCategory",
     "roots.MixinSpellLibraryData",
     "roots.MixinUUIDRegistry",
+    "roots.spells.MixinSpellGrowthInfusion",
     "roots.spells.MixinSpellShatter",
     "sanity.MixinConsequenceManager",
     "sanity.MixinEyesConsequences",

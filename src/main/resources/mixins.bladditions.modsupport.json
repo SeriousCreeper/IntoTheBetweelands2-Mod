@@ -233,6 +233,7 @@
     "waterstrainer.MixinAPIUtils"
   ],
   "client": [
+    "bloodmagic.MixinClientHandler",
     "corpse.MixinGuiDeathHistory",
     "quark.MixinRenderLeashKnot2",
     "thaumcraft.MixinGuiFocalManipulator",

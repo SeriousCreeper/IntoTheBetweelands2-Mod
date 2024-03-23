@@ -1162,6 +1162,6 @@ public class CommonProxy {
 
 
     public static boolean IsWithinLocation(World world, BlockPos pos) {
-        return LocationStorage.isLocationGuarded(world, null, pos);
+        return LocationStorage.isLocationGuarded(world, null, pos) || world.provider.getDimension() == ConfigBLAdditions.configGeneral.DungeonDimensionID;
     }
 }

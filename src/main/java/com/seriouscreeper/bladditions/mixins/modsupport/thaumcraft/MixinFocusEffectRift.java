@@ -1,5 +1,6 @@
 package com.seriouscreeper.bladditions.mixins.modsupport.thaumcraft;
 
+import com.seriouscreeper.bladditions.proxy.CommonProxy;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -14,7 +15,7 @@ import thebetweenlands.common.world.storage.location.LocationStorage;
 public class MixinFocusEffectRift {
     @Inject(method = "createHole", at = @At("HEAD"), cancellable = true)
     private static void createHole(World world, BlockPos pos, EnumFacing facing, byte count, int max, CallbackInfoReturnable<Boolean> cir) {
-        if(LocationStorage.isLocationGuarded(world, null, pos)) {
+        if(CommonProxy.IsWithinLocation(world, pos)) {
             cir.setReturnValue(false);
         }
     }

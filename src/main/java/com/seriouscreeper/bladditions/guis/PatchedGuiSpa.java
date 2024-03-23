@@ -5,6 +5,7 @@ import com.seriouscreeper.bladditions.tiles.PatchedTileSpa;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -100,7 +101,21 @@ public class PatchedGuiSpa extends GuiContainer {
     }
 
     private TextureAtlasSprite func_175371_a(Block p_175371_1_) {
-        return Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getTexture(p_175371_1_.getDefaultState());
+        if(spa.tank.getFluid() == null) {
+            return null;
+        }
+
+        ResourceLocation fluidTexture = spa.tank.getFluid().getFluid().getStill();
+
+        if (fluidTexture != null) {
+            return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(fluidTexture.toString());
+        }
+
+        try {
+            return Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getTexture(p_175371_1_.getDefaultState());
+        } catch(Exception e) {
+            return null;
+        }
     }
 
     public void renderFluid(TextureAtlasSprite icon, Fluid fluid) {

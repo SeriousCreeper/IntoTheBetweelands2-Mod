@@ -1,11 +1,13 @@
 package com.seriouscreeper.bladditions.mixins.modsupport.thebetweenlands;
 
 import com.mrbysco.anotherliquidmilkmod.init.MilkRegistry;
+import com.seriouscreeper.bladditions.proxy.CommonProxy;
 import growthcraft.core.shared.fluids.FluidDictionary;
 import growthcraft.milk.shared.init.GrowthcraftMilkFluids;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
@@ -27,7 +29,7 @@ import thebetweenlands.common.registries.ItemRegistry;
 @Mixin(value = EntityLurker.class)
 public class MixinEntityLurker extends EntityCreature {
     public long milk_cooldown;
-    private final int timeBetweenMilking = 6000;
+    private final int timeBetweenMilking = 24000;
 
     public MixinEntityLurker(World worldIn) {
         super(worldIn);
@@ -75,7 +77,13 @@ public class MixinEntityLurker extends EntityCreature {
 
                         stack.shrink(1);
 
-                        setMilkCooldown(getEntityWorld().getTotalWorldTime() + timeBetweenMilking);
+                        int milkTimer = timeBetweenMilking;
+
+                        if(CommonProxy.IsPacifist((EntityPlayerMP) player)) {
+                            milkTimer /= 4;
+                        }
+
+                        setMilkCooldown(getEntityWorld().getTotalWorldTime() + milkTimer);
                     }
 
                     return false;

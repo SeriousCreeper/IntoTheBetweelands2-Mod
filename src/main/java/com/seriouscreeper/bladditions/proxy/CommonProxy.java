@@ -17,6 +17,7 @@ import com.rcx.mystgears.block.BlockTurret;
 import com.rcx.mystgears.item.ItemGear;
 import com.seriouscreeper.bladditions.BLAdditions;
 import com.seriouscreeper.bladditions.blocks.*;
+import com.seriouscreeper.bladditions.capability.PacifistCapability;
 import com.seriouscreeper.bladditions.config.ConfigBLAdditions;
 import com.seriouscreeper.bladditions.crafting.PatchedRecipeMagicDust;
 import com.seriouscreeper.bladditions.entities.GreeblingMerchantEntity;
@@ -85,6 +86,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -103,7 +105,6 @@ import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.OreIngredient;
 import net.tiffit.sanity.consequences.ConsequenceManager;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import party.lemons.arcaneworld.config.ArcaneWorldConfig;
 import soot.Registry;
 import soot.recipe.ItemRenameStampingRecipe;
 import teamroots.embers.RegistryManager;
@@ -224,22 +225,15 @@ public class CommonProxy {
 
 
     public static boolean IsPacifist(EntityPlayerMP player) {
-        ResourceLocation id = Advancements.PACIFIST_ID;
-        MinecraftServer server = player.getServer();
+        PacifistCapability cap = player.getCapability(PacifistCapability.INSTANCE, null);
 
-        if (server != null) {
-            AdvancementManager manager = server.getAdvancementManager();
-            Advancement adv = manager.getAdvancement(id);
-
-            if (adv != null) {
-                if (!player.getAdvancements().getProgress(adv).isDone()) {
-                    return true;
-                }
-            }
+        if(cap == null) {
+            return false;
         }
 
-        return false;
+        return cap.IsPacifist();
     }
+
 
     public static boolean IsInDungeonWorld(World world) {
         return world.provider.getDimension() == ConfigBLAdditions.configGeneral.DungeonDimensionID;
@@ -386,6 +380,8 @@ public class CommonProxy {
 
 
     public void init(FMLInitializationEvent e) {
+        CapabilityManager.INSTANCE.register(PacifistCapability.class, new PacifistCapability.PacifistCapabilityStorage(), new PacifistCapability.PacifistCapabilityFactory());
+
         // Generate betweenlands bee hives
         GameRegistry.registerWorldGenerator(new BLBeeHiveWorldGen(), 0);
 

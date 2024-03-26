@@ -1,5 +1,6 @@
 package com.seriouscreeper.bladditions;
 
+import com.seriouscreeper.bladditions.capability.CapabilityEventHandler;
 import com.seriouscreeper.bladditions.commands.BLAdditionsCommands;
 import com.seriouscreeper.bladditions.config.ConfigBLAdditions;
 import com.seriouscreeper.bladditions.events.BLAdditionsEventHandler;
@@ -43,6 +44,8 @@ public class BLAdditions
     @EventHandler
     public void init(FMLInitializationEvent event) {
         proxy.init(event);
+
+        MinecraftForge.EVENT_BUS.register(new CapabilityEventHandler());
     }
 
     @EventHandler

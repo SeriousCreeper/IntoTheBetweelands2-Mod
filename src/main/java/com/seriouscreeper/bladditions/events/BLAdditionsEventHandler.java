@@ -18,15 +18,23 @@ import com.codetaylor.mc.pyrotech.modules.tech.basic.ModuleTechBasic;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.block.BlockKilnPit;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.potion.PotionFocused;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.tile.TileCampfire;
+import com.seriouscreeper.bladditions.BLAdditions;
+import com.seriouscreeper.bladditions.capability.PacifistCapability;
 import com.seriouscreeper.bladditions.config.ConfigBLAdditions;
 import com.seriouscreeper.bladditions.interfaces.ISanityExtraInfo;
 import com.seriouscreeper.bladditions.potion.PotionThaumcraftResearch;
 import com.seriouscreeper.bladditions.proxy.CommonProxy;
+import epicsquid.roots.advancements.Advancements;
 import epicsquid.roots.block.groves.BlockGroveStone;
+import epicsquid.roots.config.GeneralConfig;
+import epicsquid.roots.event.DeathEventHandler;
 import epicsquid.roots.init.ModItems;
+import epicsquid.roots.init.ModRecipes;
 import epicsquid.roots.init.ModSounds;
 import epicsquid.roots.item.ItemSylvanArmor;
 import epicsquid.roots.item.wildwood.ItemWildwoodArmor;
+import epicsquid.roots.recipe.PacifistEntry;
+import epicsquid.roots.util.EntityUtil;
 import hunternif.mc.atlas.api.AtlasAPI;
 import mcp.mobius.waila.api.event.WailaRenderEvent;
 import mcp.mobius.waila.api.event.WailaTooltipEvent;
@@ -58,6 +66,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
@@ -67,6 +76,7 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.IPlantable;
+import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.entity.item.ItemExpireEvent;
 import net.minecraftforge.event.entity.living.*;
@@ -159,6 +169,14 @@ import java.util.*;
 
 @Mod.EventBusSubscriber
 public class BLAdditionsEventHandler {
+    @SubscribeEvent
+    public static void attachCap(AttachCapabilitiesEvent<Entity> e) {
+        if (e.getObject() instanceof EntityPlayer) {
+            e.addCapability(new ResourceLocation(BLAdditions.MODID, "pacifist"), new PacifistCapability.PacifistCapabilityProvider());
+        }
+    }
+
+
     @SubscribeEvent
     public static void onEntityTick(TickEvent.PlayerTickEvent event) {
         if (event.player.world.provider.getDimension() == ConfigBLAdditions.configGeneral.DungeonDimensionID && event.player.posY < 10.0) {

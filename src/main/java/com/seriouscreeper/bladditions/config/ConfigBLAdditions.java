@@ -96,6 +96,8 @@ public class ConfigBLAdditions {
     }
 
     public static class ConfigGeneral {
+        @Config.RangeInt(min = 0, max = 9)
+        public int MaxPacifistForgiveness = 5;
         public int DungeonDimensionID = -500;
         public int SulfurExplosionDamage = 4;
         public int SulfurExplosionChance = 5;

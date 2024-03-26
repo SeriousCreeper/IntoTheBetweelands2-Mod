@@ -556,6 +556,9 @@ public class CommonProxy {
         BloodMagicAPI.INSTANCE.getValueManager().setTranquility(BlockRegistry.DUG_PURIFIED_SWAMP_DIRT, new TranquilityStack(EnumTranquilityType.EARTHEN, 1.0));
         BloodMagicAPI.INSTANCE.getValueManager().setTranquility(BlockRegistry.DUG_PURIFIED_SWAMP_GRASS, new TranquilityStack(EnumTranquilityType.EARTHEN, 1.0));
         BloodMagicAPI.INSTANCE.getValueManager().setTranquility(BlockRegistry.SWAMP_DIRT, new TranquilityStack(EnumTranquilityType.EARTHEN, 0.25));
+        BloodMagicAPI.INSTANCE.getValueManager().setTranquility(BlockRegistry.SWAMP_GRASS, new TranquilityStack(EnumTranquilityType.EARTHEN, 0.5));
+
+        BloodMagicAPI.INSTANCE.getValueManager().setTranquility(BlockRegistry.WEEDWOOD_BUSH, new TranquilityStack(EnumTranquilityType.PLANT, 1.0));
 
         BloodMagicAPI.INSTANCE.getValueManager().setTranquility(BlockRegistry.MIDDLE_FRUIT_BUSH, new TranquilityStack(EnumTranquilityType.CROP, 1.0));
         BloodMagicAPI.INSTANCE.getValueManager().setTranquility(BlockRegistry.FUNGUS_CROP, new TranquilityStack(EnumTranquilityType.CROP, 1.0));

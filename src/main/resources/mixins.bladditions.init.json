@@ -9,6 +9,7 @@
     "MapColorAccessor",
     "MixinBlockPistonBase",
     "MixinBlockRedstoneWire",
+    "MixinEntityAINearestAttackableTarget",
     "MixinItemDye",
     "MixinLeashKnot",
     "MixinMapColors",

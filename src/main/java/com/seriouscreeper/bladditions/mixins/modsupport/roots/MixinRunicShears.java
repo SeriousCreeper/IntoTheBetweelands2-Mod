@@ -43,6 +43,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import thebetweenlands.common.entity.mobs.EntityPyrad;
 import thebetweenlands.common.entity.mobs.EntitySwarm;
 import thebetweenlands.common.registries.BlockRegistry;
 
@@ -169,14 +170,13 @@ public class MixinRunicShears extends ItemShearsBase {
 
                                 if(isPacifist) {
                                     cooldown /= 4;
+                                } else if(entity instanceof EntitySwarm || entity instanceof EntityPyrad) {
+                                    player.sendStatusMessage((new TextComponentTranslation("Only Pacifists can shear this entity", new Object[0])).setStyle((new Style()).setColor(TextFormatting.DARK_PURPLE)), true);
+                                    return true;
                                 }
 
                                 cap.setCooldown(cooldown);
                                 EntityItem ent = entity.entityDropItem(recipe.getDrop(entity).copy(), 1.0F);
-
-                                if(entity instanceof EntitySwarm) {
-                                    entity.setHealth(entity.getHealth() - 5);
-                                }
 
                                 ent.motionY += (double)(rand.nextFloat() * 0.05F);
                                 ent.motionX += (double)((rand.nextFloat() - rand.nextFloat()) * 0.1F);

@@ -28,6 +28,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import thebetweenlands.common.entity.mobs.EntityPyrad;
 import thebetweenlands.common.entity.mobs.EntitySwarm;
 
 import java.util.List;
@@ -66,6 +67,11 @@ public class MixinDispenseRunicShears {
             }
 
             if (entity != null && recipe != null && cap != null) {
+                if(entity instanceof EntitySwarm || entity instanceof EntityPyrad) {
+                    cir.setReturnValue(stack);
+                    return;
+                }
+
                 cap.setCooldown((long)recipe.getCooldown());
                 EntityItem ent = entity.entityDropItem(recipe.getDrop((EntityLivingBase)entity).copy(), 1.0F);
                 ent.motionY += (double)(Util.rand.nextFloat() * 0.05F);
@@ -73,10 +79,6 @@ public class MixinDispenseRunicShears {
                 ent.motionZ += (double)((Util.rand.nextFloat() - Util.rand.nextFloat()) * 0.1F);
                 if (stack.attemptDamageItem(1, world.rand, FakePlayerFactory.getMinecraft((WorldServer)world))) {
                     stack.setCount(0);
-                }
-
-                if(entity instanceof EntitySwarm) {
-                    entity.setHealth(entity.getHealth() - 5);
                 }
 
                 IMessage packet = new MessageRunicShearsFX(entity);

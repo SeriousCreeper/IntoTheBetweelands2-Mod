@@ -64,7 +64,12 @@ public class MixinTileMechanicalMulchSpreader extends TileEntity {
                 int var10002;
 
                 if (bs.getBlock() instanceof BlockSwampGrass || bs.getBlock() instanceof BlockSwampDirt || bs.getBlock() instanceof BlockDeadGrass) {
-                    w.setBlockState(p, BlockRegistry.DUG_SWAMP_DIRT.getDefaultState());
+                    if(bs.getBlock() == BlockRegistry.PURIFIED_SWAMP_DIRT) {
+                        w.setBlockState(p, BlockRegistry.DUG_PURIFIED_SWAMP_DIRT.getDefaultState());
+                    } else {
+                        w.setBlockState(p, BlockRegistry.DUG_SWAMP_DIRT.getDefaultState());
+                    }
+
                     bs = w.getBlockState(p);
                 }
 

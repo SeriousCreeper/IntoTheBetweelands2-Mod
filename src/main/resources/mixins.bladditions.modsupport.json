@@ -194,6 +194,7 @@
     "thebetweenlands.MixinBiomeDecoratorMarsh",
     "thebetweenlands.MixinBLFurnace",
     "thebetweenlands.MixinBlockBarrel",
+    "thebetweenlands.MixinBlockBreakHandler",
     "thebetweenlands.MixinBlockPlant",
     "thebetweenlands.MixinBlockSaplingSpiritTree",
     "thebetweenlands.MixinDruidAltarRecipeMaker",

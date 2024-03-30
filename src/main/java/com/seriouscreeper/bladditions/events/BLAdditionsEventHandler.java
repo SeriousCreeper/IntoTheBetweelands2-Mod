@@ -253,6 +253,7 @@ public class BLAdditionsEventHandler {
          */
 
         GameStageHelper.addStage((EntityPlayer)murderer, "unlocked_bloodmagic");
+        GameStageHelper.syncPlayer((EntityPlayer)murderer);
 
         world.playSound(null, murderer.getPosition().getX(), murderer.getPosition().getY(), murderer.getPosition().getZ(), SoundRegistry.STALKER_SCREAM, SoundCategory.HOSTILE, 2.0F, 0.1F);
     }
@@ -304,6 +305,7 @@ public class BLAdditionsEventHandler {
 
                     // we have an active grovestone, unlock botania
                     GameStageHelper.addStage(player, "unlocked_botania");
+                    GameStageHelper.syncPlayer((EntityPlayer)player);
 
                     player.world.spawnEntity(new EntityBLLightningBolt(player.world, player.posX, player.posY, player.posZ, 0, false, false));
                 }

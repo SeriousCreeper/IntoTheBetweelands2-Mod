@@ -30,8 +30,8 @@ public class MixinRegistrarBloodMagicRecipes {
      */
     @Overwrite
     public static void registerAlchemyTableRecipes(BloodMagicRecipeRegistrar registrar) {
-        registrar.addAlchemyTable(ItemLivingArmourPointsUpgrade.UpgradeType.DRAFT_ANGELUS.getStack(), 20000, 400, 3, new Object[]{ComponentTypes.NEURO_TOXIN.getStack(), ComponentTypes.ANTISEPTIC.getStack(), "dustGold", Items.FERMENTED_SPIDER_EYE, new ItemStack(RegistrarBloodMagicItems.BLOOD_SHARD, 1, 0), Items.GHAST_TEAR});
-        registrar.addAlchemyTable(new ItemStack(BlockRegistry.SWAMP_GRASS), 200, 200, 1, new Object[]{BlockRegistry.SWAMP_GRASS, ItemMisc.EnumItemMisc.COMPOST.create(1), ItemRegistry.MIDDLE_FRUIT_BUSH_SEEDS});
+        //registrar.addAlchemyTable(ItemLivingArmourPointsUpgrade.UpgradeType.DRAFT_ANGELUS.getStack(), 20000, 400, 3, new Object[]{ComponentTypes.NEURO_TOXIN.getStack(), ComponentTypes.ANTISEPTIC.getStack(), "dustGold", Items.FERMENTED_SPIDER_EYE, new ItemStack(RegistrarBloodMagicItems.BLOOD_SHARD, 1, 0), Items.GHAST_TEAR});
+        registrar.addAlchemyTable(new ItemStack(BlockRegistry.SWAMP_GRASS), 200, 200, 1, new Object[]{BlockRegistry.SWAMP_DIRT, ItemMisc.EnumItemMisc.COMPOST.create(1), ItemRegistry.MIDDLE_FRUIT_BUSH_SEEDS});
 
         // Original recipes
         /*

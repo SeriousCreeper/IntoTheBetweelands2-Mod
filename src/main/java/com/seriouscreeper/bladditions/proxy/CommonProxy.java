@@ -43,7 +43,6 @@ import com.tiviacz.pizzacraft.init.ModBlocks;
 import epicsquid.mysticallib.LibRegistry;
 import epicsquid.mysticallib.event.RegisterContentEvent;
 import epicsquid.roots.Roots;
-import epicsquid.roots.advancements.Advancements;
 import epicsquid.roots.api.CreateToolEvent;
 import epicsquid.roots.init.ModItems;
 import epicsquid.roots.integration.jei.soil.SoilRecipe;
@@ -60,12 +59,10 @@ import growthcraft.milk.common.Init;
 import growthcraft.milk.shared.fluids.MilkFluidTags;
 import growthcraft.milk.shared.init.GrowthcraftMilkFluids;
 import kpan.bq_popup.config.ConfigHolder;
-import net.minecraft.advancements.Advancement;
-import net.minecraft.advancements.AdvancementManager;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockCrops;
-import net.minecraft.block.BlockPistonBase;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
+import net.minecraft.dispenser.BehaviorDefaultDispenseItem;
+import net.minecraft.dispenser.IBlockSource;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EnumCreatureType;
@@ -80,7 +77,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.*;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
@@ -127,6 +123,7 @@ import thaumcraft.api.crafting.*;
 import thaumcraft.api.golems.GolemHelper;
 import thaumcraft.api.items.ItemsTC;
 import thaumcraft.api.research.*;
+import thaumcraft.common.blocks.essentia.BlockJarItem;
 import thaumcraft.common.config.ConfigBlocks;
 import thaumcraft.common.config.ConfigItems;
 import thaumcraft.common.golems.seals.SealHandler;
@@ -134,6 +131,7 @@ import thaumcraft.common.lib.crafting.DustTriggerMultiblock;
 import thaumcraft.common.lib.crafting.InfusionEnchantmentRecipe;
 import thaumcraft.common.lib.enchantment.EnumInfusionEnchantment;
 import thaumcraft.common.lib.utils.CropUtils;
+import thaumcraft.common.tiles.essentia.TileJarFillable;
 import thaumicperiphery.ModContent;
 import thebetweenlands.api.item.CorrosionHelper;
 import thebetweenlands.api.recipes.ISmokingRackRecipe;
@@ -637,6 +635,76 @@ public class CommonProxy {
         ThaumcraftApi.addCrucibleRecipe(new ResourceLocation("thaumcraft:LiquidDeath"), new CrucibleRecipe("LIQUIDDEATH", ItemRegistry.BL_BUCKET.withFluid(1, ConfigBlocks.FluidDeath.instance), new ItemStack(ItemRegistry.BL_BUCKET, 1, 1), (new AspectList()).add(Aspect.DEATH, 100).add(Aspect.ALCHEMY, 20).add(Aspect.ENTROPY, 50)));
 
 //        FLUXABLE_ITEMS.put(new ItemStack(ItemRegistry.ITEMS_MISC, 1, 1), new ItemStack(Items.APPLE));
+
+        BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(Item.getItemFromBlock(BlocksTC.jarNormal), new BehaviorDefaultDispenseItem()
+        {
+            @Override
+            protected ItemStack dispenseStack(IBlockSource source, ItemStack stack)
+            {
+                if(stack.getItem() instanceof BlockJarItem) {
+                    BlockPos blockPos = (source.getBlockState().getValue(BlockDispenser.FACING) == EnumFacing.UP) ? source.getBlockPos().up() : source.getBlockPos().offset(source.getBlockState().getValue(BlockDispenser.FACING));
+                    World world = source.getWorld();
+
+                    if(world.getBlockState(blockPos).getBlock() instanceof BlockAir) {
+                        world.setBlockState(blockPos, BlocksTC.jarNormal.getDefaultState());
+                        TileEntity te = source.getWorld().getTileEntity(blockPos);
+
+                        if (te instanceof TileJarFillable) {
+                            BlockJarItem blockJarItem = (BlockJarItem)stack.getItem();
+                            TileJarFillable jar = (TileJarFillable)te;
+                            jar.setAspects(blockJarItem.getAspects(stack));
+
+                            if (stack.hasTagCompound() && stack.getTagCompound().hasKey("AspectFilter")) {
+                                jar.aspectFilter = Aspect.getAspect(stack.getTagCompound().getString("AspectFilter"));
+                            }
+
+                            te.markDirty();
+                            source.getWorld().markAndNotifyBlock(blockPos, source.getWorld().getChunk(blockPos), BlocksTC.jarNormal.getDefaultState(), BlocksTC.jarNormal.getDefaultState(), 3);
+
+                            stack.shrink(1);
+                            return stack;
+                        }
+                    }
+                }
+
+                return super.dispenseStack(source, stack);
+            }
+        });
+
+        BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(Item.getItemFromBlock(BlocksTC.jarVoid), new BehaviorDefaultDispenseItem()
+        {
+            @Override
+            protected ItemStack dispenseStack(IBlockSource source, ItemStack stack)
+            {
+                if(stack.getItem() instanceof BlockJarItem) {
+                    BlockPos blockPos = (source.getBlockState().getValue(BlockDispenser.FACING) == EnumFacing.UP) ? source.getBlockPos().up() : source.getBlockPos().offset(source.getBlockState().getValue(BlockDispenser.FACING));
+                    World world = source.getWorld();
+
+                    if(world.getBlockState(blockPos).getBlock() instanceof BlockAir) {
+                        world.setBlockState(blockPos, BlocksTC.jarVoid.getDefaultState());
+                        TileEntity te = source.getWorld().getTileEntity(blockPos);
+
+                        if (te instanceof TileJarFillable) {
+                            BlockJarItem blockJarItem = (BlockJarItem)stack.getItem();
+                            TileJarFillable jar = (TileJarFillable)te;
+                            jar.setAspects(blockJarItem.getAspects(stack));
+
+                            if (stack.hasTagCompound() && stack.getTagCompound().hasKey("AspectFilter")) {
+                                jar.aspectFilter = Aspect.getAspect(stack.getTagCompound().getString("AspectFilter"));
+                            }
+
+                            te.markDirty();
+                            source.getWorld().markAndNotifyBlock(blockPos, source.getWorld().getChunk(blockPos), BlocksTC.jarNormal.getDefaultState(), BlocksTC.jarNormal.getDefaultState(), 3);
+
+                            stack.shrink(1);
+                            return stack;
+                        }
+                    }
+                }
+
+                return super.dispenseStack(source, stack);
+            }
+        });
     }
 
 

@@ -50,4 +50,12 @@ public class MixinModRecipes {
         //AlchemyArrayRecipeRegistry.registerRecipe(new ItemStack(Blocks.REDSTONE_BLOCK), new ItemStack(Items.REDSTONE), new AlchemyArrayEffectMobSacrifice("mobSacrifice"), new MobSacrificeAlchemyCircleRenderer());
         AlchemyArrayRecipeRegistry.registerRecipe(ComponentTypes.REAGENT_FAST_MINER.getStack(), new ItemStack(ItemRegistry.BONE_PICKAXE), new AlchemyArrayEffectSigil("fastMiner", (ISigil)RegistrarBloodMagicItems.SIGIL_FAST_MINER), new SingleAlchemyCircleRenderer(new ResourceLocation("bloodmagic", "textures/models/AlchemyArrays/FastMinerSigil.png")));
     }
+
+    /**
+     * @author
+     * @reason
+     */
+    @Overwrite
+    public static void addPotionRecipes() {
+    }
 }

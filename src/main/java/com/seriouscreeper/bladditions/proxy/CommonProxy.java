@@ -67,6 +67,7 @@ import net.minecraft.block.BlockCrops;
 import net.minecraft.block.BlockPistonBase;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -193,6 +194,11 @@ public class CommonProxy {
 
 
     public void registerAntiqueAtlasTextures() {
+    }
+
+
+    public static boolean IsPacifistMob(EntityCreature creature) {
+        return creature instanceof EntitySwarm || (creature instanceof EntityPyrad && creature.getEntityAttribute(EntityPyrad.AGRESSIVE).getAttributeValue() != 1);
     }
 
 

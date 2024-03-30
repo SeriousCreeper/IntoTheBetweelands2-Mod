@@ -26,8 +26,7 @@ public class MixinEntityAINearestAttackableTarget<T extends EntityLivingBase> ex
 
     @Inject(method = "startExecuting", at = @At("HEAD"), cancellable = true)
     private void avoidPacifist(CallbackInfo ci) {
-        if(this.taskOwner instanceof EntitySwarm ||
-           (this.taskOwner instanceof EntityPyrad && this.taskOwner.getEntityAttribute(EntityPyrad.AGRESSIVE).getAttributeValue() != 1))
+        if(CommonProxy.IsPacifistMob(this.taskOwner))
         {
             if(this.targetEntity instanceof EntityPlayer && !this.targetEntity.world.isRemote) {
                 EntityPlayerMP player = (EntityPlayerMP) this.targetEntity;

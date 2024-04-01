@@ -29,6 +29,7 @@ public class MixinBlackTea {
     public static void addPotion(int tier, World world, EntityPlayer entityplayer) {
         if (!world.isRemote) {
             DailyDrink dailyDrink = DrinkingHelper.getLevelAndTimeImprovement(world, entityplayer);
+            tier = 0;
             tier += dailyDrink.getLevel();
             int time = ConfigMain.drink.blackTeaDrink_Time;
             time = (int)((float)time * (1.0F + dailyDrink.getTime()));

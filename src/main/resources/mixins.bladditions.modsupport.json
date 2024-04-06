@@ -78,6 +78,7 @@
     "embers.MixinTileEntityDawnstoneAnvil",
     "eyesinthedarkness.MixinEntityEyes",
     "fairylights.MixinFairyLightsRecipes",
+    "firespreadtweaks.MixinFireSpreadEvent",
     "fishundeadrising.MixinEntityFishTameable",
     "fishundeadrising.MixinEntityMimic",
     "fishundeadrising.MixinEntityParasite",

@@ -173,6 +173,7 @@
     "thaumcraft.MixinGolemHead",
     "thaumcraft.MixinGolemLeg",
     "thaumcraft.MixinGolemMaterial",
+    "thaumcraft.MixinHudHandler",
     "thaumcraft.MixinItemSanityChecker",
     "thaumcraft.MixinModConfig",
     "thaumcraft.MixinPacketFXScanSource",

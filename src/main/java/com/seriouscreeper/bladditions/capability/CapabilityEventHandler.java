@@ -94,12 +94,27 @@ public class CapabilityEventHandler {
     public static void onPlayerClone(PlayerEvent.Clone event) {
         EntityPlayer player = (EntityPlayer)event.getEntity();
 
+        resetPacifistCapability(player, event.getOriginal());
+        resetWellnessCapability(player, event.getOriginal());
+    }
+
+
+    private static void resetPacifistCapability(EntityPlayer player, EntityPlayer original) {
         PacifistCapability cap = player.getCapability(PacifistCapability.INSTANCE, null);
-        PacifistCapability capOld = event.getOriginal().getCapability(PacifistCapability.INSTANCE, null);
+        PacifistCapability capOld = original.getCapability(PacifistCapability.INSTANCE, null);
 
         if(cap != null && capOld != null) {
             cap.CopyCapability(capOld);
             AdjustPlayerHealth(player);
+        }
+    }
+
+    private static void resetWellnessCapability(EntityPlayer player, EntityPlayer original) {
+        WellnessCapability cap = player.getCapability(WellnessCapability.INSTANCE, null);
+        WellnessCapability capOld = original.getCapability(WellnessCapability.INSTANCE, null);
+
+        if(cap != null && capOld != null) {
+            cap.CopyCapability(capOld);
         }
     }
 }

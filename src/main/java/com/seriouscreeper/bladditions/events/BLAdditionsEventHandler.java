@@ -20,6 +20,7 @@ import com.codetaylor.mc.pyrotech.modules.tech.basic.potion.PotionFocused;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.tile.TileCampfire;
 import com.seriouscreeper.bladditions.BLAdditions;
 import com.seriouscreeper.bladditions.capability.PacifistCapability;
+import com.seriouscreeper.bladditions.capability.WellnessCapability;
 import com.seriouscreeper.bladditions.config.ConfigBLAdditions;
 import com.seriouscreeper.bladditions.interfaces.ISanityExtraInfo;
 import com.seriouscreeper.bladditions.potion.PotionThaumcraftResearch;
@@ -173,6 +174,7 @@ public class BLAdditionsEventHandler {
     public static void attachCap(AttachCapabilitiesEvent<Entity> e) {
         if (e.getObject() instanceof EntityPlayer) {
             e.addCapability(new ResourceLocation(BLAdditions.MODID, "pacifist"), new PacifistCapability.PacifistCapabilityProvider());
+            e.addCapability(new ResourceLocation(BLAdditions.MODID, "wellness"), new WellnessCapability.WellnessCapabilityProvider());
         }
     }
 
@@ -932,7 +934,17 @@ public class BLAdditionsEventHandler {
         for(PotionEffect effect : effects) {
             if(effect.getPotion() instanceof PotionThaumcraftResearch && effect.getPotion().getRegistryName() != event.getPotionEffect().getPotion().getRegistryName()) {
                 entity.removePotionEffect(effect.getPotion());
-                return;
+                break;
+            }
+        }
+
+        WellnessCapability cap = entity.getCapability(WellnessCapability.INSTANCE, null);
+
+        if(cap != null && entity instanceof EntityPlayer) {
+            cap.SetWellness(WellnessCapability.CalculateWellness((EntityPlayer)entity));
+
+            if(!entity.world.isRemote) {
+                entity.sendMessage(new TextComponentString(TextFormatting.GREEN + "Research bonus from your surroundings: " + Math.round((1f - cap.GetWellness()) * 100) + "%"));
             }
         }
     }
@@ -943,93 +955,14 @@ public class BLAdditionsEventHandler {
         EntityLivingBase entity = event.getEntityLiving();
 
         if(event.getPotion() instanceof PotionThaumcraftResearch) {
-            if(entity.getEntityData().hasKey("wellnessBonus")) {
-                entity.getEntityData().removeTag("wellnessBonus");
+            WellnessCapability cap = entity.getCapability(WellnessCapability.INSTANCE, null);
+
+            if(cap != null && entity instanceof EntityPlayer) {
+                cap.ResetWellness();
             }
         }
     }
 
-
-    private float checkPlayerWellness(World world, EntityPlayer player, Collection<PotionEffect> effects, PotionThaumcraftResearch.RESEARCH_CATEGORY category) {
-        float wellnessBonus = 1;
-
-        // greebling nearby
-        // well rested buff from pyrotech
-        // bl events affecting it in different ways?
-        // bookshelf
-        // maybe certain blocks should affect different research?
-            // like cauldron nearby improves the alchemy one
-
-        if(player.isRiding()) {
-            wellnessBonus *= ConfigBLAdditions.configTea.SittingBonus;
-        }
-
-        // Find greebling nearby
-        List<Entity> l = EntityUtils.getEntitiesInRange(world, player.getPosition(), null, Entity.class, 10.0D);
-
-        if (!l.isEmpty()) {
-            for (Entity e : l) {
-                if(e instanceof EntityGreebling) {
-                    wellnessBonus *= ConfigBLAdditions.configTea.GreeblingBonus;
-                }
-            }
-        }
-
-        int blockSearchRadius = 4;
-
-        List<Block> blocksApplied = new ArrayList<>();
-
-        for(int y = -1; y <= 1; ++y) {
-            for(int x = -blockSearchRadius; x <= blockSearchRadius; ++x) {
-                for(int z = -blockSearchRadius; z <= blockSearchRadius; ++z) {
-                    IBlockState state = world.getBlockState(player.getPosition().add(x, y, z));
-                    Block block = state.getBlock();
-
-                    for(Block wellnessBlock : CommonProxy.WELLNESS_BLOCKS.keySet()) {
-                        if(wellnessBlock == block) {
-                            List<PotionThaumcraftResearch.RESEARCH_CATEGORY> researchBonuses = CommonProxy.WELLNESS_BLOCKS.get(block);
-
-                            if(researchBonuses != null && researchBonuses.contains(category)) {
-                                if(!blocksApplied.contains(block)) {
-                                    wellnessBonus *= ConfigBLAdditions.configTea.NearbyBlocksBonus;
-                                    blocksApplied.add(block);
-                                }
-
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        // Pyrotech buff bonus
-        for(PotionEffect effect : effects) {
-            if(effect.getPotion() instanceof PotionFocused) {
-                wellnessBonus *= ConfigBLAdditions.configTea.FocusedBuffBonus;
-                break;
-            }
-        }
-
-        // BL Events
-        BetweenlandsWorldStorage storage = BetweenlandsWorldStorage.forWorld(world);
-
-        if (storage != null) {
-            Map<String, Float> eventBonuses = ConfigBLAdditions.parseBLEvents();
-
-            List<IEnvironmentEvent> activeEvents = storage.getEnvironmentEventRegistry().getActiveEvents();
-
-            for(IEnvironmentEvent event : activeEvents) {
-                String eventName = event.getEventName().getPath();
-
-                if(eventBonuses.containsKey(eventName)) {
-                    wellnessBonus *= eventBonuses.get(eventName);
-                }
-            }
-        }
-
-        return wellnessBonus;
-    }
 
 
     @SubscribeEvent
@@ -1384,6 +1317,12 @@ public class BLAdditionsEventHandler {
             float totalWellnessBonus = 0;
             float activeWellnessBonuses = 0;
 
+            WellnessCapability wellnessCapability = player.getCapability(WellnessCapability.INSTANCE, null);
+
+            if(wellnessCapability == null) {
+                return;
+            }
+
             for(PotionEffect effect : effects) {
                 addSanityForPotions(player, world, effect);
 
@@ -1391,15 +1330,12 @@ public class BLAdditionsEventHandler {
                     PotionThaumcraftResearch researchPotion = (PotionThaumcraftResearch) effect.getPotion();
 
                     int wellnessInterval = ConfigBLAdditions.configTea.TCPotionChance;
+                    float wellness = wellnessCapability.GetWellness();
 
-                    float wellness = checkPlayerWellness(world, player, effects, researchPotion.Category);
-
-                    if(!player.getEntityData().hasKey("wellnessBonus")) {
-                        wellnessInterval = Math.round(wellnessInterval * wellness);
-                    }
+                    wellnessInterval = Math.round(wellnessInterval * wellness);
 
                     int wellnessChanceRequired = (effect.getAmplifier() + 1) * Math.round((float)ConfigBLAdditions.configTea.TCPotionChance * 0.03f);
-                    int nextCheck = world.rand.nextInt(wellnessInterval);
+                    int nextCheck = world.rand.nextInt(Math.max(1, wellnessInterval));
 
                     if(nextCheck > wellnessChanceRequired) {
                         continue;

@@ -18,6 +18,7 @@ import com.rcx.mystgears.item.ItemGear;
 import com.seriouscreeper.bladditions.BLAdditions;
 import com.seriouscreeper.bladditions.blocks.*;
 import com.seriouscreeper.bladditions.capability.PacifistCapability;
+import com.seriouscreeper.bladditions.capability.WellnessCapability;
 import com.seriouscreeper.bladditions.config.ConfigBLAdditions;
 import com.seriouscreeper.bladditions.crafting.PatchedRecipeMagicDust;
 import com.seriouscreeper.bladditions.entities.GreeblingMerchantEntity;
@@ -385,6 +386,7 @@ public class CommonProxy {
 
     public void init(FMLInitializationEvent e) {
         CapabilityManager.INSTANCE.register(PacifistCapability.class, new PacifistCapability.PacifistCapabilityStorage(), new PacifistCapability.PacifistCapabilityFactory());
+        CapabilityManager.INSTANCE.register(WellnessCapability.class, new WellnessCapability.WellnessCapabilityStorage(), new WellnessCapability.WellnessCapabilityFactory());
 
         // Generate betweenlands bee hives
         GameRegistry.registerWorldGenerator(new BLBeeHiveWorldGen(), 0);

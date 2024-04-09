@@ -126,6 +126,7 @@
     "roots.MixinEntityRitualHeavyStorms",
     "roots.MixinEntityRitualSummonCreatures",
     "roots.MixinILivingRepair",
+    "roots.MixinMossConfig",
     "roots.MixinRitualSummonCreatures",
     "roots.MixinRunicShears",
     "roots.MixinRunicShearsEntityCategory",

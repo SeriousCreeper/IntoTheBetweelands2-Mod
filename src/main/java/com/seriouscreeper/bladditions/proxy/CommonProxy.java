@@ -62,6 +62,7 @@ import growthcraft.milk.shared.init.GrowthcraftMilkFluids;
 import kpan.bq_popup.config.ConfigHolder;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.dispenser.BehaviorDefaultDispenseItem;
 import net.minecraft.dispenser.IBlockSource;
 import net.minecraft.entity.Entity;
@@ -1235,8 +1236,11 @@ public class CommonProxy {
 
     }
 
-
     public static boolean IsWithinLocation(World world, BlockPos pos) {
-        return LocationStorage.isLocationGuarded(world, null, pos) || world.provider.getDimension() == ConfigBLAdditions.configGeneral.DungeonDimensionID;
+        return IsWithinLocation(world, pos, false);
+    }
+    public static boolean IsWithinLocation(World world, BlockPos pos, boolean isPiston) {
+        IBlockState blockState = world.getBlockState(pos);
+        return LocationStorage.isLocationGuarded(world, null, pos) || (!isPiston && world.provider.getDimension() == ConfigBLAdditions.configGeneral.DungeonDimensionID);
     }
 }

@@ -30,7 +30,7 @@ public class MixinBlockPistonBase {
     public static boolean canPush(IBlockState blockStateIn, World worldIn, BlockPos pos, EnumFacing facing, boolean destroyBlocks, EnumFacing p_185646_5_) {
         Block block = blockStateIn.getBlock();
 
-        if(CommonProxy.IsWithinLocation(worldIn, pos)) {
+        if(CommonProxy.IsWithinLocation(worldIn, pos, true)) {
             return false;
         }
 

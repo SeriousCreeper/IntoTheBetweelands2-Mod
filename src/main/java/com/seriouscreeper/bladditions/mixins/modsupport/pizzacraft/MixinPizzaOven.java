@@ -1,13 +1,11 @@
 package com.seriouscreeper.bladditions.mixins.modsupport.pizzacraft;
 
-import com.tiviacz.pizzacraft.PizzaCraft;
 import com.tiviacz.pizzacraft.blocks.BlockPizzaOven;
 import com.tiviacz.pizzacraft.blocks.BlockPizzaOvenBurning;
 import com.tiviacz.pizzacraft.init.ModBlocks;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -15,9 +13,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.oredict.OreDictionary;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -28,13 +24,13 @@ import thebetweenlands.common.registries.ItemRegistry;
 
 import static net.minecraft.block.Block.spawnAsEntity;
 
-@Mixin(value = BlockPizzaOven.class, remap = false)
+@Mixin(value = BlockPizzaOven.class)
 public class MixinPizzaOven {
     @Shadow
     public static final PropertyInteger STATE = PropertyInteger.create("wood", 0, 4);
 
 
-    @Inject(method = "onBlockActivated", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "func_180639_a(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/IBlockState;Lnet/minecraft/entity/player/EntityPlayer;Lnet/minecraft/util/EnumHand;Lnet/minecraft/util/EnumFacing;FFF)Z", at = @At("HEAD"), cancellable = true, remap = false)
     public void onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ, CallbackInfoReturnable<Boolean> cir)
     {
         if(!worldIn.isRemote)
@@ -150,7 +146,7 @@ public class MixinPizzaOven {
     }
 
 
-    @Inject(method = "onBlockHarvested", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "func_176208_a(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/IBlockState;Lnet/minecraft/entity/player/EntityPlayer;)V", at = @At("HEAD"), cancellable = true, remap = false)
     public void onBlockHarvested(World worldIn, BlockPos pos, IBlockState state, EntityPlayer player, CallbackInfo ci) {
         int a = (Integer)state.getValue(STATE);
         if (!worldIn.isRemote && !player.capabilities.isCreativeMode) {

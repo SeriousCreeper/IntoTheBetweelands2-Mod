@@ -1,5 +1,6 @@
 package com.seriouscreeper.bladditions.mixins.modsupport.roots;
 
+import com.seriouscreeper.bladditions.mixins.modsupport.mysticallib.MixinBlockCropBase;
 import epicsquid.roots.block.BlockCloudBerryCrop;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -15,7 +16,7 @@ import java.util.Iterator;
 import java.util.Random;
 
 @Mixin(value = BlockCloudBerryCrop.class, remap = false)
-public class MixinBlockCloudBerryCrop  extends MixinBlockCropBase {
+public class MixinBlockCloudBerryCrop extends MixinBlockCropBase {
     @Override
     public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
         if(!canGrow(worldIn, pos, state, worldIn.isRemote)) {

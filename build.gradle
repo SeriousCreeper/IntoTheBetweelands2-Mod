@@ -46,7 +46,7 @@ minecraft {
     username = 'Developer'
 
     // Add any additional tweaker classes here
-    // extraTweakClasses.add('org.spongepowered.asm.launch.MixinTweaker')
+    extraTweakClasses.add('org.spongepowered.asm.launch.MixinTweaker')
 
     // Add various JVM arguments here for runtime
     def args = ["-ea:${project.group}"]
@@ -135,7 +135,7 @@ dependencies {
     implementation rfg.deobf("curse.maven:another-liquid-milk-319900:2703510")
     implementation rfg.deobf("curse.maven:mystical-gears-317915:3206298")
     implementation rfg.deobf("curse.maven:darknesslib-349174:3672570")
-    implementation rfg.deobf("curse.maven:pizzacraft-292056:2986635")
+    implementation("curse.maven:pizzacraft-292056:2986635")
     implementation rfg.deobf("curse.maven:mysticallib-277064:3483816")
     implementation rfg.deobf("curse.maven:roots-246183:5193525")
     implementation rfg.deobf("curse.maven:eyes-in-the-darkness-304719:2812571")
@@ -191,6 +191,15 @@ dependencies {
     implementation rfg.deobf("curse.maven:guidebook-253874:2989594")
     implementation rfg.deobf("curse.maven:mystical-world-282940:3460961")
     implementation rfg.deobf("curse.maven:item-filters-309674:3003364")
+
+    runtimeOnly("curse.maven:guide-api-228832:2645992")
+    runtimeOnly("curse.maven:collective-342584:3533131")
+    runtimeOnly("curse.maven:geckolib-388172:4020277")
+    runtimeOnly("curse.maven:ivtoolkit-224535:2443253")
+    runtimeOnly("curse.maven:tiffitlib-295414:2631741")
+    runtimeOnly("curse.maven:valkyrielib-245480:2691542")
+    runtimeOnly("curse.maven:chameleon-230497:2450900")
+    runtimeOnly("curse.maven:dropt-284973:3758733")
 
     implementation files('libs/IgniteHUD-b0.5.4-deobf.jar')
     implementation files('libs/TheBetweenlands-3.9.6-core-deobf.jar')

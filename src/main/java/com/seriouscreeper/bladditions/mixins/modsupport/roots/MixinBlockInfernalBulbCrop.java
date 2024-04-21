@@ -1,5 +1,6 @@
 package com.seriouscreeper.bladditions.mixins.modsupport.roots;
 
+import com.seriouscreeper.bladditions.mixins.modsupport.mysticallib.MixinBlockCropBase;
 import epicsquid.roots.block.BlockInfernalBulbCrop;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;

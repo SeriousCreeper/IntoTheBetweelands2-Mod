@@ -1,4 +1,4 @@
-package com.seriouscreeper.bladditions.mixins.modsupport.roots;
+package com.seriouscreeper.bladditions.mixins.modsupport.mysticallib;
 
 import epicsquid.mysticallib.block.BlockCropBase;
 import net.minecraft.block.BlockCrops;

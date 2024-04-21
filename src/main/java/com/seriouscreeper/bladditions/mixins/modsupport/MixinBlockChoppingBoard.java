@@ -39,7 +39,7 @@ public class MixinBlockChoppingBoard {
         return false;
     }
 
-    @Inject(method = "Lcom/tiviacz/pizzacraft/blocks/BlockChoppingBoard;func_180639_a(Lnet/minecraft/world/World;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/IBlockState;Lnet/minecraft/entity/player/EntityPlayer;Lnet/minecraft/util/EnumHand;Lnet/minecraft/util/EnumFacing;FFF)Z", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "onBlockActivated", at = @At("HEAD"), cancellable = true)
     public void onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ, CallbackInfoReturnable<Boolean> cir) {
         if (hand == EnumHand.MAIN_HAND) {
             TileEntityChoppingBoard tile = (TileEntityChoppingBoard)worldIn.getTileEntity(pos);

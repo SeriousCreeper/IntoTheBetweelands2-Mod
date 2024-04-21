@@ -14,8 +14,7 @@
     "MixinLeashKnot",
     "MixinMapColors",
     "MixinPotionUtils",
-    "MixinWorld",
-    "init.MixinLoader"
+    "MixinWorld"
   ],
   "client": [
     "MixinGuiIngameForge",

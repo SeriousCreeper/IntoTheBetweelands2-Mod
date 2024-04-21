@@ -9,14 +9,9 @@ import net.minecraft.world.gen.structure.template.Template;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.ModifyArg;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import party.lemons.arcaneworld.gen.dungeon.generation.DungeonGenerator;
 import party.lemons.arcaneworld.gen.dungeon.generation.DungeonRoomProcessor;
 import party.lemons.arcaneworld.gen.dungeon.generation.RoomDirection;
-import party.lemons.arcaneworld.gen.dungeon.generation.TickerDungeon;
-import party.lemons.lemonlib.ticker.TickerHandler;
 
 @Mixin(value = DungeonGenerator.class, remap = false)
 public class MixinDungeonGenerator {

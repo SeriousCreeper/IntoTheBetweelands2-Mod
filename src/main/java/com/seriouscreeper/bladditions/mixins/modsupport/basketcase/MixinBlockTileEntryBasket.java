@@ -24,8 +24,8 @@ import javax.annotation.Nullable;
 
 @Mixin(value = BlockTileEntityBasket.class, remap = false)
 public class MixinBlockTileEntryBasket extends BlockTileEntity {
-    public MixinBlockTileEntryBasket(String registryName, Material material, float hardness, float resistance, boolean canBePickedUp) {
-        super(registryName, material, hardness, resistance, canBePickedUp);
+    public MixinBlockTileEntryBasket(String registryName, Material material, float hardness, boolean canBePickedUp) {
+        super(registryName, material, hardness, canBePickedUp);
     }
 
     @Shadow

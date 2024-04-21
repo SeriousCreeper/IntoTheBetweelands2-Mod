@@ -2,14 +2,9 @@ package com.seriouscreeper.bladditions.client.renderers;
 
 import com.seriouscreeper.bladditions.client.renderers.models.ModelMerchantGreebling;
 import com.seriouscreeper.bladditions.entities.GreeblingMerchantEntity;
-import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
-import party.lemons.deliverymechants.MerchantEntity;
-import party.lemons.deliverymechants.MerchantType;
-import thebetweenlands.client.render.model.entity.ModelGreebling;
-import thebetweenlands.client.render.model.entity.ModelGreeblingCoracle;
 
 import javax.annotation.Nullable;
 

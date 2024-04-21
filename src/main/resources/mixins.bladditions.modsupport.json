@@ -233,16 +233,14 @@
     "thebetweenlands.structures.MixinWorldGenSludgeWormDungeon",
     "thebetweenlands.structures.MixinWorldGenSpiritTree",
     "thebetweenlands.structures.WorldGenWightFortress",
-    "toolbelt.MixinToolbeltConfig",
-    "waterstrainer.MixinAPIUtils"
+    "toolbelt.MixinToolbeltConfig"
   ],
   "client": [
     "bloodmagic.MixinClientHandler",
     "corpse.MixinGuiDeathHistory",
     "quark.MixinRenderLeashKnot2",
     "thaumcraft.MixinGuiFocalManipulator",
-    "thebetweenlands.MixinGuiFirefly",
-    "waterstrainer.MixinGuiStrainer"
+    "thebetweenlands.MixinGuiFirefly"
   ],
   "injectors": {
     "maxShiftBy": 10

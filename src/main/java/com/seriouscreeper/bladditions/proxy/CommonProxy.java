@@ -59,7 +59,6 @@ import growthcraft.core.shared.utils.TickUtils;
 import growthcraft.milk.common.Init;
 import growthcraft.milk.shared.fluids.MilkFluidTags;
 import growthcraft.milk.shared.init.GrowthcraftMilkFluids;
-import kpan.bq_popup.config.ConfigHolder;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -547,9 +546,6 @@ public class CommonProxy {
 
 
     public void postInit(FMLPostInitializationEvent e) {
-        ConfigHolder.client.showOtherTeamTask = false;
-        ConfigHolder.client.showAbsentCompletedTask = false;
-
         BloodMagicAPI.INSTANCE.unregisterAltarComponent(Blocks.GLOWSTONE.getDefaultState(), "GLOWSTONE");
         BloodMagicAPI.INSTANCE.registerAltarComponent(RegistryManager.block_dawnstone.getDefaultState(), "GLOWSTONE");
 

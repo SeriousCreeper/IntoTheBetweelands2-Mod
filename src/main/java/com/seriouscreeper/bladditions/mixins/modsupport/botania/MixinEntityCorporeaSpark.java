@@ -18,6 +18,7 @@ import vazkii.botania.api.corporea.InvWithLocation;
 import vazkii.botania.common.entity.EntityCorporeaSpark;
 import vazkii.botania.common.item.ModItems;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Mixin(value = EntityCorporeaSpark.class)
@@ -40,13 +41,45 @@ public class MixinEntityCorporeaSpark extends Entity implements ICorporeaSpark {
     private void findNetwork() {
     }
 
-    @Inject(method = "processInitialInteract", at = @At("HEAD"), cancellable = true)
-    public void processInitialInteract(EntityPlayer player, EnumHand hand, CallbackInfoReturnable<Boolean> cir) {
+    @Shadow
+    private void dropAndKill() {
+    }
+
+    @Shadow
+    private static void displayRelatives(EntityPlayer player, List<ICorporeaSpark> checked, ICorporeaSpark spark) {}
+
+    @Shadow
+    private ICorporeaSpark master;
+
+
+    @Override
+    public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
         ItemStack stack = player.getHeldItem(hand);
         if (!this.isDead && !stack.isEmpty()) {
+            if (player.world.isRemote) {
+                boolean valid = stack.getItem() == ModItems.twigWand || stack.getItem() == Items.DYE || stack.getItem() == ModItems.phantomInk;
+                if (valid) {
+                    player.swingArm(hand);
+                }
+
+                return valid;
+            }
+
+            if (stack.getItem() == ModItems.twigWand) {
+                if (player.isSneaking()) {
+                    this.dropAndKill();
+                    if (this.isMaster()) {
+                        this.restartNetwork();
+                    }
+                } else {
+                    displayRelatives(player, new ArrayList(), this.master);
+                }
+
+                return true;
+            }
+
             if (stack.getItem() == Items.DYE) {
                 int color = 15 - stack.getItemDamage();
-
                 if (color != this.getNetwork().getMetadata()) {
                     this.setNetwork(EnumDyeColor.byMetadata(color));
                     if (this.isMaster()) {
@@ -56,10 +89,15 @@ public class MixinEntityCorporeaSpark extends Entity implements ICorporeaSpark {
                     }
 
                     stack.shrink(1);
-                    cir.setReturnValue(true);
+                    return true;
                 }
+            } else if (stack.getItem() == ModItems.phantomInk) {
+                this.setInvisible(true);
+                return true;
             }
         }
+
+        return false;
     }
 
     @Shadow

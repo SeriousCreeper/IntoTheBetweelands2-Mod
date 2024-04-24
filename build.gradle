@@ -141,8 +141,8 @@ dependencies {
     implementation rfg.deobf("curse.maven:eyes-in-the-darkness-304719:2812571")
     implementation rfg.deobf("curse.maven:growthcraft-community-edition-235092:5172498")
     implementation rfg.deobf("curse.maven:sanity-304817:2632168")
-    implementation rfg.deobf("curse.maven:soot-281528:3056967")
-    implementation rfg.deobf("curse.maven:embers-rekindled-300777:3695248")
+    implementation rfg.deobf("curse.maven:soot-extended-life-982730:5156451")
+    implementation rfg.deobf("curse.maven:embers-extended-life-936489:5264855")
     implementation rfg.deobf("curse.maven:thaumcraft-223628:2629023")
     implementation rfg.deobf("curse.maven:thaumic-periphery-293505:2766866")
     implementation rfg.deobf("curse.maven:angry-pixel-the-betweenlands-mod-243363:4479688")
@@ -191,6 +191,7 @@ dependencies {
     implementation rfg.deobf("curse.maven:guidebook-253874:2989594")
     implementation rfg.deobf("curse.maven:mystical-world-282940:3460961")
     implementation rfg.deobf("curse.maven:item-filters-309674:3003364")
+    implementation rfg.deobf("curse.maven:aetherworks-extended-life-1003576:5263747")
 
     runtimeOnly("curse.maven:guide-api-228832:2645992")
     runtimeOnly("curse.maven:collective-342584:3533131")

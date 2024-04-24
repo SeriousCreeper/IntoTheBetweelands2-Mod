@@ -1,35 +1,32 @@
 package com.seriouscreeper.bladditions.mixins.modsupport.embers;
 
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
 import net.minecraftforge.fluids.capability.TileFluidHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import teamroots.embers.SoundManager;
 import teamroots.embers.api.EmbersAPI;
 import teamroots.embers.api.event.EmberEvent;
-import teamroots.embers.api.misc.IMetalCoefficient;
 import teamroots.embers.api.upgrades.IUpgradeProvider;
 import teamroots.embers.api.upgrades.UpgradeUtil;
 import teamroots.embers.network.PacketHandler;
 import teamroots.embers.network.message.MessageEmberActivationFX;
 import teamroots.embers.tileentity.TileEntityBoilerBottom;
 import teamroots.embers.tileentity.TileEntityBoilerTop;
-import thebetweenlands.common.registries.FluidRegistry;
 
 import java.util.List;
 import java.util.Random;
 
 @Mixin(value = TileEntityBoilerBottom.class, remap = false)
-public class MixinTileEntityBoilerBottom extends TileFluidHandler implements ITickable {
+public class MixinTileEntityBoilerBottom extends TileFluidHandler {
     @Shadow
     private List<IUpgradeProvider> upgrades;
 
@@ -47,10 +44,11 @@ public class MixinTileEntityBoilerBottom extends TileFluidHandler implements ITi
         return 0;
     }
 
-    @Override
-    public void update() { // func_73660_a
+    @Inject(method = "update", at  = @At("HEAD"), cancellable = true)
+    public void update(CallbackInfo ci) { // func_73660_a
         this.upgrades = UpgradeUtil.getUpgrades(this.world, this.pos, EnumFacing.HORIZONTALS);
         UpgradeUtil.verifyUpgrades(this, this.upgrades);
+
         if (!UpgradeUtil.doTick(this, this.upgrades)) {
             TileEntity tile = this.getWorld().getTileEntity(this.getPos().up());
             int i = this.random.nextInt(this.inventory.getSlots());
@@ -84,5 +82,7 @@ public class MixinTileEntityBoilerBottom extends TileFluidHandler implements ITi
                 }
             }
         }
+
+        ci.cancel();
     }
 }

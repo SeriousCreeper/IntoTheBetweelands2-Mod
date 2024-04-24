@@ -105,12 +105,14 @@ import net.tiffit.sanity.consequences.ConsequenceManager;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import soot.Registry;
 import soot.recipe.ItemRenameStampingRecipe;
-import teamroots.embers.RegistryManager;
 import teamroots.embers.block.BlockSeedNew;
 import teamroots.embers.entity.EntityAncientGolem;
 import teamroots.embers.recipe.FluidReactionRecipe;
 import teamroots.embers.recipe.ItemStampingRecipe;
 import teamroots.embers.recipe.RecipeRegistry;
+import teamroots.embers.register.BlockRegister;
+import teamroots.embers.register.FluidRegister;
+import teamroots.embers.register.ItemRegister;
 import teamroots.embers.tileentity.TileEntitySeedNew;
 import teamroots.embers.util.EmberGenUtil;
 import thaumcraft.Thaumcraft;
@@ -348,11 +350,11 @@ public class CommonProxy {
         MysticalGears.items.add(new ItemGear("Octine"));
         MysticalGears.items.add(new ItemGear("Valonite"));
 
-        RegistryManager.blocks.add(seed_syrmorite = createSimpleSeed(Material.ROCK, "seed_syrmorite", new ResourceLocation("embers:textures/blocks/material_syrmorite.png"), (tile, i) -> {
+        BlockRegister.INSTANCE.add(seed_syrmorite = createSimpleSeed(Material.ROCK, "seed_syrmorite", new ResourceLocation("embers:textures/blocks/material_syrmorite.png"), (tile, i) -> {
             return ItemMisc.EnumItemMisc.SYRMORITE_NUGGET.create(1);
         }));
 
-        RegistryManager.blocks.add(seed_octine = createSimpleSeed(Material.ROCK, "seed_octine", new ResourceLocation("embers:textures/blocks/material_octine.png"), (tile, i) -> {
+        BlockRegister.INSTANCE.add(seed_octine = createSimpleSeed(Material.ROCK, "seed_octine", new ResourceLocation("embers:textures/blocks/material_octine.png"), (tile, i) -> {
             return ItemMisc.EnumItemMisc.OCTINE_NUGGET.create(1);
         }));
 
@@ -547,7 +549,7 @@ public class CommonProxy {
 
     public void postInit(FMLPostInitializationEvent e) {
         BloodMagicAPI.INSTANCE.unregisterAltarComponent(Blocks.GLOWSTONE.getDefaultState(), "GLOWSTONE");
-        BloodMagicAPI.INSTANCE.registerAltarComponent(RegistryManager.block_dawnstone.getDefaultState(), "GLOWSTONE");
+        BloodMagicAPI.INSTANCE.registerAltarComponent(BlockRegister.BLOCK_DAWNSTONE.getDefaultState(), "GLOWSTONE");
 
         BloodMagicAPI.INSTANCE.unregisterAltarComponent(Blocks.BEACON.getDefaultState(), "BEACON");
         BloodMagicAPI.INSTANCE.registerAltarComponent(BlocksTC.metalBlockVoid.getDefaultState(), "BEACON");
@@ -927,8 +929,8 @@ public class CommonProxy {
         ThaumcraftApi.getCraftingRecipes().remove(new ResourceLocation("thaumicperiphery", "caster_ember"));
         ThaumcraftApi.addInfusionCraftingRecipe(new ResourceLocation("thaumicperiphery", "caster_ember"), new InfusionRecipe(
             "CASTEREMBER", new ItemStack(ModContent.caster_ember), 6, (new AspectList()).add(Aspect.FIRE, 50).add(Aspect.MAGIC, 15).add(Aspect.EXCHANGE, 25).add(Aspect.MECHANISM, 25).add(Aspect.ENERGY, 50),
-            new ItemStack(RegistryManager.wildfire_core),
-            new Object[]{new ItemStack(RegistryManager.shard_ember), "ingotDawnstone", "plateSyrmorite", new ItemStack(ItemsTC.mechanismComplex), "ingotOctine", new ItemStack(ItemsTC.morphicResonator), "plateSyrmorite", "ingotDawnstone"
+            new ItemStack(ItemRegister.WILDFIRE_CORE),
+            new Object[]{new ItemStack(ItemRegister.SHARD_EMBER), "ingotDawnstone", "plateSyrmorite", new ItemStack(ItemsTC.mechanismComplex), "ingotOctine", new ItemStack(ItemsTC.morphicResonator), "plateSyrmorite", "ingotDawnstone"
         }
         ));
 
@@ -949,10 +951,10 @@ public class CommonProxy {
         InfusionEnchantmentRecipe IECOLLECTOR = new InfusionEnchantmentRecipe(EnumInfusionEnchantment.COLLECTOR, (new AspectList()).add(Aspect.DESIRE, 80).add(Aspect.WATER, 100), new Object[]{
                 new ItemStack(com.aranaira.arcanearchives.init.ItemRegistry.COMPONENT_CONTAINMENTFIELD),
                 new ItemStack(ItemsTC.salisMundus),
-                new ItemStack(RegistryManager.vacuum),
+                new ItemStack(BlockRegister.VACUUM),
                 new ItemStack(com.aranaira.arcanearchives.init.ItemRegistry.COMPONENT_CONTAINMENTFIELD),
                 new ItemStack(ItemsTC.salisMundus),
-                new ItemStack(RegistryManager.vacuum)
+                new ItemStack(BlockRegister.VACUUM)
         });
         ThaumcraftApi.addInfusionCraftingRecipe(new ResourceLocation("thaumcraft:IECOLLECTOR"), IECOLLECTOR);
         ThaumcraftApi.addFakeCraftingRecipe(new ResourceLocation("thaumcraft:IECOLLECTORFAKE"), new InfusionEnchantmentRecipe(IECOLLECTOR, new ItemStack(ItemRegistry.BONE_AXE)));
@@ -982,10 +984,10 @@ public class CommonProxy {
         InfusionEnchantmentRecipe IESOUNDING = new InfusionEnchantmentRecipe(EnumInfusionEnchantment.SOUNDING, (new AspectList()).add(Aspect.SENSES, 40).add(Aspect.FIRE, 60), new Object[]{
                 new ItemStack(com.aranaira.arcanearchives.init.ItemRegistry.COMPONENT_CONTAINMENTFIELD),
                 new ItemStack(ItemsTC.salisMundus),
-                new ItemStack(RegistryManager.resonating_bell),
+                new ItemStack(ItemRegister.RESONATING_BELL),
                 new ItemStack(com.aranaira.arcanearchives.init.ItemRegistry.COMPONENT_CONTAINMENTFIELD),
                 new ItemStack(ItemsTC.salisMundus),
-                new ItemStack(RegistryManager.resonating_bell)
+                new ItemStack(ItemRegister.RESONATING_BELL)
         });
         ThaumcraftApi.addInfusionCraftingRecipe(new ResourceLocation("thaumcraft:IESOUNDING"), IESOUNDING);
         ThaumcraftApi.addFakeCraftingRecipe(new ResourceLocation("thaumcraft:IESOUNDINGFAKE"), new InfusionEnchantmentRecipe(IESOUNDING, new ItemStack(ItemRegistry.VALONITE_PICKAXE)));
@@ -1165,8 +1167,8 @@ public class CommonProxy {
         RecipeRegistry.stampingRecipes.add(new CustomItemRenameStampingRecipe());
 
         RecipeRegistry.fluidReactionRecipes.clear();
-        RecipeRegistry.fluidReactionRecipes.add(new FluidReactionRecipe(new FluidStack(RegistryManager.fluid_steam, 5), new FluidStack(FluidRegistry.CLEAN_WATER, 1), new Color(255,255,255)));
-        RecipeRegistry.fluidReactionRecipes.add(new FluidReactionRecipe(new FluidStack(RegistryManager.fluid_gas, 1), new FluidStack(RegistryManager.fluid_steam, 5), new Color(128,192,255)));
+        RecipeRegistry.fluidReactionRecipes.add(new FluidReactionRecipe(new FluidStack(FluidRegister.FLUID_STEAM, 5), new FluidStack(FluidRegistry.CLEAN_WATER, 1), new Color(255,255,255)));
+        RecipeRegistry.fluidReactionRecipes.add(new FluidReactionRecipe(new FluidStack(FluidRegister.FLUID_GAS, 1), new FluidStack(FluidRegister.FLUID_STEAM, 5), new Color(128,192,255)));
     }
 
 

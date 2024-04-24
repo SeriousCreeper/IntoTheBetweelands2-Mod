@@ -9,7 +9,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
-import teamroots.embers.RegistryManager;
+import teamroots.embers.register.BlockRegister;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.casters.FocusEffect;
 import thaumcraft.api.casters.Trajectory;
@@ -26,7 +26,7 @@ public class MixinFocusEffectLight extends FocusEffect {
     @Overwrite
     protected boolean placeLightSource(BlockPos pos, EnumFacing side, int intensity) {
         World world = this.getPackage().world;
-        return world.setBlockState(pos, RegistryManager.glow.getDefaultState());
+        return world.setBlockState(pos, BlockRegister.GLOW.getDefaultState());
     }
 
     @Shadow

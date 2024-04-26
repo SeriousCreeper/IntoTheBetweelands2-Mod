@@ -43,11 +43,13 @@ import com.tiviacz.pizzacraft.crafting.bakeware.PizzaCraftingManager;
 import com.tiviacz.pizzacraft.init.ModBlocks;
 import epicsquid.mysticallib.LibRegistry;
 import epicsquid.mysticallib.event.RegisterContentEvent;
+import epicsquid.roots.RegistryManager;
 import epicsquid.roots.Roots;
 import epicsquid.roots.api.CreateToolEvent;
 import epicsquid.roots.init.ModItems;
 import epicsquid.roots.integration.jei.soil.SoilRecipe;
 import epicsquid.roots.item.materials.Materials;
+import epicsquid.roots.mechanics.Growth;
 import gigaherz.eyes.ConfigData;
 import gigaherz.eyes.EyesInTheDarkness;
 import gigaherz.eyes.entity.EntityEyes;
@@ -548,6 +550,11 @@ public class CommonProxy {
 
 
     public void postInit(FMLPostInitializationEvent e) {
+        Growth.addBlacklist(epicsquid.roots.init.ModBlocks.cloud_berry);
+        Growth.addBlacklist(epicsquid.roots.init.ModBlocks.infernal_bulb);
+        Growth.addBlacklist(epicsquid.roots.init.ModBlocks.stalicripe);
+        Growth.addBlacklist(epicsquid.roots.init.ModBlocks.dewgonia);
+
         BloodMagicAPI.INSTANCE.unregisterAltarComponent(Blocks.GLOWSTONE.getDefaultState(), "GLOWSTONE");
         BloodMagicAPI.INSTANCE.registerAltarComponent(BlockRegister.BLOCK_DAWNSTONE.getDefaultState(), "GLOWSTONE");
 

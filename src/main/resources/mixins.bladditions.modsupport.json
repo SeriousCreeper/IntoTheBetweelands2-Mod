@@ -182,6 +182,7 @@
     "thaumcraft.MixinThaumcraftCraftingManager",
     "thaumcraft.MixinThaumcraftWorldGenerator",
     "thaumcraft.MixinTileBarrierStone",
+    "thaumcraft.MixinTileLampGrowth",
     "thaumcraft.MixinUtils",
     "thaumcraft.entities.MixinEntityCultist",
     "thaumcraft.entities.MixinEntityCultistPortalGreater",

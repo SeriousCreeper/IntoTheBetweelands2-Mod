@@ -27,7 +27,8 @@ public class MixinBlockDewgoniaCrop extends MixinBlockCropBase {
         if (worldIn.isAreaLoaded(pos, 1)) {
             int i = this.getAge(state);
             if (i < this.getMaxAge()) {
-                float f = getGrowthChance(this, worldIn, pos);
+                float f = getGrowthChance(this, worldIn, pos) * 5;
+
                 if (ForgeHooks.onCropsGrowPre(worldIn, pos, state, rand.nextInt((int)(10.0F / f) + 1) == 0)) {
                     worldIn.setBlockState(pos, this.withAge(i + 1), 2);
                     ForgeHooks.onCropsGrowPost(worldIn, pos, state, worldIn.getBlockState(pos));
@@ -61,5 +62,10 @@ public class MixinBlockDewgoniaCrop extends MixinBlockCropBase {
         }
 
         return !this.isMaxAge(state) && !isDecayed(world, pos) && hasSource;
+    }
+
+    @Override
+    protected int getBonemealAgeIncrease(World worldIn) {
+        return 0;
     }
 }

@@ -5,6 +5,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -13,11 +14,13 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import thebetweenlands.api.item.CorrosionHelper;
 import thebetweenlands.api.item.ICorrodible;
+import vazkii.botania.api.mana.ManaItemHandler;
 import vazkii.botania.common.item.equipment.tool.manasteel.ItemManasteelSword;
 
 import javax.annotation.Nullable;
@@ -30,9 +33,18 @@ public class MixinItemManasteelSword extends ItemSword implements ICorrodible {
     }
 
 
-    @Inject(method = "onUpdate", at = @At("HEAD"))
-    public void injectOnUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected, CallbackInfo ci) {
-        CorrosionHelper.updateCorrosion(stack, worldIn, entityIn, itemSlot, isSelected);
+    @Shadow
+    public int getManaPerDamage() {
+        return 60;
+    }
+
+    @Override
+    public void onUpdate(ItemStack stack, World world, Entity player, int itemSlot, boolean isSelected) {
+        if (!world.isRemote && player instanceof EntityPlayer && stack.getItemDamage() > 0 && ManaItemHandler.requestManaExactForTool(stack, (EntityPlayer)player, this.getManaPerDamage() * 2, true)) {
+            stack.setItemDamage(stack.getItemDamage() - 1);
+        }
+
+        CorrosionHelper.updateCorrosion(stack, world, player, itemSlot, isSelected);
     }
 
     @SideOnly(Side.CLIENT)

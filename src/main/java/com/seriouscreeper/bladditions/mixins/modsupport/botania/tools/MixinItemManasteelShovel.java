@@ -29,6 +29,7 @@ import thebetweenlands.api.item.ICorrodible;
 import thebetweenlands.common.entity.mobs.EntityTinySludgeWorm;
 import thebetweenlands.common.registries.AdvancementCriterionRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
+import vazkii.botania.api.mana.ManaItemHandler;
 import vazkii.botania.common.item.equipment.tool.manasteel.ItemManasteelShovel;
 
 import javax.annotation.Nonnull;
@@ -110,9 +111,13 @@ public class MixinItemManasteelShovel extends ItemSpade implements ICorrodible {
     }
 
 
-    @Inject(method = "onUpdate", at = @At("HEAD"))
-    public void injectOnUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected, CallbackInfo ci) {
-        CorrosionHelper.updateCorrosion(stack, worldIn, entityIn, itemSlot, isSelected);
+    @Override
+    public void onUpdate(ItemStack stack, World world, Entity player, int itemSlot, boolean isSelected) {
+        if (!world.isRemote && player instanceof EntityPlayer && stack.getItemDamage() > 0 && ManaItemHandler.requestManaExactForTool(stack, (EntityPlayer)player, 120, true)) {
+            stack.setItemDamage(stack.getItemDamage() - 1);
+        }
+
+        CorrosionHelper.updateCorrosion(stack, world, player, itemSlot, isSelected);
     }
 
     @SideOnly(Side.CLIENT)

@@ -113,24 +113,28 @@ public class ConfigBLAdditions {
         public boolean DebugRecruitmentNames = false;
         public int CrimsonCultSpawnRate = 250;
         public String[] RecruitmentBlacklist = new String[] {
-                "thaumcraft.common.entities.monster.cult.EntityCultistKnight",
-                "thaumcraft.common.entities.monster.cult.EntityCultistPortalLesser",
-                "thaumcraft.common.entities.monster.boss.EntityCultistPortalGreater",
-                "thaumcraft.common.entities.monster.cult.EntityCultistCleric",
-                "thaumcraft.common.entities.monster.boss.EntityCultistLeader",
-                "thaumcraft.common.entities.monster.boss.EntityEldritchWarden",
-                "thaumcraft.common.entities.monster.boss.EntityEldritchGolem",
-                "thaumcraft.common.entities.monster.boss.EntityTaintacleGiant",
-                "thaumcraft.common.entities.monster.EntityMindSpider",
-                "thaumcraft.common.entities.monster.EntityEldritchGuardian",
-                "thaumcraft.common.entities.monster.EntityEldritchCrab",
-                "thaumcraft.common.entities.monster.EntityInhabitedZombie",
-                "thaumcraft.common.entities.monster.EntityThaumicSlime",
-                "thaumcraft.common.entities.monster.tainted.EntityTaintCrawler",
-                "thaumcraft.common.entities.monster.tainted.EntityTaintacle",
-                "thaumcraft.common.entities.monster.tainted.EntityTaintSwarm",
-                "thaumcraft.common.entities.monster.tainted.EntityTaintSeed",
-                "thaumcraft.common.entities.monster.tainted.EntityTaintSeedPrime"
+            "thaumcraft.common.entities.monster.cult.EntityCultistKnight",
+            "thaumcraft.common.entities.monster.cult.EntityCultistPortalLesser",
+            "thaumcraft.common.entities.monster.boss.EntityCultistPortalGreater",
+            "thaumcraft.common.entities.monster.cult.EntityCultistCleric",
+            "thaumcraft.common.entities.monster.boss.EntityCultistLeader",
+            "thaumcraft.common.entities.monster.boss.EntityEldritchWarden",
+            "thaumcraft.common.entities.monster.boss.EntityEldritchGolem",
+            "thaumcraft.common.entities.monster.boss.EntityTaintacleGiant",
+            "thaumcraft.common.entities.monster.EntityMindSpider",
+            "thaumcraft.common.entities.monster.EntityEldritchGuardian",
+            "thaumcraft.common.entities.monster.EntityEldritchCrab",
+            "thaumcraft.common.entities.monster.EntityInhabitedZombie",
+            "thaumcraft.common.entities.monster.EntityThaumicSlime",
+            "thaumcraft.common.entities.monster.tainted.EntityTaintCrawler",
+            "thaumcraft.common.entities.monster.tainted.EntityTaintacle",
+            "thaumcraft.common.entities.monster.tainted.EntityTaintSwarm",
+            "thaumcraft.common.entities.monster.tainted.EntityTaintSeed",
+            "thaumcraft.common.entities.monster.tainted.EntityTaintSeedPrime"
+        };
+
+        public String[] BarkAmuletBlocklist = new String[] {
+            "gigaherz.eyes.entity.EntityEyes"
         };
 
         public String[] FoodSicknessWhitelist = new String[] {

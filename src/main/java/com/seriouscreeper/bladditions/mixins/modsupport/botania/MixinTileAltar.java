@@ -1,15 +1,19 @@
 package com.seriouscreeper.bladditions.mixins.modsupport.botania;
 
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.ItemRegistry;
 import vazkii.botania.api.state.BotaniaStateProps;
 import vazkii.botania.api.state.enums.AltarVariant;
 import vazkii.botania.common.block.tile.TileAltar;
@@ -37,5 +41,16 @@ public class MixinTileAltar extends TileSimpleInventory {
     @Shadow
     public int getSizeInventory() {
         return 0;
+    }
+
+
+    @SideOnly(Side.CLIENT)
+    @ModifyArg(method = "renderHUD", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/RenderItem;renderItemIntoGUI(Lnet/minecraft/item/ItemStack;II)V"))
+    private ItemStack redirectWheatSeed(ItemStack stack) {
+        if(stack.getItem() == Items.WHEAT_SEEDS) {
+            return new ItemStack(ItemRegistry.MIDDLE_FRUIT_BUSH_SEEDS);
+        }
+
+        return stack;
     }
 }

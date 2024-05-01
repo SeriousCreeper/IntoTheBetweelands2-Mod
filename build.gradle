@@ -140,7 +140,7 @@ dependencies {
     implementation rfg.deobf("curse.maven:roots-246183:5193525")
     implementation rfg.deobf("curse.maven:eyes-in-the-darkness-304719:2812571")
     implementation rfg.deobf("curse.maven:growthcraft-community-edition-235092:5172498")
-    implementation rfg.deobf("curse.maven:sanity-304817:2632168")
+    implementation rfg.deobf("curse.maven:sanity-304817:2630361")
     implementation rfg.deobf("curse.maven:soot-extended-life-982730:5156451")
     implementation rfg.deobf("curse.maven:embers-extended-life-936489:5264855")
     implementation rfg.deobf("curse.maven:thaumcraft-223628:2629023")

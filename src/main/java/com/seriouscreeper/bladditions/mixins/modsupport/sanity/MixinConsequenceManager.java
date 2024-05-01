@@ -2,6 +2,7 @@ package com.seriouscreeper.bladditions.mixins.modsupport.sanity;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.world.EnumDifficulty;
 import net.tiffit.sanity.SanityCapability;
 import net.tiffit.sanity.consequences.ConsequenceManager;
 import net.tiffit.sanity.consequences.IConsequence;
@@ -34,7 +35,7 @@ public class MixinConsequenceManager {
         List<IConsequence> cons = new ArrayList<>();
         SanityCapability cap = (SanityCapability)p.getCapability(SanityCapability.INSTANCE, (EnumFacing)null);
 
-        if(cap == null) {
+        if(cap == null || p.world.getDifficulty() == EnumDifficulty.PEACEFUL) {
             return cons;
         }
 

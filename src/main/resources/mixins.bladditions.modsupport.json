@@ -67,6 +67,7 @@
     "botania.tools.MixinItemManasteelSword",
     "charsetimmersion.MixinCharsetImmersion",
     "corpse.MixinEntityCorpse",
+    "darknesslib.MixinDarknessLibAPI",
     "embers.MixinAnvilBreakdownRecipe",
     "embers.MixinAnvilRepairRecipe",
     "embers.MixinBlockSteamEngine",

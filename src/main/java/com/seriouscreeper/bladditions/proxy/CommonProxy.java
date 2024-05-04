@@ -107,7 +107,10 @@ import net.tiffit.sanity.consequences.ConsequenceManager;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import soot.Registry;
 import soot.recipe.ItemRenameStampingRecipe;
+import teamroots.embers.api.EmbersAPI;
+import teamroots.embers.apiimpl.EmbersAPIImpl;
 import teamroots.embers.block.BlockSeedNew;
+import teamroots.embers.config.ConfigSeed;
 import teamroots.embers.entity.EntityAncientGolem;
 import teamroots.embers.recipe.FluidReactionRecipe;
 import teamroots.embers.recipe.ItemStampingRecipe;
@@ -115,6 +118,7 @@ import teamroots.embers.recipe.RecipeRegistry;
 import teamroots.embers.register.BlockRegister;
 import teamroots.embers.register.FluidRegister;
 import teamroots.embers.register.ItemRegister;
+import teamroots.embers.register.Util;
 import teamroots.embers.tileentity.TileEntitySeedNew;
 import teamroots.embers.util.EmberGenUtil;
 import thaumcraft.Thaumcraft;
@@ -184,8 +188,8 @@ public class CommonProxy {
     public static final Map<BlockStack, BlockStack> CROPS = Maps.newHashMap();
     public static Fluid SWAMP_WATER;
 
-    public static Block seed_syrmorite;
-    public static Block seed_octine;
+    public static BlockSeedNew seed_syrmorite;
+    public static BlockSeedNew seed_octine;
 
     public static ResourceLocation MARKER_CRAGROCK_TOWER = new ResourceLocation(BLAdditions.MODID, "tile_cragrock_tower");
     public static ResourceLocation MARKER_SPIRIT_TREE = new ResourceLocation(BLAdditions.MODID, "tile_spirit_tree");
@@ -352,12 +356,12 @@ public class CommonProxy {
         MysticalGears.items.add(new ItemGear("Octine"));
         MysticalGears.items.add(new ItemGear("Valonite"));
 
-        BlockRegister.INSTANCE.add(seed_syrmorite = createSimpleSeed(Material.ROCK, "seed_syrmorite", new ResourceLocation("embers:textures/blocks/material_syrmorite.png"), (tile, i) -> {
-            return ItemMisc.EnumItemMisc.SYRMORITE_NUGGET.create(1);
+        BlockRegister.INSTANCE.add(seed_syrmorite = createSimpleSeed(Material.ROCK, "seed_syrmorite", new ResourceLocation("embers", "textures/blocks/material_syrmorite.png"), (tile, i) -> {
+            return new ItemStack(Item.getByNameOrId("pyrotech:generated_slag_syrmorite"));
         }));
 
-        BlockRegister.INSTANCE.add(seed_octine = createSimpleSeed(Material.ROCK, "seed_octine", new ResourceLocation("embers:textures/blocks/material_octine.png"), (tile, i) -> {
-            return ItemMisc.EnumItemMisc.OCTINE_NUGGET.create(1);
+        BlockRegister.INSTANCE.add(seed_octine = createSimpleSeed(Material.ROCK, "seed_octine", new ResourceLocation("embers", "textures/blocks/material_octine.png"), (tile, i) -> {
+            return new ItemStack(Item.getByNameOrId("pyrotech:generated_slag_octine"));
         }));
 
         registerEntities();

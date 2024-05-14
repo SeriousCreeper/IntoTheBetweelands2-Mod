@@ -238,6 +238,7 @@
     "toolbelt.MixinToolbeltConfig"
   ],
   "client": [
+    "arcanearchives.MixinGUIRadiantChest",
     "bloodmagic.MixinClientHandler",
     "corpse.MixinGuiDeathHistory",
     "quark.MixinRenderLeashKnot2",

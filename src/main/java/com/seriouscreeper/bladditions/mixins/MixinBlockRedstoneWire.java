@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.Shadow;
 
 import java.util.Random;
 
-@Mixin(value = BlockRedstoneWire.class, remap = true)
+@Mixin(BlockRedstoneWire.class)
 public class MixinBlockRedstoneWire {
     @Shadow public static final PropertyInteger POWER = PropertyInteger.create("power", 0, 15);
 

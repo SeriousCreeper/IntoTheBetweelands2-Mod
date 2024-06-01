@@ -46,7 +46,7 @@ minecraft {
     username = 'Developer'
 
     // Add any additional tweaker classes here
-    extraTweakClasses.add('org.spongepowered.asm.launch.MixinTweaker')
+    //extraTweakClasses.add('org.spongepowered.asm.launch.MixinTweaker')
 
     // Add various JVM arguments here for runtime
     def args = ["-ea:${project.group}"]
@@ -206,7 +206,7 @@ dependencies {
     implementation files('libs/TheBetweenlands-3.9.6-core-deobf.jar')
 
     if (project.use_mixins.toBoolean()) {
-        String mixin = modUtils.enableMixins("zone.rong:mixinbooter:9.1", "bladditions.refmap.json")
+        String mixin = modUtils.enableMixins("zone.rong:mixinbooter:9.1", "refmap.bladditions.json")
         api(mixin) {
             transitive = false
         }

@@ -9,23 +9,26 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Random;
 
 @Mixin(BlockRedstoneWire.class)
 public class MixinBlockRedstoneWire {
+    @Final
     @Shadow public static final PropertyInteger POWER = PropertyInteger.create("power", 0, 15);
 
-    /**
-     * @author SC
-     */
-    @Overwrite
-    @SideOnly(Side.CLIENT)
-    public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+    @Inject(method = "randomDisplayTick", at = @At("HEAD"), cancellable = true)
+    private void injectRandomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand, CallbackInfo ci) {
         int i = (Integer)stateIn.getValue(POWER);
+
         if (i != 0) {
             double d0 = (double)pos.getX() + 0.5D + ((double)rand.nextFloat() - 0.5D) * 0.2D;
             double d1 = (double)((float)pos.getY() + 0.0625F);
@@ -35,16 +38,13 @@ public class MixinBlockRedstoneWire {
             float f2 = f * (0.67F - 0.145F) + 0.145F;
             float f3 = f * (0.83F - 0.18F) + 0.18F;
             worldIn.spawnParticle(EnumParticleTypes.REDSTONE, d0, d1, d2, (double)f1, (double)f2, (double)f3, new int[0]);
+
+            ci.cancel();
         }
     }
 
-
-    /**
-     * @author SC
-     */
-    @Overwrite
-    @SideOnly(Side.CLIENT)
-    public static int colorMultiplier(int p_176337_0_) {
+    @Inject(method = "colorMultiplier", at = @At("HEAD"), cancellable = true)
+    private static void injectColorMultiplier(int p_176337_0_, CallbackInfoReturnable<Integer> cir) {
         float f = (float)p_176337_0_ / 15.0F;
 
         float f1 = f * (0.15F - 0.02f) + 0.02F;
@@ -54,6 +54,7 @@ public class MixinBlockRedstoneWire {
         int i = MathHelper.clamp((int)(f1 * 255.0F), 0, 255);
         int j = MathHelper.clamp((int)(f2 * 255.0F), 0, 255);
         int k = MathHelper.clamp((int)(f3 * 255.0F), 0, 255);
-        return -16777216 | i << 16 | j << 8 | k;
+
+        cir.setReturnValue(-16777216 | i << 16 | j << 8 | k);
     }
 }

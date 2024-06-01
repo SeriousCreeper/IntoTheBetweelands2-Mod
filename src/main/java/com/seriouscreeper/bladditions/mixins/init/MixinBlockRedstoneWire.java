@@ -1,4 +1,4 @@
-package com.seriouscreeper.bladditions.mixins;
+package com.seriouscreeper.bladditions.mixins.init;
 
 import net.minecraft.block.BlockRedstoneWire;
 import net.minecraft.block.properties.PropertyInteger;

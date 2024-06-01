@@ -2,24 +2,21 @@
   "required": true,
   "package": "com.seriouscreeper.bladditions.mixins",
   "compatibilityLevel": "JAVA_8",
-  "minVersion": "0.6",
+  "minVersion": "0.8",
   "refmap": "refmap.bladditions.json",
   "mixins": [
-    "MapColorAccessor",
-    "MixinBlockPistonBase",
-    "MixinBlockRedstoneWire",
-    "MixinEntityAINearestAttackableTarget",
-    "MixinItemDye",
-    "MixinLeashKnot",
-    "MixinMapColors",
-    "MixinPotionUtils",
-    "MixinWorld"
+    "init.MapColorAccessor",
+    "init.MixinBlockPistonBase",
+    "init.MixinEntityAINearestAttackableTarget",
+    "init.MixinItemDye",
+    "init.MixinLeashKnot",
+    "init.MixinMapColors",
+    "init.MixinPotionUtils",
+    "init.MixinWorld"
   ],
   "client": [
-    "MixinGuiIngameForge",
-    "MixinRenderLiving"
-  ],
-  "injectors": {
-    "maxShiftBy": 10
-  }
+    "init.MixinBlockRedstoneWire",
+    "init.MixinGuiIngameForge",
+    "init.MixinRenderLiving"
+  ]
 }

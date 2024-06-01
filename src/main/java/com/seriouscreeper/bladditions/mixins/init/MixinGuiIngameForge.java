@@ -1,4 +1,4 @@
-package com.seriouscreeper.bladditions.mixins;
+package com.seriouscreeper.bladditions.mixins.init;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;

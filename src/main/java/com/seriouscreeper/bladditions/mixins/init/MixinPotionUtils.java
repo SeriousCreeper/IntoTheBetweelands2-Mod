@@ -1,4 +1,4 @@
-package com.seriouscreeper.bladditions.mixins;
+package com.seriouscreeper.bladditions.mixins.init;
 
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.potion.PotionUtils;

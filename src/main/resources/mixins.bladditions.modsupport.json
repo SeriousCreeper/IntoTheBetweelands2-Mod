@@ -2,8 +2,7 @@
   "required": true,
   "package": "com.seriouscreeper.bladditions.mixins.modsupport",
   "compatibilityLevel": "JAVA_8",
-  "target": "@env(DEFAULT)",
-  "minVersion": "0.6.0",
+  "minVersion": "0.8",
   "refmap": "refmap.bladditions.json",
   "mixins": [
     "MixinBLFluidRegistry",
@@ -244,8 +243,5 @@
     "quark.MixinRenderLeashKnot2",
     "thaumcraft.MixinGuiFocalManipulator",
     "thebetweenlands.MixinGuiFirefly"
-  ],
-  "injectors": {
-    "maxShiftBy": 10
-  }
+  ]
 }

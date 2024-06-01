@@ -1,5 +1,6 @@
 package com.seriouscreeper.bladditions.mixins.modsupport.mysticallib;
 
+import com.seriouscreeper.bladditions.proxy.CommonProxy;
 import epicsquid.mysticallib.block.BlockCropBase;
 import net.minecraft.block.BlockCrops;
 import net.minecraft.block.state.IBlockState;
@@ -31,11 +32,7 @@ public class MixinBlockCropBase extends BlockCrops {
     public boolean isDecayed(IBlockAccess world, BlockPos pos) {
         IBlockState blockState = world.getBlockState(pos.down());
 
-        if (blockState.getBlock() instanceof BlockGenericDugSoil) {
-            return (Boolean)blockState.getValue(BlockGenericDugSoil.DECAYED);
-        }
-
-        return false;
+        return CommonProxy.IsSoilDecayed(blockState);
     }
 
 

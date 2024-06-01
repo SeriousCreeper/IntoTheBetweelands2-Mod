@@ -144,6 +144,7 @@ import thaumcraft.common.tiles.essentia.TileJarFillable;
 import thaumicperiphery.ModContent;
 import thebetweenlands.api.item.CorrosionHelper;
 import thebetweenlands.api.recipes.ISmokingRackRecipe;
+import thebetweenlands.common.block.farming.BlockGenericDugSoil;
 import thebetweenlands.common.entity.draeton.EntityDraeton;
 import thebetweenlands.common.entity.mobs.*;
 import thebetweenlands.common.item.herblore.ItemCrushed;
@@ -206,6 +207,15 @@ public class CommonProxy {
 
     public static boolean IsPacifistMob(EntityCreature creature) {
         return creature instanceof EntitySwarm || (creature instanceof EntityPyrad && creature.getEntityAttribute(EntityPyrad.AGRESSIVE).getAttributeValue() != 1);
+    }
+
+
+    public static boolean IsSoilDecayed(IBlockState blockState) {
+        if (blockState.getBlock() instanceof BlockGenericDugSoil) {
+            return (Boolean)blockState.getValue(BlockGenericDugSoil.DECAYED);
+        }
+
+        return false;
     }
 
 

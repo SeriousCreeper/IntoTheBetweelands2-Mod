@@ -1,4 +1,4 @@
-package com.seriouscreeper.bladditions.mixins;
+package com.seriouscreeper.bladditions.mixins.init;
 
 import com.seriouscreeper.bladditions.proxy.CommonProxy;
 import net.minecraft.entity.EntityCreature;
@@ -12,8 +12,6 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import thebetweenlands.common.entity.mobs.EntityPyrad;
-import thebetweenlands.common.entity.mobs.EntitySwarm;
 
 @Mixin(value = EntityAINearestAttackableTarget.class)
 public class MixinEntityAINearestAttackableTarget<T extends EntityLivingBase> extends EntityAITarget {

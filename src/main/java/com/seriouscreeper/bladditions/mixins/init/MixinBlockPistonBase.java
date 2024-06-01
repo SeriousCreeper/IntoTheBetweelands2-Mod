@@ -1,4 +1,4 @@
-package com.seriouscreeper.bladditions.mixins;
+package com.seriouscreeper.bladditions.mixins.init;
 
 import com.seriouscreeper.bladditions.proxy.CommonProxy;
 import net.minecraft.block.Block;

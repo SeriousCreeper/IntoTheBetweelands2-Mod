@@ -12,6 +12,7 @@ import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -63,7 +64,7 @@ public class WellnessCapability {
         }
 
         // Find greebling nearby
-        List<Entity> l = EntityUtils.getEntitiesInRange(player.world, player.getPosition(), null, Entity.class, 10.0D);
+        List<Entity> l = EntityUtils.getEntitiesInRange(player.world, player.getPosition(), null, Entity.class, 20.0D);
 
         if (!l.isEmpty()) {
             for (Entity e : l) {
@@ -73,14 +74,15 @@ public class WellnessCapability {
             }
         }
 
-        int blockSearchRadius = 4;
+        int blockSearchRadius = 8;
 
         List<Block> blocksApplied = new ArrayList<>();
 
-        for(int y = -1; y <= 1; ++y) {
-            for(int x = -blockSearchRadius; x <= blockSearchRadius; ++x) {
-                for(int z = -blockSearchRadius; z <= blockSearchRadius; ++z) {
-                    IBlockState state = player.world.getBlockState(player.getPosition().add(x, y, z));
+        for(int y = -1; y <= 1; y++) {
+            for(int x = -blockSearchRadius; x <= blockSearchRadius; x++) {
+                for(int z = -blockSearchRadius; z <= blockSearchRadius; z++) {
+                    BlockPos playerPos = new BlockPos(Math.floor(player.posX), player.posY, Math.floor(player.posZ));
+                    IBlockState state = player.world.getBlockState(playerPos.add(x, y, z));
                     Block block = state.getBlock();
 
                     for(Block wellnessBlock : CommonProxy.WELLNESS_BLOCKS.keySet()) {

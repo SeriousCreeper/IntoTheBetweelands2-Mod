@@ -42,15 +42,4 @@ public class MixinTileAltar extends TileSimpleInventory {
     public int getSizeInventory() {
         return 0;
     }
-
-
-    @SideOnly(Side.CLIENT)
-    @ModifyArg(method = "renderHUD", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/RenderItem;renderItemIntoGUI(Lnet/minecraft/item/ItemStack;II)V"))
-    private ItemStack redirectWheatSeed(ItemStack stack) {
-        if(stack.getItem() == Items.WHEAT_SEEDS) {
-            return new ItemStack(ItemRegistry.MIDDLE_FRUIT_BUSH_SEEDS);
-        }
-
-        return stack;
-    }
 }

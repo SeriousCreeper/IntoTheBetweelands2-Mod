@@ -242,6 +242,7 @@
     "corpse.MixinGuiDeathHistory",
     "quark.MixinRenderLeashKnot2",
     "thaumcraft.MixinGuiFocalManipulator",
-    "thebetweenlands.MixinGuiFirefly"
+    "thebetweenlands.MixinGuiFirefly",
+    "botania.MixinTileAltarClient"
   ]
 }

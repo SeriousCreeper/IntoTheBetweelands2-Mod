@@ -22,6 +22,7 @@ public class ConfigBLAdditions {
     public static final ConfigSanity configSanity = new ConfigSanity();
     public static final ConfigBotania configBotania = new ConfigBotania();
     public static final ConfigBloodMagic configBloodMagic = new ConfigBloodMagic();
+    public static final ConfigThaumcraft configThaumcraft = new ConfigThaumcraft();
 
     @Config.Ignore
     private static Map<String, Float> blEventBonuses = null;
@@ -31,6 +32,11 @@ public class ConfigBLAdditions {
         public int ManaNarslimmus = 1200;
         public int ManaSpectrolus = 4800;
         public float DamageChakram = 6;
+    }
+
+
+    public static class ConfigThaumcraft {
+        public String[] unnaturalHungerCures = new String[] { "minecraft:rotten_flesh", "thaumcraft:brain" };
     }
 
 

@@ -192,6 +192,7 @@
     "thaumcraft.entities.MixinEntityTaintSeed",
     "thaumcraft.entities.MixinEntityThaumcraftBoss",
     "thaumicaugmentation.MixinFocusEffectLight",
+    "thaumicaugmentation.MixinFocusEffectWater",
     "thaumicjei.MixinThaumcraftJEIPlugin",
     "thaumicperiphery.MixinItemPauldronRepulsion",
     "thebetweenlands.MixinBetweenlandsSpawnerLogic",
@@ -239,10 +240,10 @@
   "client": [
     "arcanearchives.MixinGUIRadiantChest",
     "bloodmagic.MixinClientHandler",
+    "botania.MixinTileAltarClient",
     "corpse.MixinGuiDeathHistory",
     "quark.MixinRenderLeashKnot2",
     "thaumcraft.MixinGuiFocalManipulator",
-    "thebetweenlands.MixinGuiFirefly",
-    "botania.MixinTileAltarClient"
+    "thebetweenlands.MixinGuiFirefly"
   ]
 }

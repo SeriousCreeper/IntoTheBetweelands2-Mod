@@ -20,10 +20,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -52,10 +49,10 @@ import java.util.Iterator;
 import java.util.List;
 
 public class ItemCorruptedBoneWayfinder extends ItemBoneWayfinder {
-    public ItemCorruptedBoneWayfinder() {
-        setRegistryName("corrupted_bone_wayfinder");
-        setTranslationKey(BLAdditions.MODID + ".corrupted_bone_wayfinder");
-        this.setMaxDamage(1);
+    public ItemCorruptedBoneWayfinder(String registryName) {
+        setRegistryName(registryName);
+        setTranslationKey(BLAdditions.MODID + "." + registryName);
+        this.setMaxDamage(0);
     }
 
     @SideOnly(Side.CLIENT)
@@ -131,7 +128,7 @@ public class ItemCorruptedBoneWayfinder extends ItemBoneWayfinder {
 
     @Override
     public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityLivingBase entity) {
-        if (!worldIn.isRemote && stack.getItemDamage() < stack.getMaxDamage()) {
+        if (!worldIn.isRemote) {
             //BlockPos waystone = this.getTeleportPos(stack);
 
             if(entity.isRiding())

@@ -1150,7 +1150,8 @@ public class CommonProxy {
         //event.getRegistry().register(ModItems.living_shovel = new PatchedItemLivingShovel(Materials.LIVING, "living_shovel"));
 
         event.getRegistry().register(new ItemAngrierPebble());
-        event.getRegistry().register(new ItemCorruptedBoneWayfinder());
+        event.getRegistry().register(new ItemCorruptedBoneWayfinder("corrupted_bone_wayfinder"));
+        event.getRegistry().register(new ItemImpetusBoneWayfinder("impetus_bone_wayfinder"));
         //event.getRegistry().register(new ItemWaterBowl());
 
         ModItems.baffle_cap = ItemRegistry.YELLOW_DOTTED_FUNGUS;

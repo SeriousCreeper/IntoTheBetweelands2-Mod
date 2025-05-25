@@ -2,8 +2,6 @@ package com.seriouscreeper.bladditions.mixins.modsupport.thebetweenlands;
 
 import epicsquid.mysticallib.util.Util;
 import epicsquid.roots.entity.ritual.EntityRitualSummonCreatures;
-import jdk.nashorn.internal.ir.Block;
-import net.minecraft.entity.monster.EntitySnowman;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;

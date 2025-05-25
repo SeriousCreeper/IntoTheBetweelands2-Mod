@@ -82,7 +82,7 @@ public class MixinFocusEffectFrost extends FocusEffect {
         return "thaumcraft.FROST";
     }
 
-    @Override
+    @Shadow
     public int getComplexity() {
         return 0;
     }

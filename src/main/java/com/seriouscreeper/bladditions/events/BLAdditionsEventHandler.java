@@ -391,7 +391,7 @@ public class BLAdditionsEventHandler {
 
     @SubscribeEvent
     public void onStageUnlocked(GameStageEvent.Added event) {
-        if(event.getStageName().equals("knowledge_of_decay")) {
+        if(event.getStageName().equals(ConfigBLAdditions.configThaumcraft.stageToUnlockThaumcraft)) {
             IPlayerKnowledge knowledge = ThaumcraftCapabilities.getKnowledge(event.getEntityPlayer());
 
             knowledge.addResearch("!gotcrystals");

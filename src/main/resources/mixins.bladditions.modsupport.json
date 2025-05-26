@@ -159,6 +159,7 @@
     "teastory.teas.MixinWhiteTea",
     "teastory.teas.MixinYellowTea",
     "thaumcraft.MixinBlockBarrier",
+    "thaumcraft.MixinBlockFluxGoo",
     "thaumcraft.MixinBlockGolemBuilder",
     "thaumcraft.MixinBlockHungryChest",
     "thaumcraft.MixinBlockResearchTable",

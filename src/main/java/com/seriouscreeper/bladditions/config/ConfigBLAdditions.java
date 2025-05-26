@@ -37,6 +37,7 @@ public class ConfigBLAdditions {
 
     public static class ConfigThaumcraft {
         public String[] unnaturalHungerCures = new String[] { "minecraft:rotten_flesh", "thaumcraft:brain" };
+        public int taintSlimeSpawnChance = 300;
     }
 
 

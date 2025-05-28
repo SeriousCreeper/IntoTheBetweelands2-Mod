@@ -391,7 +391,9 @@ public class BLAdditionsEventHandler {
 
     @SubscribeEvent
     public void onStageUnlocked(GameStageEvent.Added event) {
-        if(event.getStageName().equals(ConfigBLAdditions.configThaumcraft.stageToUnlockThaumcraft)) {
+        String stageName = event.getStageName();
+
+        if(stageName.equals(ConfigBLAdditions.configThaumcraft.stageToUnlockThaumcraft)) {
             IPlayerKnowledge knowledge = ThaumcraftCapabilities.getKnowledge(event.getEntityPlayer());
 
             knowledge.addResearch("!gotcrystals");
@@ -401,6 +403,23 @@ public class BLAdditionsEventHandler {
             //if (ModConfig.CONFIG_MISC.noSleep && !knowledge.isResearchKnown("!gotdream")) {
             //    giveDreamJournal(event.getEntityPlayer());
             //}
+        }
+
+        CheckThaumcraftGameStageResearch(event.getEntityPlayer(), stageName);
+    }
+
+
+    // TODO: Check on startup if we need to retroactively add any research to players
+    private void CheckThaumcraftGameStageResearch(EntityPlayer player, String research) {
+        if(!research.startsWith("tc_")) {
+            return;
+        }
+
+        IPlayerKnowledge knowledge = ThaumcraftCapabilities.getKnowledge(player);
+
+        if(!knowledge.isResearchKnown(research)) {
+            knowledge.addResearch(research);
+            knowledge.sync((EntityPlayerMP)player);
         }
     }
 

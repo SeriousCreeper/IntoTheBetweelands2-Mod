@@ -497,7 +497,7 @@ public class CommonProxy {
         EmberGenUtil.registerMetalCoefficient("blockSyrmorite",0.75f);
 
         // Arcane Archives
-        RecipeLibrary.LETTER_OF_INVITATION_RECIPE = GCTRecipeList.instance.makeAndAddRecipeWithCreatorAndCondition("letter_invitation", new ItemStack(com.aranaira.arcanearchives.init.ItemRegistry.LETTER_OF_INVITATION, 1), new Object[]{ItemMisc.EnumItemMisc.PARCHMENT.create(3), new ItemStack(com.aranaira.arcanearchives.init.ItemRegistry.COMPONENT_RADIANTDUST, 1), ItemCrushed.EnumItemCrushed.GROUND_AQUA_MIDDLE_GEM.create(1)}).addCondition((player, tile) -> {
+        RecipeLibrary.LETTER_OF_INVITATION_RECIPE = GCTRecipeList.instance.makeAndAddRecipeWithCreatorAndCondition("letter_invitation", new ItemStack(com.aranaira.arcanearchives.init.ItemRegistry.LETTER_OF_INVITATION, 1), new Object[]{ItemMisc.EnumItemMisc.PARCHMENT.create(1), new ItemStack(com.aranaira.arcanearchives.init.ItemRegistry.COMPONENT_RADIANTDUST, 1), ItemCrushed.EnumItemCrushed.GROUND_AQUA_MIDDLE_GEM.create(1)}).addCondition((player, tile) -> {
             if (!player.world.isRemote) {
                 HiveSaveData saveData = DataHelper.getHiveData();
                 HiveSaveData.Hive hive = saveData.getHiveByMember(player.getUniqueID());
@@ -507,7 +507,7 @@ public class CommonProxy {
                 return network.ownsHive() || !network.inHive();
             }
         });
-        RecipeLibrary.LETTER_OF_RESIGNATION_RECIPE = GCTRecipeList.instance.makeAndAddRecipeWithCreatorAndCondition("letter_resignation", new ItemStack(com.aranaira.arcanearchives.init.ItemRegistry.LETTER_OF_RESIGNATION, 1), new Object[]{ItemMisc.EnumItemMisc.PARCHMENT.create(3), new ItemStack(com.aranaira.arcanearchives.init.ItemRegistry.COMPONENT_RADIANTDUST, 1), ItemCrushed.EnumItemCrushed.GROUND_GREEN_MIDDLE_GEM.create(1)}).addCondition((player, tile) -> {
+        RecipeLibrary.LETTER_OF_RESIGNATION_RECIPE = GCTRecipeList.instance.makeAndAddRecipeWithCreatorAndCondition("letter_resignation", new ItemStack(com.aranaira.arcanearchives.init.ItemRegistry.LETTER_OF_RESIGNATION, 1), new Object[]{ItemMisc.EnumItemMisc.PARCHMENT.create(1), new ItemStack(com.aranaira.arcanearchives.init.ItemRegistry.COMPONENT_RADIANTDUST, 1), ItemCrushed.EnumItemCrushed.GROUND_GREEN_MIDDLE_GEM.create(1)}).addCondition((player, tile) -> {
             if (!player.world.isRemote) {
                 HiveSaveData saveData = DataHelper.getHiveData();
                 HiveSaveData.Hive hive = saveData.getHiveByMember(player.getUniqueID());
@@ -517,7 +517,7 @@ public class CommonProxy {
                 return network.inHive();
             }
         });
-        RecipeLibrary.WRIT_OF_EXPULSION_RECIPE = GCTRecipeList.instance.makeAndAddRecipeWithCreatorAndCondition("writ_expulsion", new ItemStack(com.aranaira.arcanearchives.init.ItemRegistry.WRIT_OF_EXPULSION, 1), new Object[]{ItemMisc.EnumItemMisc.PARCHMENT.create(3), new ItemStack(com.aranaira.arcanearchives.init.ItemRegistry.COMPONENT_RADIANTDUST, 1), ItemCrushed.EnumItemCrushed.GROUND_CRIMSON_MIDDLE_GEM.create(1)}).addCondition((player, tile) -> {
+        RecipeLibrary.WRIT_OF_EXPULSION_RECIPE = GCTRecipeList.instance.makeAndAddRecipeWithCreatorAndCondition("writ_expulsion", new ItemStack(com.aranaira.arcanearchives.init.ItemRegistry.WRIT_OF_EXPULSION, 1), new Object[]{ItemMisc.EnumItemMisc.PARCHMENT.create(1), new ItemStack(com.aranaira.arcanearchives.init.ItemRegistry.COMPONENT_RADIANTDUST, 1), ItemCrushed.EnumItemCrushed.GROUND_CRIMSON_MIDDLE_GEM.create(1)}).addCondition((player, tile) -> {
             if (!player.world.isRemote) {
                 HiveSaveData saveData = DataHelper.getHiveData();
                 HiveSaveData.Hive hive = saveData.getHiveByMember(player.getUniqueID());

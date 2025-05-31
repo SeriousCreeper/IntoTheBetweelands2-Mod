@@ -411,10 +411,6 @@ public class BLAdditionsEventHandler {
 
     // TODO: Check on startup if we need to retroactively add any research to players
     private void CheckThaumcraftGameStageResearch(EntityPlayer player, String research) {
-        if(!research.startsWith("tc_")) {
-            return;
-        }
-
         IPlayerKnowledge knowledge = ThaumcraftCapabilities.getKnowledge(player);
 
         if(!knowledge.isResearchKnown(research)) {

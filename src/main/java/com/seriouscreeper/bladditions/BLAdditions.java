@@ -43,7 +43,8 @@ import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
                         "required-after:thebetweenlands;" +
                         "required-after:roots;" +
                         "required-after:thaumcraft;" +
-                        "required-after:thaumicperiphery;"
+                        "required-after:thaumicperiphery;" + 
+                        "required-after:immersiveengineering;"
 )
 public class BLAdditions
 {

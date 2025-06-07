@@ -1,5 +1,6 @@
 package com.seriouscreeper.bladditions.proxy;
 
+import blusunrize.immersiveengineering.api.tool.ExternalHeaterHandler;
 import WayofTime.bloodmagic.api.impl.BloodMagicAPI;
 import WayofTime.bloodmagic.core.RegistrarBloodMagicItems;
 import WayofTime.bloodmagic.incense.EnumTranquilityType;
@@ -17,6 +18,7 @@ import com.rcx.mystgears.block.BlockTurret;
 import com.rcx.mystgears.item.ItemGear;
 import com.seriouscreeper.bladditions.BLAdditions;
 import com.seriouscreeper.bladditions.blocks.*;
+import com.seriouscreeper.bladditions.compat.ie.ExternalHeaterClasses;
 import com.seriouscreeper.bladditions.capability.PacifistCapability;
 import com.seriouscreeper.bladditions.capability.WellnessCapability;
 import com.seriouscreeper.bladditions.config.ConfigBLAdditions;
@@ -410,6 +412,8 @@ public class CommonProxy {
         GameRegistry.registerWorldGenerator(new BLBeeHiveWorldGen(), 0);
 
         ConsequenceManager.CONSEQUENCES.add(new ConsequenceSounds());
+
+        ExternalHeaterHandler.registerHeatableAdapter(TileEntityAbstractBLFurnace.class, new ExternalHeaterClasses.HeaterBLFurnace());
 
         /*
         BoreOutput tcCrystalOutput = new BoreOutput(Sets.newHashSet(20), Sets.newHashSet(new ResourceLocation("thebetweenlands", "sludge_plains"), new ResourceLocation("thebetweenlands", "sludge_plains_clearing")), Lists.newArrayList(

@@ -13,12 +13,15 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import thebetweenlands.common.registries.BlockRegistry;
 
+import javax.annotation.Nonnull;
+
 @Mixin(value = TileEntityBlastFurnaceAdvanced.class, remap = false)
 public class MixinTileEntityBlastFurnaceAdvanced extends TileEntityBlastFurnace {
     /**
      * @author
      * @reason
      */
+    @Nonnull
     @Overwrite
     public ItemStack getOriginalBlock() {
         return this.pos == 31 ? new ItemStack(BlockRegistry.SYRMORITE_HOPPER) : new ItemStack(IEContent.blockStoneDecoration, 1, 2);

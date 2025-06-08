@@ -192,6 +192,7 @@ dependencies {
     implementation rfg.deobf("curse.maven:mystical-world-282940:3460961")
     implementation rfg.deobf("curse.maven:item-filters-309674:3003364")
     implementation rfg.deobf("curse.maven:aetherworks-extended-life-1003576:5263747")
+    implementation rfg.deobf("curse.maven:immersive-engineering-231951:2974106")
 
     runtimeOnly("curse.maven:guide-api-228832:2645992")
     runtimeOnly("curse.maven:collective-342584:3533131")

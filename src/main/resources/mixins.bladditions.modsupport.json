@@ -95,6 +95,7 @@
     "growthcraft.MixinInitBees",
     "grue.MixinGrueEventHandler",
     "ignitehud.MixinGuiWidget",
+    "immersiveengineering.MixinBottlingMachineRecipe",
     "immersiveengineering.MixinMultiblockBlastFurnaceAdvanced",
     "immersiveengineering.MixinMultiblockBottlingMachine",
     "immersiveengineering.MixinSqueezerRecipe",

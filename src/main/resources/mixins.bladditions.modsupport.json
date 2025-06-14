@@ -97,6 +97,7 @@
     "ignitehud.MixinGuiWidget",
     "immersiveengineering.MixinMultiblockBlastFurnaceAdvanced",
     "immersiveengineering.MixinMultiblockBottlingMachine",
+    "immersiveengineering.MixinSqueezerRecipe",
     "immersiveengineering.MixinTileEntityBlastFurnaceAdvanced",
     "immersiveengineering.MixinTileEntityBottlingMachine",
     "immersiveengineering.MixinTileEntityLightningrod",

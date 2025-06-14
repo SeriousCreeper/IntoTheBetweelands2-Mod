@@ -2,6 +2,7 @@ package com.seriouscreeper.bladditions.mixins.modsupport.immersiveengineering;
 
 import blusunrize.immersiveengineering.api.crafting.BottlingMachineRecipe;
 import blusunrize.immersiveengineering.api.crafting.IngredientStack;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import org.spongepowered.asm.mixin.Final;
@@ -20,5 +21,12 @@ public class MixinBottlingMachineRecipe {
     @Inject(method = "<init>", remap = false, at = @At("RETURN"))
     private void injectConstructor(ItemStack output, Object input, FluidStack fluidInput, CallbackInfo ci) {
         this.input.setUseNBT(true);
+    }
+
+    @Inject(method = "addRecipe", remap = false, at = @At("HEAD"), cancellable = true)
+    private static void injectAddRecipe(ItemStack output, Object input, FluidStack fluidInput, CallbackInfo ci) {
+        if (output.getItem() == Items.POTIONITEM) {
+            ci.cancel();
+        }
     }
 }

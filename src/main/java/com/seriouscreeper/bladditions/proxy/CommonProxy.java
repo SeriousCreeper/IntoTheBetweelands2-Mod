@@ -45,7 +45,6 @@ import com.tiviacz.pizzacraft.crafting.bakeware.PizzaCraftingManager;
 import com.tiviacz.pizzacraft.init.ModBlocks;
 import epicsquid.mysticallib.LibRegistry;
 import epicsquid.mysticallib.event.RegisterContentEvent;
-import epicsquid.roots.RegistryManager;
 import epicsquid.roots.Roots;
 import epicsquid.roots.api.CreateToolEvent;
 import epicsquid.roots.init.ModItems;
@@ -70,7 +69,9 @@ import net.minecraft.dispenser.BehaviorDefaultDispenseItem;
 import net.minecraft.dispenser.IBlockSource;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.entity.monster.EntitySlime;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
@@ -137,6 +138,7 @@ import thaumcraft.api.research.*;
 import thaumcraft.common.blocks.essentia.BlockJarItem;
 import thaumcraft.common.config.ConfigBlocks;
 import thaumcraft.common.config.ConfigItems;
+import thaumcraft.common.entities.monster.cult.EntityCultistPortalLesser;
 import thaumcraft.common.golems.seals.SealHandler;
 import thaumcraft.common.lib.crafting.DustTriggerMultiblock;
 import thaumcraft.common.lib.crafting.InfusionEnchantmentRecipe;
@@ -145,17 +147,22 @@ import thaumcraft.common.lib.utils.CropUtils;
 import thaumcraft.common.tiles.essentia.TileJarFillable;
 import thaumicperiphery.ModContent;
 import thebetweenlands.api.item.CorrosionHelper;
+import thebetweenlands.api.recipes.IDruidAltarRecipe;
 import thebetweenlands.api.recipes.ISmokingRackRecipe;
 import thebetweenlands.common.block.farming.BlockGenericDugSoil;
 import thebetweenlands.common.entity.draeton.EntityDraeton;
 import thebetweenlands.common.entity.mobs.*;
 import thebetweenlands.common.item.herblore.ItemCrushed;
 import thebetweenlands.common.item.misc.ItemMisc;
+import thebetweenlands.common.recipe.misc.DruidAltarRecipe;
 import thebetweenlands.common.recipe.misc.SmokingRackRecipe;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.tile.TileEntityAbstractBLFurnace;
+import thebetweenlands.common.tile.spawner.MobSpawnerLogicBetweenlands;
+import thebetweenlands.common.tile.spawner.TileEntityMobSpawnerBetweenlands;
 import thebetweenlands.common.world.storage.location.LocationStorage;
 import thecodex6824.thaumicaugmentation.api.TAItems;
 import thecodex6824.thaumicaugmentation.api.ThaumicAugmentationAPI;
@@ -405,7 +412,78 @@ public class CommonProxy {
     }
 
 
+    private void AddDruidAltarRecipe(ItemStack[] inputs, String entityId) {
+        DruidAltarRecipe.addRecipe(new IDruidAltarRecipe() {
+            public boolean containsInputItem(ItemStack input) {
+                if (input.isEmpty()) {
+                    return false;
+                }
+
+                for (ItemStack stack : inputs) {
+                    if (stack.getItem() == input.getItem()) {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+
+            public boolean matchesInput(ItemStack[] input) {
+                List<ItemStack> remainingRecipeInputs = new ArrayList<>(Arrays.asList(inputs));
+
+                for (ItemStack inStack : input) {
+                    boolean matched = false;
+                    Iterator<ItemStack> iter = remainingRecipeInputs.iterator();
+
+                    while (iter.hasNext()) {
+                        ItemStack recipeStack = iter.next();
+                        if (ItemStack.areItemsEqual(recipeStack, inStack)) {
+                            iter.remove();
+                            matched = true;
+                            break;
+                        }
+                    }
+
+                    if (!matched) {
+                        // Input item did not match any remaining recipe input
+                        return false;
+                    }
+                }
+
+                // Ensure all recipe items were used exactly once
+                return remainingRecipeInputs.isEmpty();
+            }
+
+
+            public ItemStack getOutput(ItemStack[] input) {
+                return ItemStack.EMPTY;
+            }
+
+            public void onCrafted(World world, BlockPos pos, ItemStack[] input, ItemStack output) {
+                ResourceLocation rl = new ResourceLocation(entityId);
+                Entity entity = EntityList.createEntityByIDFromName(rl, world);
+
+                if (entity != null) {
+                    entity.setPosition(pos.getX() + 0.5D, pos.getY() + 1.0D, pos.getZ() + 0.5D);
+                    world.spawnEntity(entity);
+                }
+            }
+        });
+    }
+
+
     public void init(FMLInitializationEvent e) {
+
+        AddDruidAltarRecipe(new ItemStack[] {
+                        new ItemStack(ItemsTC.brain, 1),
+                        new ItemStack(ItemsTC.salisMundus, 1),
+                        new ItemStack(ItemsTC.bottleTaint, 1),
+                        new ItemStack(ModItems.infernal_bulb, 1),
+                },
+                "thaumcraft:cultistportallesser"
+        );
+
+
         CapabilityManager.INSTANCE.register(PacifistCapability.class, new PacifistCapability.PacifistCapabilityStorage(), new PacifistCapability.PacifistCapabilityFactory());
         CapabilityManager.INSTANCE.register(WellnessCapability.class, new WellnessCapability.WellnessCapabilityStorage(), new WellnessCapability.WellnessCapabilityFactory());
 

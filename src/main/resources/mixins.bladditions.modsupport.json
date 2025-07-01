@@ -9,6 +9,7 @@
     "MixinBlockChoppingBoard",
     "MixinMystgears",
     "aether.MixinClientProxy",
+    "aether.MixinCurrencyAetherInit",
     "arcanearchives.MixinItemUtilsAA",
     "arcanearchives.MixinRadiantTankTileEntity",
     "arcanearchives.MixinRadiantTroveTileEntity",

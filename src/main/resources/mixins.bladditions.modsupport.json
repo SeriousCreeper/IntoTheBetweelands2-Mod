@@ -8,6 +8,7 @@
     "MixinBLFluidRegistry",
     "MixinBlockChoppingBoard",
     "MixinMystgears",
+    "aether.MixinClientProxy",
     "arcanearchives.MixinItemUtilsAA",
     "arcanearchives.MixinRadiantTankTileEntity",
     "arcanearchives.MixinRadiantTroveTileEntity",

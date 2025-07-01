@@ -193,6 +193,7 @@ dependencies {
     implementation rfg.deobf("curse.maven:item-filters-309674:3003364")
     implementation rfg.deobf("curse.maven:aetherworks-extended-life-1003576:5263747")
     implementation rfg.deobf("curse.maven:immersive-engineering-231951:2974106")
+    implementation rfg.deobf("curse.maven:aether-ii-223796:2960610")
 
     runtimeOnly("curse.maven:guide-api-228832:2645992")
     runtimeOnly("curse.maven:collective-342584:3533131")
@@ -205,6 +206,7 @@ dependencies {
 
     implementation files('libs/IgniteHUD-b0.5.4-deobf.jar')
     implementation files('libs/TheBetweenlands-3.9.6-core-deobf.jar')
+    implementation files('libs/orbis-lib-1.12.2-0.2.0+build411.jar')
 
     if (project.use_mixins.toBoolean()) {
         String mixin = modUtils.enableMixins("zone.rong:mixinbooter:9.1", "refmap.bladditions.json")

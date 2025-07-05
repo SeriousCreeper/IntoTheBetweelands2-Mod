@@ -144,6 +144,7 @@
     "roots.MixinUUIDRegistry",
     "roots.spells.MixinSpellGrowthInfusion",
     "roots.spells.MixinSpellShatter",
+    "rustichromia.MixinTileEntityAssembler",
     "sanity.MixinConsequenceManager",
     "sanity.MixinEyesConsequences",
     "sanity.MixinIConsequences",

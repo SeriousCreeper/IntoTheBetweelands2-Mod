@@ -5,6 +5,7 @@ import com.seriouscreeper.bladditions.commands.BLAdditionsCommands;
 import com.seriouscreeper.bladditions.config.ConfigBLAdditions;
 import com.seriouscreeper.bladditions.events.BLAdditionsEventHandler;
 import com.seriouscreeper.bladditions.events.DungeonEventHandler;
+import com.seriouscreeper.bladditions.events.TeleportWorldEventHandler;
 import com.seriouscreeper.bladditions.proxy.CommonProxy;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.LootTableList;
@@ -67,6 +68,7 @@ public class BLAdditions
 
         MinecraftForge.EVENT_BUS.register(new BLAdditionsEventHandler());
         MinecraftForge.EVENT_BUS.register(new DungeonEventHandler());
+        MinecraftForge.EVENT_BUS.register(new TeleportWorldEventHandler());
     }
 
     @EventHandler

@@ -27,6 +27,9 @@ public class ConfigBLAdditions {
     @Config.Ignore
     private static Map<String, Float> blEventBonuses = null;
 
+    @Config.Ignore
+    public static int[][] draetonDimensions = null;
+
     public static class ConfigBotania {
         public int ManaKekimurus = 5000;
         public int ManaNarslimmus = 1200;
@@ -148,6 +151,12 @@ public class ConfigBLAdditions {
         public String[] FoodSicknessWhitelist = new String[] {
                 "roots:cooked_pereskia"
         };
+
+        @Config.Comment({"fromDimension, toDimension, minHeight, maxHeight, targetX, targetY, targetZ"})
+        public String[] DraetonDimension = new String[] {
+                "20,0,300,400,0,128,0",
+                "0,20,200,250,0,128,0"
+        };
     }
 
 
@@ -190,6 +199,26 @@ public class ConfigBLAdditions {
     }
 
 
+    public static int[][] getParsedDraetonDimension() {
+        String[] configArray = ConfigBLAdditions.configGeneral.DraetonDimension;
+        int[][] result = new int[configArray.length][];
+
+        for (int i = 0; i < configArray.length; i++) {
+            String line = configArray[i];
+            String[] tokens = line.split(",");
+            int[] row = new int[tokens.length];
+
+            for (int j = 0; j < tokens.length; j++) {
+                row[j] = Integer.parseInt(tokens[j].trim());
+            }
+
+            result[i] = row;
+        }
+
+        return result;
+    }
+
+
     public static void parseFluxItems() {
         CommonProxy.FLUXABLE_ITEMS.clear();
 
@@ -218,6 +247,7 @@ public class ConfigBLAdditions {
                 blEventBonuses.clear();
 
             parseFluxItems();
+            draetonDimensions = getParsedDraetonDimension();
 
             ConfigManager.sync(BLAdditions.MODID, Config.Type.INSTANCE);
         }

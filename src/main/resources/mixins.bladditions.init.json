@@ -12,6 +12,7 @@
     "init.MixinLeashKnot",
     "init.MixinMapColors",
     "init.MixinPotionUtils",
+    "init.MixinVanillaDoubleChestItemHandler",
     "init.MixinWorld"
   ],
   "client": [

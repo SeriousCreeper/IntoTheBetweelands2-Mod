@@ -1,20 +1,20 @@
-package com.seriouscreeper.bladditions.mixins.modsupport.thebetweenlands;
+package com.seriouscreeper.bladditions.mixins.modsupport.asetherworks;
 
 import com.seriouscreeper.bladditions.config.ConfigBLAdditions;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
-import thebetweenlands.common.item.misc.ItemMisc;
+import v0id.aw.common.item.AWResource;
 
-@Mixin(value = ItemMisc.class, remap = false)
-public class MixinItemMisc extends Item {
+@Mixin(value = AWResource.class, remap = false)
+public class MixinAWResource extends Item {
     @Override
     public int getItemStackLimit(ItemStack stack) {
         if(stack.isEmpty()) {
             return this.maxStackSize;
         }
 
-        if (stack.getMetadata() == 10 || stack.getMetadata() == 11) {
+        if (stack.getMetadata() == 4) {
             return ConfigBLAdditions.configGeneral.StackSizeIngots;
         }
 

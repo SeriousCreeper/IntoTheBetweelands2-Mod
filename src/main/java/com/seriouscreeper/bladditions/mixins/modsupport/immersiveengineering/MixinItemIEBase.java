@@ -1,20 +1,20 @@
-package com.seriouscreeper.bladditions.mixins.modsupport.thebetweenlands;
+package com.seriouscreeper.bladditions.mixins.modsupport.immersiveengineering;
 
+import blusunrize.immersiveengineering.common.items.ItemIEBase;
 import com.seriouscreeper.bladditions.config.ConfigBLAdditions;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
-import thebetweenlands.common.item.misc.ItemMisc;
 
-@Mixin(value = ItemMisc.class, remap = false)
-public class MixinItemMisc extends Item {
+@Mixin(value = ItemIEBase.class, remap = false)
+public class MixinItemIEBase extends Item {
     @Override
     public int getItemStackLimit(ItemStack stack) {
         if(stack.isEmpty()) {
             return this.maxStackSize;
         }
 
-        if (stack.getMetadata() == 10 || stack.getMetadata() == 11) {
+        if (stack.getMetadata() == 5 || stack.getMetadata() == 6 || stack.getMetadata() == 8) {
             return ConfigBLAdditions.configGeneral.StackSizeIngots;
         }
 

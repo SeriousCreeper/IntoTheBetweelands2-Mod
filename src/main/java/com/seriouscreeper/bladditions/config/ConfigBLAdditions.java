@@ -157,6 +157,8 @@ public class ConfigBLAdditions {
                 "20,0,300,400,0,128,0",
                 "0,20,200,250,0,128,0"
         };
+
+        public int StackSizeIngots = 16;
     }
 
 

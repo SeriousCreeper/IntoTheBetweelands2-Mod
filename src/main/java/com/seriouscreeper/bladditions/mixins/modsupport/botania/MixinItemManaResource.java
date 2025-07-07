@@ -1,5 +1,6 @@
 package com.seriouscreeper.bladditions.mixins.modsupport.botania;
 
+import com.seriouscreeper.bladditions.config.ConfigBLAdditions;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
@@ -41,5 +42,18 @@ public class MixinItemManaResource extends Item {
             event.setCanceled(true);
             event.setCancellationResult(EnumActionResult.SUCCESS);
         }
+    }
+
+    @Override
+    public int getItemStackLimit(ItemStack stack) {
+        if(stack.isEmpty()) {
+            return this.maxStackSize;
+        }
+
+        if (stack.getMetadata() == 0 || stack.getMetadata() == 4 || stack.getMetadata() == 7 || stack.getMetadata() == 14) {
+            return ConfigBLAdditions.configGeneral.StackSizeIngots;
+        }
+
+        return this.maxStackSize;
     }
 }

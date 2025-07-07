@@ -227,6 +227,7 @@
     "thebetweenlands.MixinItemBLArrow",
     "thebetweenlands.MixinItemBoneWayfinder",
     "thebetweenlands.MixinItemMagicItemMagnet",
+    "thebetweenlands.MixinItemMisc",
     "thebetweenlands.MixinItemMobAnadia",
     "thebetweenlands.MixinItemMummyBait",
     "thebetweenlands.MixinItemNet",

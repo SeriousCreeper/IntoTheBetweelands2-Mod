@@ -124,7 +124,6 @@
     "pyrotech.MixinTileWitherForge",
     "pyrotech.MixinWorldGenDenseRedstoneOre",
     "quark.MixinEntityLeashKnot",
-    "realisticstorage.MixinContainerGuard",
     "reccomplex.MixinTransformerNatural",
     "redstonepaste.MixinBlockRedstonePaste",
     "roots.EventManager",

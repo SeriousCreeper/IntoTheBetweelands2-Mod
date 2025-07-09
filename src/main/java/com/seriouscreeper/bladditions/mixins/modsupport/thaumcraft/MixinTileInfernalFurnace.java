@@ -4,12 +4,11 @@ import com.seriouscreeper.bladditions.util.CustomInfernalFurnaceRecipes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import thaumcraft.common.tiles.devices.TileInfernalFurnace;
 
-@Mixin(value = TileInfernalFurnace.class, remap = false)
+@Mixin(value = TileInfernalFurnace.class)
 public class MixinTileInfernalFurnace {
     @Redirect(
             method = "canSmelt",

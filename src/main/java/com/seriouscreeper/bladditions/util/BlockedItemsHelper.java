@@ -1,9 +1,6 @@
 package com.seriouscreeper.bladditions.util;
 
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import oethever.realisticstorage.ModConfig;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -14,8 +11,8 @@ public class BlockedItemsHelper {
 
 
     public static void updateConfig() {
-        updateRegexList(alwaysEjectedPatterns, ModConfig.alwaysEjectedItems);
-        updateRegexList(neverEjectedPatterns, ModConfig.neverEjectedItems);
+        //updateRegexList(alwaysEjectedPatterns, ModConfig.alwaysEjectedItems);
+        //updateRegexList(neverEjectedPatterns, ModConfig.neverEjectedItems);
     }
 
 
@@ -35,6 +32,9 @@ public class BlockedItemsHelper {
     }
 
     public static boolean isBlocked(ItemStack stack) {
+        return false;
+
+        /*
         if(neverEjectedPatterns.isEmpty()) {
             updateConfig();
         }
@@ -55,5 +55,6 @@ public class BlockedItemsHelper {
         }
 
         return false;
+         */
     }
 }

@@ -120,6 +120,7 @@
     "pyrotech.MixinItemAxe",
     "pyrotech.MixinItemMaterial",
     "pyrotech.MixinTileKilnBase",
+    "pyrotech.MixinTileKilnPit",
     "pyrotech.MixinTileMechanicalMulchSpreader",
     "pyrotech.MixinTileWitherForge",
     "pyrotech.MixinWorldGenDenseRedstoneOre",

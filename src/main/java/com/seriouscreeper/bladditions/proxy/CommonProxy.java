@@ -1351,7 +1351,10 @@ public class CommonProxy {
         return IsWithinLocation(world, pos, false);
     }
     public static boolean IsWithinLocation(World world, BlockPos pos, boolean isPiston) {
-        IBlockState blockState = world.getBlockState(pos);
+        if(pos == null) {
+            return false;
+        }
+
         return LocationStorage.isLocationGuarded(world, null, pos) || (!isPiston && world.provider.getDimension() == ConfigBLAdditions.configGeneral.DungeonDimensionID);
     }
 }

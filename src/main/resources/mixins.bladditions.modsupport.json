@@ -243,6 +243,7 @@
     "thebetweenlands.MixinRecipeRegistry",
     "thebetweenlands.MixinSludgeWormMazeBlockHelper",
     "thebetweenlands.MixinTeleporterBetweenlands",
+    "thebetweenlands.MixinTileEntityCrabPotFilter",
     "thebetweenlands.MixinTileEntityMothHouse",
     "thebetweenlands.MixinTileEntityOfferingTable",
     "thebetweenlands.MixinTileEntityWaterFilter",

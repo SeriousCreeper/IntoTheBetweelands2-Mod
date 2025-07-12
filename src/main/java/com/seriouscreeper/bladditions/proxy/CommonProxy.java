@@ -18,6 +18,7 @@ import com.rcx.mystgears.block.BlockTurret;
 import com.rcx.mystgears.item.ItemGear;
 import com.seriouscreeper.bladditions.BLAdditions;
 import com.seriouscreeper.bladditions.blocks.*;
+import com.seriouscreeper.bladditions.compat.embers.modifier.ModifierRubberBoots;
 import com.seriouscreeper.bladditions.compat.ie.ExternalHeaterClasses;
 import com.seriouscreeper.bladditions.capability.PacifistCapability;
 import com.seriouscreeper.bladditions.capability.WellnessCapability;
@@ -111,6 +112,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import soot.Registry;
 import soot.recipe.ItemRenameStampingRecipe;
 import teamroots.embers.api.EmbersAPI;
+import teamroots.embers.api.itemmod.ModifierBase;
 import teamroots.embers.apiimpl.EmbersAPIImpl;
 import teamroots.embers.block.BlockSeedNew;
 import teamroots.embers.config.ConfigSeed;
@@ -471,8 +473,14 @@ public class CommonProxy {
         });
     }
 
+    public static ModifierBase RUBBER_BOOTS = new ModifierRubberBoots();
+
+    private void RegisterEmbersItemModifiers() {
+        EmbersAPI.registerModifier(ItemRegistry.RUBBER_BOOTS, RUBBER_BOOTS);
+    }
 
     public void init(FMLInitializationEvent e) {
+        RegisterEmbersItemModifiers();
 
         AddDruidAltarRecipe(new ItemStack[] {
                         new ItemStack(ItemsTC.brain, 1),

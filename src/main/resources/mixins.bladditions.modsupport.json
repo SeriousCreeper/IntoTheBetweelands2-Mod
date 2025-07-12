@@ -240,6 +240,7 @@
     "thebetweenlands.MixinItemNet",
     "thebetweenlands.MixinItemRegistry",
     "thebetweenlands.MixinItemRingOfDisperion",
+    "thebetweenlands.MixinItemRubberBoots",
     "thebetweenlands.MixinLocationSludgeWormDungeon",
     "thebetweenlands.MixinRecipeRegistry",
     "thebetweenlands.MixinSludgeWormMazeBlockHelper",

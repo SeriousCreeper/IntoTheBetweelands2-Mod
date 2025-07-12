@@ -80,6 +80,7 @@
     "embers.MixinTileEntityBreaker",
     "embers.MixinTileEntityDawnstoneAnvil",
     "embers.MixinTileEntityFurnaceBottom",
+    "embers.MixinTileEntityPumpBottom",
     "eyesinthedarkness.MixinEntityEyes",
     "fairylights.MixinFairyLightsRecipes",
     "firespreadtweaks.MixinFireSpreadEvent",

@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(value = GUIRadiantChest.class, remap = false)
+@Mixin(value = GUIRadiantChest.class)
 public class MixinGUIRadiantChest {
     @Shadow private Slot hoveredSlot;
 

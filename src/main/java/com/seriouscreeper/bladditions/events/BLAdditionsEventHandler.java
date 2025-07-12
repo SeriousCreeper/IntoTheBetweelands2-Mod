@@ -53,14 +53,12 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Enchantments;
-import net.minecraft.init.Items;
-import net.minecraft.init.SoundEvents;
+import net.minecraft.init.*;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.*;
 import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.potion.PotionUtils;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -85,6 +83,7 @@ import net.minecraftforge.event.entity.player.BonemealEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fluids.*;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
@@ -499,6 +498,7 @@ public class BLAdditionsEventHandler {
 
         EntityPlayer player = event.getEntityPlayer();
         ItemStack stack = event.getItemStack();
+        EnumFacing side = event.getFace();
 
         if(stack == ItemStack.EMPTY) {
             return;
@@ -509,6 +509,34 @@ public class BLAdditionsEventHandler {
         // to prevent emptying bottles with water into containers
         if(FluidUtil.getFluidContained(stack) != null && FluidUtil.getFluidContained(stack).getFluid() != null) {
             if (FluidUtil.getFluidContained(stack).getFluid() == net.minecraftforge.fluids.FluidRegistry.WATER && !(te instanceof TileCampfire)) {
+                if (!stack.isEmpty() && stack.getItem() == Items.POTIONITEM &&
+                        PotionUtils.getPotionFromItem(stack) == PotionTypes.WATER) {
+
+                    if (te != null && te.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side)) {
+                        IFluidHandler handler = te.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side);
+                        Fluid swampWater = FluidRegistry.SWAMP_WATER;
+
+                        if (swampWater != null) {
+                            FluidStack swampWaterStack = new FluidStack(swampWater, 250); // amount of one bottle
+                            int filled = handler.fill(swampWaterStack, false); // test insert
+
+                            if (filled == 250) {
+                                // Perform actual insert
+                                handler.fill(swampWaterStack, true);
+
+                                if (!player.isCreative()) {
+                                    // Consume the water bottle, give back glass bottle
+                                    player.setHeldItem(event.getHand(), new ItemStack(Items.GLASS_BOTTLE));
+                                }
+
+                                world.playSound(null, event.getPos(), SoundEvents.ITEM_BOTTLE_EMPTY, SoundCategory.PLAYERS, 1.0f, 1.0f);
+                                event.setCanceled(true);
+                                event.setCancellationResult(EnumActionResult.SUCCESS);
+                            }
+                        }
+                    }
+                }
+
                 event.setCanceled(true);
             }
         }

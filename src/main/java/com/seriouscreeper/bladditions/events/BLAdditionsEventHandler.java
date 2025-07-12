@@ -12,6 +12,7 @@ import com.charles445.simpledifficulty.api.thirst.IThirstCapability;
 import com.charles445.simpledifficulty.api.thirst.ThirstEnum;
 import com.charles445.simpledifficulty.api.thirst.ThirstUtil;
 import com.charles445.simpledifficulty.item.ItemCanteen;
+import com.charles445.simpledifficulty.register.RegisterItems;
 import com.codetaylor.mc.athenaeum.util.SoundHelper;
 import com.codetaylor.mc.pyrotech.library.spi.block.IBlockIgnitableWithIgniterItem;
 import com.codetaylor.mc.pyrotech.modules.tech.basic.ModuleTechBasic;
@@ -25,6 +26,7 @@ import com.seriouscreeper.bladditions.config.ConfigBLAdditions;
 import com.seriouscreeper.bladditions.interfaces.ISanityExtraInfo;
 import com.seriouscreeper.bladditions.potion.PotionThaumcraftResearch;
 import com.seriouscreeper.bladditions.proxy.CommonProxy;
+import com.seriouscreeper.bladditions.util.FluidInsertCombo;
 import epicsquid.roots.advancements.Advancements;
 import epicsquid.roots.block.groves.BlockGroveStone;
 import epicsquid.roots.config.GeneralConfig;
@@ -36,6 +38,9 @@ import epicsquid.roots.item.ItemSylvanArmor;
 import epicsquid.roots.item.wildwood.ItemWildwoodArmor;
 import epicsquid.roots.recipe.PacifistEntry;
 import epicsquid.roots.util.EntityUtil;
+import growthcraft.bees.shared.init.GrowthcraftBeesFluids;
+import growthcraft.milk.shared.init.GrowthcraftMilkFluids;
+import growthcraft.milk.shared.init.GrowthcraftMilkItems;
 import hunternif.mc.atlas.api.AtlasAPI;
 import mcp.mobius.waila.api.event.WailaRenderEvent;
 import mcp.mobius.waila.api.event.WailaTooltipEvent;
@@ -492,10 +497,97 @@ public class BLAdditionsEventHandler {
     }
 
 
+    public static boolean tryInsertFluidFromItem(
+            EntityPlayer player,
+            EnumHand hand,
+            TileEntity te,
+            EnumFacing side,
+            World world,
+            BlockPos pos,
+            ItemStack inputStack,
+            ItemStack requiredInput,
+            Fluid targetFluid,
+            int fluidAmount,
+            ItemStack resultingItem,
+            SoundEvent sound
+    ) {
+        if (inputStack.isEmpty() || inputStack.getItem() != requiredInput.getItem()) return false;
+
+        if (te != null && te.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side)) {
+            IFluidHandler handler = te.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side);
+            if (handler != null && targetFluid != null) {
+                FluidStack toInsert = new FluidStack(targetFluid, fluidAmount);
+                int simulated = handler.fill(toInsert, false);
+                if (simulated >= fluidAmount) {
+                    handler.fill(toInsert, true);
+
+                    if (!player.isCreative()) {
+                        if(inputStack.getCount() > 1) {
+                            inputStack.shrink(1);
+                            player.addItemStackToInventory(resultingItem.copy());
+                        } else {
+                            player.setHeldItem(hand, resultingItem.copy());
+                        }
+                    }
+
+                    world.playSound(null, pos, sound, SoundCategory.PLAYERS, 1.0f, 1.0f);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+
+    public static boolean tryExtractFluidToItem(
+            EntityPlayer player,
+            EnumHand hand,
+            TileEntity te,
+            EnumFacing side,
+            World world,
+            BlockPos pos,
+            ItemStack inputStack,
+            ItemStack requiredInput,
+            Fluid expectedFluid,
+            int fluidAmount,
+            ItemStack resultingItem,
+            SoundEvent sound
+    ) {
+        if (inputStack.isEmpty() || inputStack.getItem() != requiredInput.getItem()) return false;
+
+        if (te != null && te.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side)) {
+            IFluidHandler handler = te.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side);
+
+            if(handler == null) {
+                return false;
+            }
+
+            FluidStack drainSim = handler.drain(new FluidStack(expectedFluid, fluidAmount), false);
+
+            if (drainSim != null && drainSim.amount >= fluidAmount) {
+                handler.drain(new FluidStack(expectedFluid, fluidAmount), true);
+
+                if (!player.isCreative()) {
+                    if(inputStack.getCount() > 1) {
+                        inputStack.shrink(1);
+                        player.addItemStackToInventory(resultingItem.copy());
+                    } else {
+                        player.setHeldItem(hand, resultingItem.copy());
+                    }
+                }
+
+                world.playSound(null, pos, sound, SoundCategory.PLAYERS, 1.0f, 1.0f);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onBottleUsed(PlayerInteractEvent.RightClickBlock event) throws NoSuchFieldException, IllegalAccessException {
         World world = event.getWorld();
-
         EntityPlayer player = event.getEntityPlayer();
         ItemStack stack = event.getItemStack();
         EnumFacing side = event.getFace();
@@ -509,37 +601,68 @@ public class BLAdditionsEventHandler {
         // to prevent emptying bottles with water into containers
         if(FluidUtil.getFluidContained(stack) != null && FluidUtil.getFluidContained(stack).getFluid() != null) {
             if (FluidUtil.getFluidContained(stack).getFluid() == net.minecraftforge.fluids.FluidRegistry.WATER && !(te instanceof TileCampfire)) {
-                if (!stack.isEmpty() && stack.getItem() == Items.POTIONITEM &&
-                        PotionUtils.getPotionFromItem(stack) == PotionTypes.WATER) {
-
-                    if (te != null && te.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side)) {
-                        IFluidHandler handler = te.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side);
-                        Fluid swampWater = FluidRegistry.SWAMP_WATER;
-
-                        if (swampWater != null) {
-                            FluidStack swampWaterStack = new FluidStack(swampWater, 250); // amount of one bottle
-                            int filled = handler.fill(swampWaterStack, false); // test insert
-
-                            if (filled == 250) {
-                                // Perform actual insert
-                                handler.fill(swampWaterStack, true);
-
-                                if (!player.isCreative()) {
-                                    // Consume the water bottle, give back glass bottle
-                                    player.setHeldItem(event.getHand(), new ItemStack(Items.GLASS_BOTTLE));
-                                }
-
-                                world.playSound(null, event.getPos(), SoundEvents.ITEM_BOTTLE_EMPTY, SoundCategory.PLAYERS, 1.0f, 1.0f);
-                                event.setCanceled(true);
-                                event.setCancellationResult(EnumActionResult.SUCCESS);
-                            }
-                        }
-                    }
-                }
-
                 event.setCanceled(true);
             }
         }
+
+        List<FluidInsertCombo> combos = Arrays.asList(
+                new FluidInsertCombo(
+                        PotionUtils.addPotionToItemStack(new ItemStack(Items.POTIONITEM), PotionTypes.WATER),
+                        FluidRegistry.SWAMP_WATER,
+                        250,
+                        new ItemStack(Items.GLASS_BOTTLE),
+                        SoundEvents.ITEM_BOTTLE_EMPTY
+                ),
+                new FluidInsertCombo(
+                        new ItemStack(SDItems.purifiedWaterBottle),
+                        FluidRegistry.CLEAN_WATER,
+                        250,
+                        new ItemStack(Items.GLASS_BOTTLE),
+                        SoundEvents.ITEM_BUCKET_EMPTY
+                ),
+                new FluidInsertCombo(
+                        GrowthcraftMilkFluids.whey.asBottleItemStack(),
+                        GrowthcraftMilkFluids.whey.getFluid(),
+                        250,
+                        new ItemStack(Items.GLASS_BOTTLE),
+                        SoundEvents.ITEM_BUCKET_EMPTY
+                ),
+                new FluidInsertCombo(
+                        GrowthcraftMilkFluids.rennet.asBottleItemStack(),
+                        GrowthcraftMilkFluids.rennet.getFluid(),
+                        250,
+                        new ItemStack(Items.GLASS_BOTTLE),
+                        SoundEvents.ITEM_BUCKET_EMPTY
+                ),
+                new FluidInsertCombo(
+                        GrowthcraftBeesFluids.honey.asBottleItemStack(),
+                        GrowthcraftBeesFluids.honey.getFluid(),
+                        250,
+                        new ItemStack(Items.GLASS_BOTTLE),
+                        SoundEvents.ITEM_BUCKET_EMPTY
+                )
+        );
+
+        for (FluidInsertCombo combo : combos) {
+            if (tryInsertFluidFromItem(player, event.getHand(), te, side, world, event.getPos(), stack, combo.inputItem, combo.fluid, combo.amount, combo.outputItem, combo.sound)) {
+                event.setCanceled(true);
+                event.setCancellationResult(EnumActionResult.SUCCESS);
+                return;
+            }
+        }
+
+        for (FluidInsertCombo combo : combos) {
+            if (tryExtractFluidToItem(
+                    player, event.getHand(), te, side, world, event.getPos(),
+                    stack, combo.outputItem, combo.fluid, combo.amount,
+                    combo.inputItem, combo.sound)) {
+
+                event.setCanceled(true);
+                event.setCancellationResult(EnumActionResult.SUCCESS);
+                return;
+            }
+        }
+
 
         if (stack.getItem() instanceof ItemGlassBottle) {
             IFluidHandler fluidHandler = FluidUtil.getFluidHandler(world, event.getPos(), null);

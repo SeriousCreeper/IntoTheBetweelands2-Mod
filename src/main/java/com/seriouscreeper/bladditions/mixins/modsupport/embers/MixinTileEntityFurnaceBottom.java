@@ -14,7 +14,7 @@ import teamroots.embers.tileentity.TileEntityFurnaceTop;
 
 import java.util.List;
 
-@Mixin(value = TileEntityFurnaceBottom.class, remap = false)
+@Mixin(value = TileEntityFurnaceBottom.class)
 public class MixinTileEntityFurnaceBottom extends TileEntity {
     @Shadow
     private List<IUpgradeProvider> upgrades;

@@ -99,6 +99,7 @@
     "growthcraft.MixinHarvestDropsEventHandler",
     "growthcraft.MixinInitBees",
     "growthcraft.MixinInitMilk",
+    "growthcraft.MixinItemCheeseBowl",
     "grue.MixinGrueEventHandler",
     "ignitehud.MixinGuiWidget",
     "immersiveengineering.MixinBottlingMachineRecipe",

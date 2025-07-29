@@ -107,6 +107,7 @@
     "growthcraft.MixinItemIceCream",
     "growthcraft.MixinItemWaxedCheeseSlice",
     "growthcraft.MixinItemYogurt",
+    "growthcraft.MixinTileEntityBeeBox",
     "grue.MixinGrueEventHandler",
     "ignitehud.MixinGuiWidget",
     "immersiveengineering.MixinBottlingMachineRecipe",

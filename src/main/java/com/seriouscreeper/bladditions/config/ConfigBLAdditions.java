@@ -154,8 +154,6 @@ public class ConfigBLAdditions {
 
         @Config.Comment({"fromDimension, toDimension, minHeight, maxHeight, targetX, targetY, targetZ"})
         public String[] DraetonDimension = new String[] {
-                "20,0,300,400,0,128,0",
-                "0,20,200,250,0,128,0"
         };
 
         public int StackSizeIngots = 16;

@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import rustic.common.blocks.BlockBase;
 import rustic.common.blocks.BlockCrushingTub;
 
-@Mixin(value = BlockCrushingTub.class, remap = false)
+@Mixin(value = BlockCrushingTub.class)
 public class MixinBlockCrushingTub extends BlockBase {
     public MixinBlockCrushingTub(Material mat, String name) {
         super(mat, name);

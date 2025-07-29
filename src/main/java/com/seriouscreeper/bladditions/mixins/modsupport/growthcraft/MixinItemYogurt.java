@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import thebetweenlands.api.item.IFoodSicknessItem;
 
-@Mixin(value = ItemYogurt.class, remap = false)
+@Mixin(value = ItemYogurt.class)
 public class MixinItemYogurt implements IFoodSicknessItem {
     @Inject(
             method = "onItemUseFinish",

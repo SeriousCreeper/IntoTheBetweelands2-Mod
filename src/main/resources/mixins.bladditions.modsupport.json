@@ -160,6 +160,7 @@
     "roots.spells.MixinSpellGrowthInfusion",
     "roots.spells.MixinSpellShatter",
     "rustic.MixinBlockCrushingTub",
+    "rustic.MixinCrushingTubRecipe",
     "rustichromia.MixinTileEntityAssembler",
     "sanity.MixinConsequenceManager",
     "sanity.MixinEyesConsequences",

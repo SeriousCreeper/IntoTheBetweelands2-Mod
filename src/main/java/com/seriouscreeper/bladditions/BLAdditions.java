@@ -4,6 +4,7 @@ import com.seriouscreeper.bladditions.capability.CapabilityEventHandler;
 import com.seriouscreeper.bladditions.commands.BLAdditionsCommands;
 import com.seriouscreeper.bladditions.config.ConfigBLAdditions;
 import com.seriouscreeper.bladditions.events.BLAdditionsEventHandler;
+import com.seriouscreeper.bladditions.events.DrinkingEventHandler;
 import com.seriouscreeper.bladditions.events.DungeonEventHandler;
 import com.seriouscreeper.bladditions.events.TeleportWorldEventHandler;
 import com.seriouscreeper.bladditions.proxy.CommonProxy;
@@ -69,6 +70,7 @@ public class BLAdditions
         MinecraftForge.EVENT_BUS.register(new BLAdditionsEventHandler());
         MinecraftForge.EVENT_BUS.register(new DungeonEventHandler());
         MinecraftForge.EVENT_BUS.register(new TeleportWorldEventHandler());
+        MinecraftForge.EVENT_BUS.register(new DrinkingEventHandler());
     }
 
     @EventHandler

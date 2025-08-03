@@ -124,6 +124,7 @@
     "livingchest.MixinChesterEntity",
     "mysticallib.MixinBlockCropBase",
     "mysticallib.MixinBreakUtil",
+    "patchouli.MixinBookEntry",
     "pizzacraft.MixinBlockPizza",
     "pizzacraft.MixinBlockPizzaBoardBase",
     "pizzacraft.MixinFoodBase",

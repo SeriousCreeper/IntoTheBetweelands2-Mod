@@ -11,7 +11,19 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 public class MixinContainerRadiantChest {
     @Redirect(method = "mergeItemStack", at = @At(value = "INVOKE",
             target = "Lnet/minecraft/inventory/Slot;getItemStackLimit(Lnet/minecraft/item/ItemStack;)I"))
-    private int redirectGetItemStackLimit(Slot slot, ItemStack stack) {
+    private int redirectMergeItemStack(Slot slot, ItemStack stack) {
+        return stack.getMaxStackSize();
+    }
+
+    @Redirect(method = "slotClick", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/inventory/Slot;getItemStackLimit(Lnet/minecraft/item/ItemStack;)I"))
+    private int redirectSlotClick(Slot slot, ItemStack stack) {
+        return stack.getMaxStackSize();
+    }
+
+    @Redirect(method = "canAddItemToSlot", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/inventory/Slot;getItemStackLimit(Lnet/minecraft/item/ItemStack;)I"))
+    private static int redirectCanAddItemToSlot(Slot slot, ItemStack stack) {
         return stack.getMaxStackSize();
     }
 }

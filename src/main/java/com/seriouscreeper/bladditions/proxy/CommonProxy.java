@@ -1,10 +1,12 @@
 package com.seriouscreeper.bladditions.proxy;
 
+import blusunrize.immersiveengineering.api.IEApi;
 import blusunrize.immersiveengineering.api.tool.ExternalHeaterHandler;
 import WayofTime.bloodmagic.api.impl.BloodMagicAPI;
 import WayofTime.bloodmagic.core.RegistrarBloodMagicItems;
 import WayofTime.bloodmagic.incense.EnumTranquilityType;
 import WayofTime.bloodmagic.incense.TranquilityStack;
+import blusunrize.immersiveengineering.common.blocks.wooden.BlockTypes_WoodenDevice0;
 import com.aranaira.arcanearchives.data.ClientNetwork;
 import com.aranaira.arcanearchives.data.DataHelper;
 import com.aranaira.arcanearchives.data.HiveSaveData;
@@ -91,6 +93,7 @@ import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -105,10 +108,13 @@ import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.EntityEntryBuilder;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.OreIngredient;
+import net.minecraftforge.oredict.RecipeSorter;
 import net.tiffit.sanity.consequences.ConsequenceManager;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import rustic.common.crafting.RecipeVantaOil;
 import soot.Registry;
 import soot.recipe.ItemRenameStampingRecipe;
 import teamroots.embers.api.EmbersAPI;
@@ -655,6 +661,8 @@ public class CommonProxy {
 
 
     public void postInit(FMLPostInitializationEvent e) {
+        BlacklistIEToolboxItems();
+
         Growth.addBlacklist(epicsquid.roots.init.ModBlocks.cloud_berry);
         Growth.addBlacklist(epicsquid.roots.init.ModBlocks.infernal_bulb);
         Growth.addBlacklist(epicsquid.roots.init.ModBlocks.stalicripe);
@@ -820,6 +828,27 @@ public class CommonProxy {
         });
     }
 
+    private static void BlacklistIEToolboxItems() {
+        IEApi.forbiddenInCrates.add(CommonProxy::hasItemInventory);
+    }
+
+    public static boolean hasItemInventory(ItemStack stack) {
+        if (stack.isEmpty()) return false;
+
+        // Forge capability (best)
+        if (stack.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null)) {
+            return true;
+        }
+
+        // Optional: known NBT fallback
+        if (stack.hasTagCompound()) {
+            NBTTagCompound tag = stack.getTagCompound();
+            return tag.hasKey("Items", Constants.NBT.TAG_LIST)
+                    || tag.hasKey("Inventory", Constants.NBT.TAG_LIST);
+        }
+
+        return false;
+    }
 
     private static void overrideThaumcraftBook () {
         NBTTagCompound contents = new NBTTagCompound();

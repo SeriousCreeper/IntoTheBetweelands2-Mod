@@ -69,6 +69,7 @@ public class BLAdditions
         MinecraftForge.EVENT_BUS.register(new DungeonEventHandler());
         MinecraftForge.EVENT_BUS.register(new TeleportWorldEventHandler());
         MinecraftForge.EVENT_BUS.register(new DrinkingEventHandler());
+        MinecraftForge.EVENT_BUS.register(new ImmersiveEngineeringEvents());
         MinecraftForge.EVENT_BUS.register(PatchouliHandler.class);
         MinecraftForge.EVENT_BUS.register(TickScheduler.class);
     }

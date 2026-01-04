@@ -16,7 +16,7 @@ public abstract class MixinTileEntityAssembler {
     @Inject(method = "<init>(I)V", at = @At("TAIL"))
     private void adjustInventory(int slots, CallbackInfo ci) {
         TileEntityAssembler self = (TileEntityAssembler)(Object)this;
-        inventory = new ItemStackHandlerUnique(new ItemStackHandler(3 + slots / 2) {
+        inventory = new ItemStackHandlerUnique(new ItemStackHandler(9) {
             @Override
             protected void onContentsChanged(int slot) {
                 self.markDirty();

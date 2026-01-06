@@ -20,22 +20,22 @@ public class MixinItemRubberBoots {
      */
     @Overwrite
     public static boolean isEntityWearingRubberBoots(Entity entity) {
-        if (entity == null || !(entity instanceof EntityPlayer)) {
+        if (!(entity instanceof EntityPlayer)) {
             return false;
         }
 
         ItemStack boots = ((EntityPlayer)entity).inventory.armorInventory.get(0);
 
-        if (!boots.isEmpty()) {
+        if (!boots.isEmpty() && boots.hasTagCompound()) {
             List<ModifierBase> modifiers = ItemModUtil.getModifiers(boots);
 
-            for (ModifierBase modifier : modifiers) {
-                if (modifier instanceof ModifierRubberBoots) {
-                    return true;
+            if(modifiers != null) {
+                for (ModifierBase modifier : modifiers) {
+                    if (modifier instanceof ModifierRubberBoots) {
+                        return true;
+                    }
                 }
             }
-
-            return false;
         }
 
         return entity instanceof EntityPlayer && !((ItemStack)((EntityPlayer)entity).inventory.armorInventory.get(0)).isEmpty() && ((ItemStack)((EntityPlayer)entity).inventory.armorInventory.get(0)).getItem() instanceof ItemRubberBoots;

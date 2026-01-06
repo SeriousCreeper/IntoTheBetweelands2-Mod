@@ -200,6 +200,8 @@ dependencies {
     implementation rfg.deobf("curse.maven:misctweaks_-245603:2709481")
     implementation rfg.deobf("curse.maven:rustic-256141:6031613")
     implementation rfg.deobf("curse.maven:charset-lib-284523:3656492")
+    implementation rfg.deobf("curse.maven:lootr-361276:4756301")
+
 
     runtimeOnly("curse.maven:guide-api-228832:2645992")
     runtimeOnly("curse.maven:collective-342584:3533131")

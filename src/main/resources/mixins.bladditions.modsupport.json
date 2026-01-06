@@ -128,6 +128,7 @@
     "immersiveengineering.MixinUtils",
     "itemstages.MixinItemStages",
     "livingchest.MixinChesterEntity",
+    "lootr.MixinSpecialChestInventory",
     "mysticallib.MixinBlockCropBase",
     "mysticallib.MixinBreakUtil",
     "patchouli.MixinBookEntry",

@@ -23,6 +23,7 @@
     "arcaneworld.MixinDungeonDimensionProvider",
     "asetherworks.MixinAWResource",
     "basketcase.MixinBlockTileEntryBasket",
+    "basketcase.MixinTileEntityBasket",
     "blockcraftery.MixinTileEditableBlock",
     "bloodmagic.MixinAlchemyArrayEffectArrowTurret",
     "bloodmagic.MixinItemBoundAxe",

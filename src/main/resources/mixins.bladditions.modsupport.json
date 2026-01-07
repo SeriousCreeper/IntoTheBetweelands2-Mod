@@ -142,7 +142,6 @@
     "pyrotech.MixinItemMaterial",
     "pyrotech.MixinTileCrate",
     "pyrotech.MixinTileKilnBase",
-    "pyrotech.MixinTileKilnPit",
     "pyrotech.MixinTileMechanicalMulchSpreader",
     "pyrotech.MixinTileStash",
     "pyrotech.MixinTileWitherForge",

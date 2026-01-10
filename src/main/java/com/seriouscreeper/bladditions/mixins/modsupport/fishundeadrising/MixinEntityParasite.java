@@ -14,7 +14,6 @@ public class MixinEntityParasite extends EntitySpider implements IEntityBL {
 
     @Override
     public boolean getCanSpawnHere() {
-        System.out.println("can spawn here!");
         return true;
     }
 }

@@ -14,12 +14,13 @@ import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import thebetweenlands.api.entity.IEntityBL;
 
 import java.util.Iterator;
 import java.util.Map;
 
 @Mixin(value = EntityRaven.class, remap = false)
-public class MixinEntityRaven extends EntityFishTameable {
+public class MixinEntityRaven extends EntityFishTameable implements IEntityBL {
     @Shadow
     public int callTimer;
     @Shadow

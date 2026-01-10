@@ -100,6 +100,11 @@ public class GreeblingMerchantEntity extends EntityCreature implements IEntityBL
     }
 
     @Override
+    protected boolean canDespawn() {
+        return false;
+    }
+
+    @Override
     public void onUpdate() {
         super.onUpdate();
         if (this.world.isRemote) {

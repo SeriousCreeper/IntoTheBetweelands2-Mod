@@ -114,6 +114,7 @@
     "grue.MixinGrueEventHandler",
     "ignitehud.MixinGuiWidget",
     "immersiveengineering.MixinBottlingMachineRecipe",
+    "immersiveengineering.MixinIESlotModWorkbench_NoBlueprint",
     "immersiveengineering.MixinItemIEBase",
     "immersiveengineering.MixinItemMaterial",
     "immersiveengineering.MixinMultiblockArcFurnace",

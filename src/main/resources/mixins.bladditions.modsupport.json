@@ -291,6 +291,7 @@
     "bloodmagic.MixinClientHandler",
     "botania.MixinTileAltarClient",
     "corpse.MixinGuiDeathHistory",
+    "immersiveengineering.client.MixinGuiAutoWorkbench",
     "quark.MixinRenderLeashKnot2",
     "thaumcraft.MixinGuiFocalManipulator",
     "thebetweenlands.MixinGuiFirefly"

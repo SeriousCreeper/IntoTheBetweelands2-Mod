@@ -45,6 +45,7 @@ import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
                         "required-after:thaumcraft;" +
                         "required-after:thaumicperiphery;" + 
                         "required-after:immersiveengineering;" +
+                        "required-after:rats;" +
                         "after: lootr;"
 )
 public class BLAdditions

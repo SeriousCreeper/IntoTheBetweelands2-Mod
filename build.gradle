@@ -201,6 +201,7 @@ dependencies {
     implementation rfg.deobf("curse.maven:rustic-256141:6031613")
     implementation rfg.deobf("curse.maven:charset-lib-284523:3656492")
     implementation rfg.deobf("curse.maven:lootr-361276:4756301")
+    implementation rfg.deobf("curse.maven:rats-ratn-edition-439001:3711122")
 
 
     runtimeOnly("curse.maven:guide-api-228832:2645992")

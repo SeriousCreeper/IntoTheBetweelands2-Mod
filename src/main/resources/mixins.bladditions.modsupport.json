@@ -148,6 +148,7 @@
     "pyrotech.MixinTileWoodRack",
     "pyrotech.MixinWorldGenDenseRedstoneOre",
     "quark.MixinEntityLeashKnot",
+    "rats.MixinEntityRats",
     "reccomplex.MixinTransformerNatural",
     "redstonepaste.MixinBlockRedstonePaste",
     "roots.EventManager",

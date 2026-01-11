@@ -82,6 +82,7 @@
     "embers.MixinTileEntityBoilerBottom",
     "embers.MixinTileEntityBreaker",
     "embers.MixinTileEntityDawnstoneAnvil",
+    "embers.MixinTileEntityEmberBore",
     "embers.MixinTileEntityFurnaceBottom",
     "embers.MixinTileEntityPumpBottom",
     "eyesinthedarkness.MixinEntityEyes",

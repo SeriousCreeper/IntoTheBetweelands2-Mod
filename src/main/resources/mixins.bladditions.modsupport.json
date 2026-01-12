@@ -86,6 +86,7 @@
     "embers.MixinTileEntityEmberBore",
     "embers.MixinTileEntityFurnaceBottom",
     "embers.MixinTileEntityPumpBottom",
+    "embers.MixinTileEntitySeedNew",
     "eyesinthedarkness.MixinEntityEyes",
     "fairylights.MixinFairyLightsRecipes",
     "firespreadtweaks.MixinFireSpreadEvent",

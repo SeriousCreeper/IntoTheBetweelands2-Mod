@@ -157,6 +157,8 @@ public class ConfigBLAdditions {
         };
 
         public int StackSizeIngots = 16;
+        @Config.RangeInt(min = 0, max = 100)
+        public int EmberSeedChance = 10;
     }
 
 

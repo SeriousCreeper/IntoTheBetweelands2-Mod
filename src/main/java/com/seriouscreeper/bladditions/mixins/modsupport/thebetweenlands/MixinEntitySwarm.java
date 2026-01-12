@@ -26,9 +26,4 @@ public class MixinEntitySwarm extends EntityClimberBase {
 
         return instance.canEntityBeSeen(entity);
     }
-
-
-    @Override
-    public void heal(float healAmount) {
-    }
 }

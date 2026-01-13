@@ -25,8 +25,6 @@ public class TeleportWorldEventHandler {
             return;
         }
 
-        System.out.println("Checking for Draeton teleportation...");
-
         EntityPlayer player = event.player;
         EntityPlayerMP playerMP = (EntityPlayerMP) player;
 

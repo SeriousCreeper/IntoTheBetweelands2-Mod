@@ -202,6 +202,7 @@ dependencies {
     implementation rfg.deobf("curse.maven:charset-lib-284523:3656492")
     implementation rfg.deobf("curse.maven:lootr-361276:4756301")
     implementation rfg.deobf("curse.maven:rats-ratn-edition-439001:3711122")
+    implementation rfg.deobf("curse.maven:deep-resonance-233398:2704397")
 
 
     runtimeOnly("curse.maven:guide-api-228832:2645992")

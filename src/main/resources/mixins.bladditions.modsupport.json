@@ -73,6 +73,7 @@
     "charsetimmersion.MixinCharsetImmersion",
     "corpse.MixinEntityCorpse",
     "darknesslib.MixinDarknessLibAPI",
+    "deepresonance.MixinLaserTileEntity",
     "embers.MixinAnvilBreakdownRecipe",
     "embers.MixinAnvilRepairRecipe",
     "embers.MixinBlockSeedNew",

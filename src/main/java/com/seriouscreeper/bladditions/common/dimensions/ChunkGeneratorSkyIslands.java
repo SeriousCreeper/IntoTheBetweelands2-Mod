@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Random;
 
 import com.gildedgames.aether.api.registrar.BlocksAether;
+import com.gildedgames.aether.common.init.GenerationAether;
 import net.minecraft.block.BlockFlower;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -416,44 +417,61 @@ public class ChunkGeneratorSkyIslands implements IChunkGenerator {
 
     @Override
     public void populate(int chunkX, int chunkZ) {
-        // Forge expects populate to be deterministic per chunk
-        long chunkSeed = ((long)chunkX * 341873128712L) ^ ((long)chunkZ * 132897987541L) ^ seed;
+        long chunkSeed = ((long) chunkX * 341873128712L) ^ ((long) chunkZ * 132897987541L) ^ seed;
         Random random = new Random(chunkSeed);
 
         int baseX = chunkX << 4;
         int baseZ = chunkZ << 4;
 
-        // --- Surface deco ---
-        // Try a handful of attempts; most will be air (since islands are sparse)
-        for (int i = 0; i < 18; i++) {
+        for (int i = 0; i < 48; i++) {
             int x = baseX + random.nextInt(16);
             int z = baseZ + random.nextInt(16);
 
             BlockPos top = findTopSolid(x, z);
             if (top == null) continue;
 
+            BlockPos place = top.up();
+            if (!world.isAirBlock(place) || world.getBlockState(place).getBlock() == BlocksAether.tall_aether_grass) continue;
+
             Biome biome = world.getBiome(top);
 
-            // 1) Trees (rare)
-            if (random.nextInt(12) == 0) {
-                WorldGenAbstractTree treeGen = biome.getRandomTreeFeature(random);
-
-                if(treeGen != null) {
-                    BlockPos place = top.up(); // tree on top of surface
-                    treeGen.generate(world, random, place);
-                }
+            if (random.nextInt(2) == 0) {
+                world.setBlockState(place, BlocksAether.tall_aether_grass.getStateFromMeta(rand.nextInt(3)), 2);
+                continue;
             }
 
-            // 3) Tall grass (common-ish)
-            if (random.nextInt(3) == 0) {
-                BlockPos place = top.up();
-                if (world.isAirBlock(place)) {
-                    IBlockState grass = Blocks.TALLGRASS.getDefaultState();
-                    world.setBlockState(place, grass, 2);
-                }
+            if (random.nextInt(10) == 0) {
+                world.setBlockState(place, BlocksAether.skyroot_twigs.getDefaultState(), 2);
+                continue;
+            }
+
+            if (random.nextInt(20) == 0) {
+                placeRockPile(top, random);
             }
         }
     }
+
+    private void placeRockPile(BlockPos surface, Random rand) {
+        // tiny pile around surface.up()
+        BlockPos base = surface.up();
+        int rocks = 2 + rand.nextInt(5);
+
+        for (int i = 0; i < rocks; i++) {
+            int dx = rand.nextInt(3) - 1;
+            int dz = rand.nextInt(3) - 1;
+            BlockPos p = base.add(dx, 0, dz);
+
+            if (world.isAirBlock(p) && !world.isAirBlock(p.down())) {
+                // Use your holystone variants
+                IBlockState s = (rand.nextInt(5) == 0)
+                        ? BlocksAether.holystone.getStateFromMeta(1)
+                        : BlocksAether.holystone.getDefaultState();
+                world.setBlockState(p, s, 2);
+            }
+        }
+    }
+
+
 
     @Override
     public boolean generateStructures(Chunk chunkIn, int x, int z) {

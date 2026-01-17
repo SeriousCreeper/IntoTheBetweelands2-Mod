@@ -20,6 +20,7 @@ import com.rcx.mystgears.block.BlockTurret;
 import com.rcx.mystgears.item.ItemGear;
 import com.seriouscreeper.bladditions.BLAdditions;
 import com.seriouscreeper.bladditions.blocks.*;
+import com.seriouscreeper.bladditions.common.dimensions.ModDimensions;
 import com.seriouscreeper.bladditions.compat.embers.modifier.ModifierRubberBoots;
 import com.seriouscreeper.bladditions.compat.ie.ExternalHeaterClasses;
 import com.seriouscreeper.bladditions.capability.PacifistCapability;
@@ -364,6 +365,7 @@ public class CommonProxy {
 
 
     public void preInit(FMLPreInitializationEvent e) {
+        ModDimensions.register();
         PotionRegistery.RegisterPotions();
 
         DarknessLibAPI.getInstance().addVehicle(EntityDraeton.class);
@@ -486,6 +488,8 @@ public class CommonProxy {
     }
 
     public void init(FMLInitializationEvent e) {
+        ConfigBLAdditions.draetonDimensions = ConfigBLAdditions.getParsedDraetonDimension();
+
         RegisterEmbersItemModifiers();
 
         AddDruidAltarRecipe(new ItemStack[] {

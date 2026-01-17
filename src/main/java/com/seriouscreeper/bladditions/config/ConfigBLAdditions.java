@@ -152,7 +152,7 @@ public class ConfigBLAdditions {
                 "roots:cooked_pereskia"
         };
 
-        @Config.Comment({"fromDimension, toDimension, minHeight, maxHeight, targetX, targetY, targetZ"})
+        @Config.Comment({"fromDimension, toDimension, minHeight, maxHeight, targetY"})
         public String[] DraetonDimension = new String[] {
         };
 

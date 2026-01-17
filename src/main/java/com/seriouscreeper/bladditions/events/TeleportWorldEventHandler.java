@@ -45,9 +45,7 @@ public class TeleportWorldEventHandler {
         int minHeight = teleportInfo[2];
         int maxHeight = teleportInfo[3];
 
-        double posX = teleportInfo[4];
-        double posY = teleportInfo[5];
-        double posZ = teleportInfo[6];
+        int posY = teleportInfo[4];
 
         // Check if the player is in a teleport world
         if (player.posY >= minHeight && player.posY <= maxHeight) {
@@ -91,17 +89,17 @@ public class TeleportWorldEventHandler {
                 }
 
                 // Transfer player
-                playerMP.server.getPlayerList().transferPlayerToDimension(playerMP, targetDim, new BlankTeleporter(newWorld, posX, posY, posZ));
+                playerMP.server.getPlayerList().transferPlayerToDimension(playerMP, targetDim, new BlankTeleporter(newWorld, playerMP.posX, posY, playerMP.posZ));
 
                 // Transfer draeton
                 draeton.setWorld(newWorld);
-                draeton.setPosition(posX, posY, posZ);
+                draeton.setPosition(playerMP.posX, posY, playerMP.posZ);
                 newWorld.spawnEntity(draeton);
 
                 // Transfer puller entities
                 for (Entity pullerEntity : pullerEntities) {
                     pullerEntity.setWorld(newWorld);
-                    pullerEntity.setPosition(posX, posY, posZ);
+                    pullerEntity.setPosition(playerMP.posX, posY, playerMP.posZ);
                     newWorld.spawnEntity(pullerEntity);
                 }
 

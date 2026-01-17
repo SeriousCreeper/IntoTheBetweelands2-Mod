@@ -22,6 +22,7 @@
     "arcaneworld.MixinDungeonDimensionEventsClient",
     "arcaneworld.MixinDungeonDimensionProvider",
     "asetherworks.MixinAWResource",
+    "asetherworks.MixinTilePrism",
     "basketcase.MixinBlockTileEntryBasket",
     "basketcase.MixinTileEntityBasket",
     "blockcraftery.MixinTileEditableBlock",

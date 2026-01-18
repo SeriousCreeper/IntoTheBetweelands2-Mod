@@ -23,7 +23,6 @@ public class MixinTransformerNatural {
     }
      */
 
-
     /**
      * @author SC
      * @reason
@@ -36,10 +35,14 @@ public class MixinTransformerNatural {
         IBlockState fillerBlock = biome.fillerBlock != null ? biome.fillerBlock : Blocks.AIR.getDefaultState();
         IBlockState mainBlock;
 
-        if(pos.getY() <= 45) {
-            mainBlock = BlockRegistry.PITSTONE.getDefaultState();
+        if(biome.getRegistryName().getNamespace().equals("thebetweenlands")) {
+            if(pos.getY() <= 45) {
+                mainBlock = BlockRegistry.PITSTONE.getDefaultState();
+            } else {
+                mainBlock = BlockRegistry.BETWEENSTONE.getDefaultState();
+            }
         } else {
-            mainBlock = BlockRegistry.BETWEENSTONE.getDefaultState();
+            mainBlock = topBlock;
         }
 
         boolean useStoneBlock = pos.getY() < world.getSeaLevel() - 3;

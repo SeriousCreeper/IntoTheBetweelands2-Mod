@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Random;
 
 import com.gildedgames.aether.api.registrar.BlocksAether;
+import com.gildedgames.aether.common.blocks.natural.BlockAetherGrass;
 import com.gildedgames.aether.common.blocks.natural.BlockHolystone;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -26,11 +27,10 @@ public class ChunkGeneratorSkyIslands implements IChunkGenerator {
     private final NoiseGeneratorPerlin warpNoiseX;     // domain warp
     private final NoiseGeneratorPerlin warpNoiseZ;
 
-
     // --- TUNABLES ---
     private final int seaLevel = 0;            // not used, but Chunk expects something
-    private final int baseY = 120;             // average island height
-    private final int heightJitter = 70;       // +/- height variation
+    private final int baseY = 160;             // average island height
+    private final int heightJitter = 40;       // +/- height variation
     private final int islandRadiusMin = 8;    // in blocks
     private final int islandRadiusMax = 32;
 
@@ -167,7 +167,10 @@ public class ChunkGeneratorSkyIslands implements IChunkGenerator {
 
         // Deterministic per-island random (don’t recreate this in the inner loops)
         Random islandRand = new Random(islandSeed ^ 0xCAFEBABEL);
-        double stretch = 0.75 + islandRand.nextDouble() * 0.95; // 0.75..1.70
+        double stretch = 1.0;
+        if (islandRand.nextInt(4) == 0) { // only 25% of islands stretch
+            stretch = 0.85 + islandRand.nextDouble() * 0.40; // 0.85..1.25
+        }
         double rot = islandRand.nextDouble() * Math.PI * 2.0;
         double cosR = Math.cos(rot);
         double sinR = Math.sin(rot);
@@ -218,8 +221,8 @@ public class ChunkGeneratorSkyIslands implements IChunkGenerator {
                         3, 2.0, 0.5
                 );
 
-                double radiusMult = 1.0 + angleNoise * 0.40;
-                radiusMult = MathHelper.clamp(radiusMult, 0.60, 1.45);
+                double radiusMult = 1.0 + angleNoise * 0.18;
+                radiusMult = MathHelper.clamp(radiusMult, 0.80, 1.20);
 
                 double effRadius = radius * radiusMult;
 
@@ -246,18 +249,52 @@ public class ChunkGeneratorSkyIslands implements IChunkGenerator {
                 // Also reduce octaves; your previous smooth used (1, 2.0, 0.8) which can still be “chattery” with warping.
                 double surface = fbm(shapeNoise, sx * 0.0045, sz * 0.0045, 2, 2.0, 0.5); // [-1..1], gentle
 
-                // Dome still defines silhouette; smoothing comes from blur later
-                double dome = (1.0 - t);
-                dome = dome * dome;
+                // Pick a per-island "dome style" deterministically
+                Random domeRand = new Random(islandSeed ^ 0xD0EEF00DL);
+
+                // 0 = dome, 1 = flat plateau (most of the island is flat, only edges fall off)
+                double flatness = domeRand.nextFloat(); // 0..1
+
+                // Make flat islands happen sometimes (tune these)
+                boolean makeFlat = flatness < 0.35f; // 35% of islands are flatter
+
+                // Dome profile (your current one)
+                double dome = 1.0 - t;
+                dome = dome * dome; // [0..1]
+
+                // Plateau profile: flat in the middle, smooth falloff near the edge
+                double plateauStart = 0.45;  // inner flat radius (bigger = flatter)
+                double plateauEnd   = 0.92;  // where it fully falls off
+
+                double plateau;
+                if (t <= plateauStart) {
+                    plateau = 1.0;
+                } else {
+                    double tt = (t - plateauStart) / (plateauEnd - plateauStart);
+                    tt = MathHelper.clamp(tt, 0.0, 1.0);
+                    // smoothstep down
+                    plateau = 1.0 - (tt * tt * (3.0 - 2.0 * tt));
+                }
+
+                // Blend: mostly dome, sometimes plateau
+                double domeProfile;
+                if (makeFlat) {
+                    // how flat? (0.6..1.0)
+                    double k = 0.6 + domeRand.nextDouble() * 0.4;
+                    domeProfile = dome * (1.0 - k) + plateau * k;
+                } else {
+                    domeProfile = dome;
+                }
+
 
                 // Top height: keep large-scale shape, reduce per-block noise
                 int top = centerY
-                        + (int) Math.round(dome * 8.0)
-                        + (int) Math.round((ridged - 0.5) * 4.0)   // reduced from 6.0
+                        + (int) Math.round(domeProfile * 8.0)
+                        + (int) Math.round((ridged - 0.5) * 2.0)   // reduced from 6.0
                         + (int) Math.round(surface * 2.0);         // reduced from *3.0
 
                 // Thickness: keep chunky islands
-                double thickBase = 10.0 + dome * 22.0;
+                double thickBase = 10.0 + domeProfile * 22.0;
                 double thickVarNoise = ridgedFbm(thicknessNoise, sx * 0.018, sz * 0.018, 3, 2.0, 0.6);
                 double thickVar = (thickVarNoise - 0.5) * 10.0;
 
@@ -331,7 +368,7 @@ public class ChunkGeneratorSkyIslands implements IChunkGenerator {
                 IBlockState blockFiller = biome.fillerBlock;
 
                 if (blockTop == null) {
-                    blockTop = BlocksAether.aether_grass.getStateFromMeta(4);
+                    blockTop = BlocksAether.aether_grass.getDefaultState().withProperty(BlockAetherGrass.PROPERTY_VARIANT, BlockAetherGrass.AETHER);
                 }
                 if (blockFiller == null) {
                     blockFiller = BlocksAether.aether_dirt.getDefaultState();
@@ -343,12 +380,12 @@ public class ChunkGeneratorSkyIslands implements IChunkGenerator {
 
                     if (depthFromTop == 0) {
                         state = blockTop;
-                    } else if (depthFromTop <= 3) {
+                    } else if (depthFromTop <= 2 + rand.nextInt(3)) {
                         state = blockFiller;
                     } else {
                         // Use the per-island RNG, not a global rand
                         if (r.nextInt(5) == 1) {
-                            state = BlocksAether.holystone.getStateFromMeta(1);
+                            state = BlocksAether.holystone.getDefaultState().withProperty(BlockHolystone.PROPERTY_VARIANT, BlockHolystone.MOSSY_HOLYSTONE);
                         } else {
                             state = BlocksAether.holystone.getDefaultState();
                         }
@@ -440,7 +477,6 @@ public class ChunkGeneratorSkyIslands implements IChunkGenerator {
                     world.setBlockState(place, twig, 2);
                     continue;
                 }
-                continue;
             }
 
             if (random.nextInt(20) == 0) {

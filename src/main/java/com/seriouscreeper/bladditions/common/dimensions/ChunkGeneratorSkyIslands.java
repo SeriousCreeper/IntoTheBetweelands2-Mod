@@ -4,8 +4,7 @@ import java.util.List;
 import java.util.Random;
 
 import com.gildedgames.aether.api.registrar.BlocksAether;
-import com.gildedgames.aether.common.init.GenerationAether;
-import net.minecraft.block.BlockFlower;
+import com.gildedgames.aether.common.blocks.natural.BlockHolystone;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
@@ -16,12 +15,6 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraft.world.gen.NoiseGeneratorPerlin;
-import net.minecraft.world.gen.feature.WorldGenAbstractTree;
-import net.minecraft.world.gen.feature.WorldGenMinable;
-import net.minecraft.world.gen.feature.WorldGenerator;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.terraingen.PopulateChunkEvent;
-import net.minecraftforge.fml.common.IWorldGenerator;
 
 public class ChunkGeneratorSkyIslands implements IChunkGenerator {
     private final World world;
@@ -431,15 +424,22 @@ public class ChunkGeneratorSkyIslands implements IChunkGenerator {
             if (top == null) continue;
 
             BlockPos place = top.up();
-            if (!world.isAirBlock(place) || world.getBlockState(place).getBlock() == BlocksAether.tall_aether_grass) continue;
+            if (!world.isAirBlock(place)) continue;
 
-            if (random.nextInt(2) == 0 && world.getBlockState(place.down()) == BlocksAether.aether_dirt.getDefaultState()) {
-                world.setBlockState(place, BlocksAether.tall_aether_grass.getStateFromMeta(rand.nextInt(3)), 2);
-                continue;
+            if (random.nextInt(2) == 0) {
+                IBlockState grass = BlocksAether.tall_aether_grass.getStateFromMeta(random.nextInt(3));
+                if (grass.getBlock().canPlaceBlockAt(world, place)) {
+                    world.setBlockState(place, grass, 2);
+                    continue;
+                }
             }
 
             if (random.nextInt(10) == 0) {
-                world.setBlockState(place, BlocksAether.skyroot_twigs.getDefaultState(), 2);
+                IBlockState twig = BlocksAether.skyroot_twigs.getStateFromMeta(random.nextInt(3));
+                if (twig.getBlock().canPlaceBlockAt(world, place)) {
+                    world.setBlockState(place, twig, 2);
+                    continue;
+                }
                 continue;
             }
 
@@ -462,7 +462,7 @@ public class ChunkGeneratorSkyIslands implements IChunkGenerator {
             if (world.isAirBlock(p) && !world.isAirBlock(p.down())) {
                 // Use your holystone variants
                 IBlockState s = (rand.nextInt(5) == 0)
-                        ? BlocksAether.holystone.getStateFromMeta(1)
+                        ? BlocksAether.holystone.getStateFromMeta(BlockHolystone.MOSSY_HOLYSTONE.getMeta())
                         : BlocksAether.holystone.getDefaultState();
                 world.setBlockState(p, s, 2);
             }

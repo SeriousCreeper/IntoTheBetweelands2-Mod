@@ -433,9 +433,7 @@ public class ChunkGeneratorSkyIslands implements IChunkGenerator {
             BlockPos place = top.up();
             if (!world.isAirBlock(place) || world.getBlockState(place).getBlock() == BlocksAether.tall_aether_grass) continue;
 
-            Biome biome = world.getBiome(top);
-
-            if (random.nextInt(2) == 0) {
+            if (random.nextInt(2) == 0 && world.getBlockState(place.down()) == BlocksAether.aether_dirt.getDefaultState()) {
                 world.setBlockState(place, BlocksAether.tall_aether_grass.getStateFromMeta(rand.nextInt(3)), 2);
                 continue;
             }

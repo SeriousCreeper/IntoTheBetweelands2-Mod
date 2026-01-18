@@ -162,37 +162,54 @@ public class ChunkGeneratorSkyIslands implements IChunkGenerator {
 
         Random r = new Random(islandSeed ^ 0x1234ABCD);
 
-        // Island thickness and shaping
-        int maxThickness = MathHelper.clamp(radius / 2 + r.nextInt(6), 6, 18);
-
-        // Deterministic per-island random (don’t recreate this in the inner loops)
+        // Deterministic per-island random
         Random islandRand = new Random(islandSeed ^ 0xCAFEBABEL);
+
         double stretch = 1.0;
-        if (islandRand.nextInt(4) == 0) { // only 25% of islands stretch
-            stretch = 0.85 + islandRand.nextDouble() * 0.40; // 0.85..1.25
+        if (islandRand.nextInt(4) == 0) {
+            stretch = 0.85 + islandRand.nextDouble() * 0.40;
         }
         double rot = islandRand.nextDouble() * Math.PI * 2.0;
         double cosR = Math.cos(rot);
         double sinR = Math.sin(rot);
 
-        // First pass: compute top/bottom for each column in this chunk
-        boolean[] hasIsland = new boolean[16 * 16];
-        int[] rawTop = new int[16 * 16];
-        int[] rawBottom = new int[16 * 16];
+        // Dome style ONCE per island (avoid per-column Random allocations)
+        Random domeRand = new Random(islandSeed ^ 0xD0EEF00DL);
+        final boolean makeFlat = domeRand.nextFloat() < 0.35f;
+        final double flatK = 0.6 + domeRand.nextDouble() * 0.4;
 
+        // Cache blockstates (avoid property rebuilds)
+        final IBlockState holystone = BlocksAether.holystone.getDefaultState();
+        final IBlockState mossyHolystone = holystone.withProperty(BlockHolystone.PROPERTY_VARIANT, BlockHolystone.MOSSY_HOLYSTONE);
+        final IBlockState aetherDirt = BlocksAether.aether_dirt.getDefaultState();
+        final IBlockState defaultGrass = BlocksAether.aether_grass.getDefaultState()
+                .withProperty(BlockAetherGrass.PROPERTY_VARIANT, BlockAetherGrass.AETHER);
+
+        // Buffers
+        boolean[] hasIsland = new boolean[256];
+        int[] rawTop = new int[256];
+        int[] rawBottom = new int[256];
+        int[] smoothTop = new int[256];
+
+        // Constants (avoid reassigning inside loops)
+        final double outlineWarpFreq = 0.03;
+        final double outlineWarpAmp  = 8.0;
+        final double warpFreq = 0.015;
+        final double warpAmp  = 20.0;
+        final double shapeFreq = 0.02;
+
+        BlockPos.MutableBlockPos biomePos = new BlockPos.MutableBlockPos();
+
+        // First pass
         for (int localX = 0; localX < 16; localX++) {
             int x = chunkBlockX + localX;
 
             for (int localZ = 0; localZ < 16; localZ++) {
                 int z = chunkBlockZ + localZ;
-                int idx = localX + localZ * 16;
+                int idx = localX + (localZ << 4);
 
                 double dx = x - centerX;
                 double dz = z - centerZ;
-
-                // Domain warp the position a bit so outlines are more organic
-                double outlineWarpFreq = 0.03;
-                double outlineWarpAmp = 8.0;
 
                 double wox = fbm(warpNoiseX, x * outlineWarpFreq, z * outlineWarpFreq, 2, 2.0, 0.5) * outlineWarpAmp;
                 double woz = fbm(warpNoiseZ, x * outlineWarpFreq, z * outlineWarpFreq, 2, 2.0, 0.5) * outlineWarpAmp;
@@ -204,15 +221,17 @@ public class ChunkGeneratorSkyIslands implements IChunkGenerator {
                 double rx = cosR * px + sinR * pz;
                 double rz = -sinR * px + cosR * pz;
 
-                // Stretch one axis (ellipse)
+                // Stretch
                 rx *= stretch;
 
-                // Angle around the island center
-                double ang = Math.atan2(rz, rx);
+                // Distance and normalized direction (replaces atan2 + sin/cos)
+                double distSq = rx * rx + rz * rz;
+                if (distSq < 1e-9) distSq = 1e-9;
+                double dist = Math.sqrt(distSq);
+                double invLen = 1.0 / dist;
 
-                // Radius multiplier based on angle (stable per-island)
-                double a = Math.cos(ang);
-                double b = Math.sin(ang);
+                double a = rx * invLen;
+                double b = rz * invLen;
 
                 double angleNoise = fbm(
                         shapeNoise,
@@ -225,15 +244,9 @@ public class ChunkGeneratorSkyIslands implements IChunkGenerator {
                 radiusMult = MathHelper.clamp(radiusMult, 0.80, 1.20);
 
                 double effRadius = radius * radiusMult;
-
-                double dist = Math.sqrt(rx * rx + rz * rz);
                 if (dist > effRadius) continue;
 
-                double t = dist / effRadius; // 0..1
-
-                // Domain warp (breaks up wavy bands)
-                double warpFreq = 0.015;
-                double warpAmp = 20.0;
+                double t = dist / effRadius;
 
                 double wx = fbm(warpNoiseX, x * warpFreq, z * warpFreq, 2, 2.0, 0.5) * warpAmp;
                 double wz = fbm(warpNoiseZ, x * warpFreq, z * warpFreq, 2, 2.0, 0.5) * warpAmp;
@@ -241,59 +254,35 @@ public class ChunkGeneratorSkyIslands implements IChunkGenerator {
                 double sx = x + wx;
                 double sz = z + wz;
 
-                // Noise for variation
-                double shapeFreq = 0.02;
-                double ridged = ridgedFbm(shapeNoise, sx * shapeFreq, sz * shapeFreq, 4, 2.0, 0.55); // [0..1]
+                double ridged = ridgedFbm(shapeNoise, sx * shapeFreq, sz * shapeFreq, 4, 2.0, 0.55);
+                double surface = fbm(shapeNoise, sx * 0.0045, sz * 0.0045, 2, 2.0, 0.5);
 
-                // IMPORTANT: make surface smoother by using LOWER frequency & LOWER amplitude
-                // Also reduce octaves; your previous smooth used (1, 2.0, 0.8) which can still be “chattery” with warping.
-                double surface = fbm(shapeNoise, sx * 0.0045, sz * 0.0045, 2, 2.0, 0.5); // [-1..1], gentle
-
-                // Pick a per-island "dome style" deterministically
-                Random domeRand = new Random(islandSeed ^ 0xD0EEF00DL);
-
-                // 0 = dome, 1 = flat plateau (most of the island is flat, only edges fall off)
-                double flatness = domeRand.nextFloat(); // 0..1
-
-                // Make flat islands happen sometimes (tune these)
-                boolean makeFlat = flatness < 0.35f; // 35% of islands are flatter
-
-                // Dome profile (your current one)
                 double dome = 1.0 - t;
-                dome = dome * dome; // [0..1]
+                dome *= dome;
 
-                // Plateau profile: flat in the middle, smooth falloff near the edge
-                double plateauStart = 0.45;  // inner flat radius (bigger = flatter)
-                double plateauEnd   = 0.92;  // where it fully falls off
-
-                double plateau;
-                if (t <= plateauStart) {
-                    plateau = 1.0;
-                } else {
-                    double tt = (t - plateauStart) / (plateauEnd - plateauStart);
-                    tt = MathHelper.clamp(tt, 0.0, 1.0);
-                    // smoothstep down
-                    plateau = 1.0 - (tt * tt * (3.0 - 2.0 * tt));
-                }
-
-                // Blend: mostly dome, sometimes plateau
                 double domeProfile;
-                if (makeFlat) {
-                    // how flat? (0.6..1.0)
-                    double k = 0.6 + domeRand.nextDouble() * 0.4;
-                    domeProfile = dome * (1.0 - k) + plateau * k;
-                } else {
+                if (!makeFlat) {
                     domeProfile = dome;
+                } else {
+                    // plateau profile
+                    double plateauStart = 0.45;
+                    double plateauEnd = 0.92;
+                    double plateau;
+                    if (t <= plateauStart) {
+                        plateau = 1.0;
+                    } else {
+                        double tt = (t - plateauStart) / (plateauEnd - plateauStart);
+                        tt = MathHelper.clamp(tt, 0.0, 1.0);
+                        plateau = 1.0 - (tt * tt * (3.0 - 2.0 * tt));
+                    }
+                    domeProfile = dome * (1.0 - flatK) + plateau * flatK;
                 }
 
-
-                // Top height: keep large-scale shape, reduce per-block noise
                 int top = centerY
                         + (int) Math.round(domeProfile * 8.0)
-                        + (int) Math.round((ridged - 0.5) * 2.0)   // reduced from 6.0
-                        + (int) Math.round(surface * 2.0);         // reduced from *3.0
+                        + (int) Math.round((ridged - 0.5) * 2.0)
+                        + (int) Math.round(surface * 2.0);
 
-                // Thickness: keep chunky islands
                 double thickBase = 10.0 + domeProfile * 22.0;
                 double thickVarNoise = ridgedFbm(thicknessNoise, sx * 0.018, sz * 0.018, 3, 2.0, 0.6);
                 double thickVar = (thickVarNoise - 0.5) * 10.0;
@@ -303,7 +292,6 @@ public class ChunkGeneratorSkyIslands implements IChunkGenerator {
 
                 int bottom = top - thickness;
 
-                // Underside shaping stays “interesting”
                 bottom = MathHelper.clamp(bottom, 1, 254);
                 top = MathHelper.clamp(top, 1, 254);
 
@@ -317,78 +305,62 @@ public class ChunkGeneratorSkyIslands implements IChunkGenerator {
             }
         }
 
-        // Second pass: blur ONLY the surface top (3×3) for smoother terrain
-        int[] smoothTop = new int[16 * 16];
-
+        // Blur top (3x3)
         for (int z = 0; z < 16; z++) {
             for (int x = 0; x < 16; x++) {
-                int idx = x + z * 16;
+                int idx = x + (z << 4);
                 if (!hasIsland[idx]) continue;
 
-                int sum = 0;
-                int count = 0;
-
+                int sum = 0, count = 0;
                 for (int oz = -1; oz <= 1; oz++) {
+                    int nz = z + oz;
+                    if (nz < 0 || nz >= 16) continue;
                     for (int ox = -1; ox <= 1; ox++) {
                         int nx = x + ox;
-                        int nz = z + oz;
-                        if (nx < 0 || nx >= 16 || nz < 0 || nz >= 16) continue;
-
-                        int nidx = nx + nz * 16;
+                        if (nx < 0 || nx >= 16) continue;
+                        int nidx = nx + (nz << 4);
                         if (!hasIsland[nidx]) continue;
-
                         sum += rawTop[nidx];
                         count++;
                     }
                 }
-
                 smoothTop[idx] = (count > 0) ? (sum / count) : rawTop[idx];
             }
         }
 
-        // Third pass: place blocks using smoothed surface
+        // Place blocks
         for (int localX = 0; localX < 16; localX++) {
             int x = chunkBlockX + localX;
 
             for (int localZ = 0; localZ < 16; localZ++) {
                 int z = chunkBlockZ + localZ;
 
-                int idx = localX + localZ * 16;
+                int idx = localX + (localZ << 4);
                 if (!hasIsland[idx]) continue;
 
                 int top = MathHelper.clamp(smoothTop[idx], 1, 254);
                 int bottom = MathHelper.clamp(rawBottom[idx], 1, 254);
-
-                // Optional safety: don’t allow bottom to exceed top
                 if (bottom > top) continue;
 
-                Biome biome = world.getBiome(new BlockPos(x, 0, z));
+                biomePos.setPos(x, 0, z);
+                Biome biome = world.getBiome(biomePos);
 
-                IBlockState blockTop = biome.topBlock;
-                IBlockState blockFiller = biome.fillerBlock;
+                IBlockState blockTop = biome.topBlock != null ? biome.topBlock : defaultGrass;
+                IBlockState blockFiller = biome.fillerBlock != null ? biome.fillerBlock : aetherDirt;
 
-                if (blockTop == null) {
-                    blockTop = BlocksAether.aether_grass.getDefaultState().withProperty(BlockAetherGrass.PROPERTY_VARIANT, BlockAetherGrass.AETHER);
-                }
-                if (blockFiller == null) {
-                    blockFiller = BlocksAether.aether_dirt.getDefaultState();
-                }
+                // choose filler depth ONCE per column (not per block)
+                int fillerDepth = 2 + r.nextInt(3);
 
                 for (int y = bottom; y <= top; y++) {
                     int depthFromTop = top - y;
-                    IBlockState state;
 
+                    IBlockState state;
                     if (depthFromTop == 0) {
                         state = blockTop;
-                    } else if (depthFromTop <= 2 + rand.nextInt(3)) {
+                    } else if (depthFromTop <= fillerDepth) {
                         state = blockFiller;
                     } else {
-                        // Use the per-island RNG, not a global rand
-                        if (r.nextInt(5) == 1) {
-                            state = BlocksAether.holystone.getDefaultState().withProperty(BlockHolystone.PROPERTY_VARIANT, BlockHolystone.MOSSY_HOLYSTONE);
-                        } else {
-                            state = BlocksAether.holystone.getDefaultState();
-                        }
+                        state = (r.nextInt(5) == 1) ? mossyHolystone : holystone;
                     }
 
                     primer.setBlockState(localX, y, localZ, state);
@@ -396,6 +368,7 @@ public class ChunkGeneratorSkyIslands implements IChunkGenerator {
             }
         }
     }
+
 
 
     private boolean circleOverlapsChunk(int cx, int cz, int r, int chunkBlockX, int chunkBlockZ) {
@@ -431,19 +404,23 @@ public class ChunkGeneratorSkyIslands implements IChunkGenerator {
     }
 
     private BlockPos findTopSolid(int x, int z) {
-        for (int y = 250; y >= 20; y--) {
-            BlockPos pos = new BlockPos(x, y, z);
-            IBlockState state = world.getBlockState(pos);
+        int yTop = MathHelper.clamp(baseY + heightJitter + 80, 1, 254);
+        int yBot = MathHelper.clamp(baseY - heightJitter - 90, 1, 254);
 
+        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+        for (int y = yTop; y >= yBot; y--) {
+            pos.setPos(x, y, z);
+            IBlockState state = world.getBlockState(pos);
             if (state.getBlock() != Blocks.AIR) {
-                BlockPos above = pos.up();
-                if (world.isAirBlock(above)) {
-                    return pos;
+                pos.setPos(x, y + 1, z);
+                if (world.isAirBlock(pos)) {
+                    return new BlockPos(x, y, z);
                 }
             }
         }
         return null;
     }
+
 
     @Override
     public void populate(int chunkX, int chunkZ) {

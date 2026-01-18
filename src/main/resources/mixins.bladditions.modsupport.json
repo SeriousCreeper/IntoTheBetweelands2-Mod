@@ -156,6 +156,7 @@
     "quark.MixinEntityLeashKnot",
     "rats.MixinEntityRats",
     "reccomplex.MixinTransformerNatural",
+    "reccomplex.MixinTransformerRuins",
     "redstonepaste.MixinBlockRedstonePaste",
     "roots.EventManager",
     "roots.MixinBlockCloudBerryCrop",
